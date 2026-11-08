@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
