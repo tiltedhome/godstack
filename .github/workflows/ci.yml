@@ -4,7 +4,9 @@ name: ci
 # so fork PRs run with a read-only token and no secrets. Every action is pinned to a commit.
 #
 # The site has two cuts: `main` is published at the root and the `v3` branch at /v3/. Every
-# deploy builds both branches, so publishing one never knocks the other off the air.
+# deploy builds both branches, so publishing one never knocks the other off the air. Only
+# `main` may deploy to the github-pages environment; a green push to `v3` asks main's
+# workflow to run, which rebuilds both and deploys.
 on:
   push:
     branches: [main, v3]
@@ -87,11 +89,26 @@ jobs:
           name: claude-artifact
           path: dist-artifact/godstack.html
 
+  # A green v3 asks main to publish (workflow_dispatch is one of the two events a
+  # GITHUB_TOKEN may trigger). The deploy itself only ever runs from main.
+  publish:
+    name: ask main to publish
+    needs: [lint, workflows, build]
+    if: github.ref == 'refs/heads/v3' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - run: gh workflow run ci.yml --ref main --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
   # Both cuts are built fresh from their branches, so the published site is never half of one.
   site:
     name: assemble the site
     needs: [lint, workflows, build]
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v3') && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
