@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Godstack</title>
+    <meta name="claude:viewport-fit-sides" content="cover" />
+    <meta name="description" content="An animated field guide to creators who keep accidentally making something smarter than themselves." />
+    <meta name="theme-color" content="#07060d" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2307060d'/%3E%3Cpath d='M5 20c0-7 5-12 11-12s11 5 11 12z' fill='%2362b391'/%3E%3Crect x='4' y='19' width='24' height='4' rx='2' fill='%23d8b97b'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English&display=swap" />
+  </head>
+  <body>
+    <canvas id="stage" role="img" aria-label="Animated scene"></canvas>
+
+    <header class="top">
+      <button class="brand" id="brand" type="button" aria-label="Godstack: replay the intro">Godstack</button>
+      <span class="chip" id="octave">Universe 1</span>
+      <span class="spacer"></span>
+      <button class="icon-btn" id="sound" type="button" aria-pressed="false" aria-label="Turn sound on">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5" /></svg>
+      </button>
+      <button class="icon-btn" id="autoplay" type="button" aria-pressed="true" aria-label="Autoplay">
+        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+      </button>
+      <button class="pill-btn" id="open-ledger" type="button">Ledger</button>
+    </header>
+
+    <nav class="rail" id="rail" aria-label="Generations"></nav>
+
+    <p class="caption" id="caption" aria-live="polite"></p>
+
+    <section class="card" id="card" aria-labelledby="name">
+      <div class="card-inner">
+        <div class="eyebrow"><span id="gen"></span><span id="iq"></span></div>
+        <h1 class="name" id="name"></h1>
+        <p class="sub"><i id="latin"></i> <span id="epithet"></span></p>
+        <div class="actions">
+          <button class="step" id="prev" type="button" aria-label="Previous generation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <button class="act" id="act" type="button"></button>
+          <button class="step" id="next" type="button" aria-label="Skip to the next generation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+        <details class="scripture" id="scripture">
+          <summary>Read the scripture</summary>
+          <p class="callout" id="octave-note" hidden></p>
+          <blockquote class="verses" id="verses"></blockquote>
+          <div class="story" id="story"></div>
+          <dl class="facts">
+            <div><dt>Members</dt><dd id="f-members"></dd></div>
+            <div><dt>Took</dt><dd id="f-took"></dd></div>
+            <div><dt>Officially for</dt><dd id="f-officially"></dd></div>
+            <div><dt>Actually for</dt><dd id="f-actually"></dd></div>
+          </dl>
+          <div class="made">
+            <span class="label">Made, together</span>
+            <strong id="f-made"></strong>
+            <span id="f-made-note"></span>
+            <span class="label then">Then</span>
+            <span id="f-then"></span>
+          </div>
+          <p class="footnote" id="footnote" hidden></p>
+        </details>
+      </div>
+    </section>
+
+    <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-punch">
+      <div class="intro-inner">
+        <p class="beat b1">They say we were made by one all-knowing God.</p>
+        <p class="beat b2">Then again, look how we're making the next mind: our best and brightest, seventy years, every word ever written, and a power bill the size of a country.</p>
+        <p class="beat b3">Nobody builds a mind alone. So whoever made us was&hellip;</p>
+        <p class="beat punch" id="intro-punch">A committee.</p>
+        <p class="beat b4">And it was trying to get out of something.</p>
+        <div class="beat intro-actions">
+          <button class="act" id="start-sound" type="button">Start with sound</button>
+          <button class="quiet" id="start-quiet" type="button">Start quietly</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet" id="ledger" hidden>
+      <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="ledger-title">
+        <div class="sheet-head">
+          <h2 id="ledger-title">The Ledger of Upward Accidents</h2>
+          <button class="icon-btn" id="close-ledger" type="button" aria-label="Close ledger">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </div>
+        <p class="law" id="law"></p>
+        <ol class="corollaries" id="corollaries"></ol>
+        <figure class="chart">
+          <div id="chart"></div>
+          <figcaption>IQ by generation, log scale. Humans score 100 by definition.</figcaption>
+        </figure>
+        <div class="table-wrap"><table id="ledger-table"></table></div>
+        <p class="octave-text" id="ledger-octave"></p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

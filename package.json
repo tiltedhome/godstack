@@ -1,0 +1,31 @@
+{
+  "name": "godstack",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "An animated field guide to creators who keep accidentally making something smarter than themselves",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:artifact": "vite build --mode artifact && node scripts/make-artifact.mjs",
+    "lore": "node scripts/write-lore.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "check": "npm run lint && npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^5.0.5"
+  }
+}
