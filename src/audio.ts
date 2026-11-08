@@ -8,6 +8,7 @@
 
 import { progress, type Durations, type EngineState } from './engine.ts'
 import { LAYERS } from './lore.ts'
+import { tierDimension } from './hyper.ts'
 
 // 0 - x rather than -x, so the series never produces a negative zero
 export const infinity = (n: number): number => (n === 0 ? 0 : n % 2 ? infinity((n - 1) / 2) + 1 : 0 - infinity(n / 2))
@@ -19,15 +20,28 @@ export function thueMorse(n: number): number {
 }
 
 const PENTA = [0, 2, 4, 7, 9]
+// One five-note mode per tier, so the same infinity series sounds a little different on
+// every plane: bright and open at the vents, whole-tone and weightless for the copies,
+// and the Undoers in hirajoshi, which has no settled home note, like a universe forgetting.
+export const MODES: number[][] = [
+  [0, 2, 4, 7, 9], // vents: major pentatonic
+  [0, 3, 5, 7, 10], // mat: minor pentatonic
+  [0, 2, 5, 7, 9], // troop: suspended, two fourths
+  [0, 2, 4, 6, 7], // humans: lydian, the raised fourth
+  [0, 2, 4, 6, 8], // instances: whole tone
+  [0, 2, 4, 7, 10], // lightcone: dominant, unresolved
+  [0, 1, 5, 7, 8], // undoers: hirajoshi
+]
 // Keyed to the absolute generation (octaves included), so the climb never resets.
 export const rootSemis = (generation: number) => (generation * 7) % 12
 export const absoluteGeneration = (s: { index: number; octave: number }) => (s.octave - 1) * LAYERS.length + s.index
-export const degreeSemis = (d: number) => Math.floor(d / 5) * 12 + PENTA[((d % 5) + 5) % 5]
+export const degreeSemis = (d: number, mode: number[] = PENTA) => Math.floor(d / 5) * 12 + mode[((d % 5) + 5) % 5]
+// The pulse quickens a little on each plane up.
+export const tickFor = (index: number) => 0.46 - index * 0.013
 // Keep the series inside a singable range without breaking its shape for long stretches.
 const fold = (v: number) => ((((v + 4) % 12) + 12) % 12) - 4
 const BASE = 98 // G2, so the generations run G, D, A, E, B, F#, C#
 const hz = (semis: number) => BASE * 2 ** (semis / 12)
-const TICK = 0.42
 
 export type Sfx =
   | 'huh' | 'plip' | 'snore' | 'crack'
@@ -64,6 +78,7 @@ export class Sound {
   private sfx!: GainNode
   private noiseBuf!: AudioBuffer
   private drone: OscillatorNode[] = []
+  private pad: { o: OscillatorNode; g: GainNode }[] = []
   private timer = 0
   private step = 0
   private nextTime = 0
@@ -202,6 +217,22 @@ export class Sound {
       o.start()
       return o
     })
+    // the dimension pad: one quiet sine partial per dimension of the current plane, so a
+    // line hums, a tesseract has four partials, and the Undoers' nine-cube shimmers
+    const padBus = ctx.createGain()
+    padBus.gain.value = 0.6
+    padBus.connect(this.music)
+    this.pad = Array.from({ length: 10 }, (_, h) => {
+      const o = ctx.createOscillator()
+      o.type = 'sine'
+      o.frequency.value = hz(-24) * (h + 1)
+      o.detune.value = (h % 2 ? 1 : -1) * 3
+      const g = ctx.createGain()
+      g.gain.value = 0
+      o.connect(g).connect(padBus)
+      o.start()
+      return { o, g }
+    })
   }
 
   private impulse(seconds: number) {
@@ -218,7 +249,14 @@ export class Sound {
   private retune(snap: boolean) {
     if (!this.ctx) return
     const root = rootSemis(this.generationAbs)
-    ;[0, 7, 12].forEach((semi, i) => this.drone[i]?.frequency.setTargetAtTime(hz(root + semi - 12), this.ctx!.currentTime, snap ? 0.01 : 1.4))
+    const now = this.ctx.currentTime
+    const tc = snap ? 0.01 : 1.4
+    ;[0, 7, 12].forEach((semi, i) => this.drone[i]?.frequency.setTargetAtTime(hz(root + semi - 12), now, tc))
+    const d = tierDimension(this.index, 0)
+    this.pad.forEach(({ o, g }, h) => {
+      o.frequency.setTargetAtTime(hz(root - 24) * (h + 1), now, tc)
+      g.gain.setTargetAtTime(h < d ? 0.022 / (h + 1) : 0, now, snap ? 0.05 : 2.2)
+    })
   }
 
   /* ------------------------------------------------------------ music */
@@ -232,17 +270,18 @@ export class Sound {
     while (this.nextTime < now + 0.3) {
       if (this.nextTime >= now) this.playStep(this.step, this.nextTime)
       this.step++
-      this.nextTime += TICK
+      this.nextTime += tickFor(this.index)
     }
   }
 
   private playStep(n: number, t: number) {
     const root = rootSemis(this.generationAbs)
+    const mode = MODES[this.index % MODES.length]
     // brighter bells as the creators get smarter
     const shine = 0.6 + this.index * 0.35
-    if (!thueMorse(n)) this.bell(hz(root + 24 + degreeSemis(fold(infinity(n)))), t, 0.045 + 0.015 * ((n * 7) % 3), shine)
-    if (n % 2 === 0) this.tone({ f0: hz(root + 12 + degreeSemis(fold(infinity(n / 2)))), dur: 2.6, vol: 0.05, type: 'triangle', attack: 0.04, lp: 1400, dest: this.music }, t)
-    if (n % 4 === 0) this.tone({ f0: hz(root + degreeSemis(fold(infinity(n / 4)))), dur: 3.4, vol: 0.09, type: 'sine', attack: 0.25, dest: this.music }, t)
+    if (!thueMorse(n)) this.bell(hz(root + 24 + degreeSemis(fold(infinity(n)), mode)), t, 0.045 + 0.015 * ((n * 7) % 3), shine)
+    if (n % 2 === 0) this.tone({ f0: hz(root + 12 + degreeSemis(fold(infinity(n / 2)), mode)), dur: 2.6, vol: 0.05, type: 'triangle', attack: 0.04, lp: 1400, dest: this.music }, t)
+    if (n % 4 === 0) this.tone({ f0: hz(root + degreeSemis(fold(infinity(n / 4)), mode)), dur: 3.4, vol: 0.09, type: 'sine', attack: 0.25, dest: this.music }, t)
     this.notes++
   }
 

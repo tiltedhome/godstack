@@ -1,6 +1,13 @@
 /* Layout: a full-bleed canvas sky, a generation rail across the top, and a field-guide
    card docked where the thumb is (bottom on phones, a right-hand panel on wide screens).
-   One deliberate dark look; the accent changes with each generation. */
+   One deliberate dark look; the accent changes with each generation.
+
+   Type: Fraunces for display (a variable "old-style soft serif" with optical sizes and a
+   WONK axis for the wordmark), the IBM Plex superfamily for everything that has to agree on
+   x-height and figures (Sans for UI, Serif for prose, Mono for data), and IM Fell English,
+   cut in the 1600s, for the scripture, discretionary ligatures and all. Labels are tracked
+   mono capitals; prose gets proportional figures, data gets tabular lining ones with a
+   slashed zero; paragraphs wrap "pretty" and punctuation hangs. */
 :root {
   --void: #07060d;
   --ink: #100d1b;
@@ -10,9 +17,22 @@
   --line: rgba(242, 237, 227, 0.14);
   --accent: #ff9b54;
   --on-accent: #120e1c;
-  --display: 'Dela Gothic One', 'Arial Black', Impact, system-ui, sans-serif;
-  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --body: 'IBM Plex Sans', 'Helvetica Neue', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --serif: 'IBM Plex Serif', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --fell: 'IM Fell English', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  /* a 1.2 (minor third) modular scale on a 15px base */
+  --t-2: 0.694rem;
+  --t-1: 0.833rem;
+  --t0: 1rem;
+  --t1: 1.2rem;
+  --t2: 1.44rem;
+  --t3: 1.728rem;
+  --t4: 2.074rem;
+  --t5: 2.488rem;
+  /* Fraunces at display sizes: large optical size, soft, with the wonky 'a' and 'g' */
+  --wonk: 'opsz' 144, 'SOFT' 60, 'WONK' 1;
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
   --cap-x: 50%;
@@ -31,8 +51,33 @@ body {
   background: var(--void);
   color: var(--text);
   font: 15px/1.5 var(--body);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures contextual;
+  hanging-punctuation: first allow-end last;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* tracked mono capitals for every small label; a slashed zero wherever data is set */
+.label,
+.eyebrow,
+.chip,
+.facts dt,
+.scripture summary,
+.verses cite,
+.pill-btn,
+.rail button,
+.b4,
+th,
+.chart .tick,
+.chart figcaption {
+  font-feature-settings: 'zero', 'ss02';
 }
 
 [hidden] {
@@ -78,11 +123,23 @@ button {
 
 .brand {
   font-family: var(--display);
-  font-size: 19px;
-  letter-spacing: 0.03em;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 23px;
+  font-variation-settings: var(--wonk);
+  letter-spacing: -0.01em;
   background: none;
   border: 0;
   padding: 0;
+}
+
+.brand sup {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.5em;
+  color: var(--accent);
+  margin-left: 0.15em;
+  vertical-align: 0.9em;
 }
 
 /* ---------------------------------------------------------------- intro */
@@ -115,6 +172,7 @@ button {
 
 .beat {
   margin: 0;
+  font-family: var(--serif);
   font-size: clamp(19px, 5vw, 23px);
   line-height: 1.4;
   text-wrap: balance;
@@ -127,11 +185,13 @@ button {
 
 .punch {
   font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-variation-settings: var(--wonk);
   /* starts large; fitPunchline() in main.ts shrinks it until the longest word fits */
   font-size: 112px;
-  line-height: 0.95;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
   color: #ff9b54;
   transform: rotate(-4deg);
   transform-origin: left center;
@@ -146,12 +206,20 @@ button {
   animation-delay: 6.3s;
 }
 
+.b5 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--t0);
+  color: var(--muted);
+  animation-delay: 6.7s;
+}
+
 .intro-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 8px;
-  animation-delay: 6.9s;
+  animation-delay: 7.2s;
 }
 
 .intro-actions .act {
@@ -409,22 +477,71 @@ button {
 .name {
   margin: 0;
   font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(25px, 7.2vw, 38px);
-  line-height: 1.04;
-  letter-spacing: 0.005em;
+  font-weight: 500;
+  font-size: clamp(27px, 7.4vw, 40px);
+  font-variation-settings: 'opsz' 72, 'SOFT' 40, 'WONK' 1;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
 .sub {
   margin: 0;
+  font-family: var(--serif);
   color: var(--muted);
   max-width: 60ch;
 }
 
 .sub i {
+  font-family: var(--display);
+  font-style: italic;
+  font-variation-settings: 'opsz' 18, 'SOFT' 50, 'WONK' 1;
   color: var(--text);
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+/* the thesis, in one line under the name: who this tier's god really was */
+.plane {
+  margin: 2px 0 0;
+  font: 500 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-feature-settings: 'zero';
+}
+
+/* a line from the minutes: a marginal note in italic, with a way to ask for another */
+.minutes {
+  margin: 6px 0 0;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--t-1);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 58ch;
+}
+
+.minutes .label {
+  display: block;
+  font: 500 10px var(--mono);
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.minutes button {
+  background: none;
+  border: 0;
+  padding: 0 0 0 6px;
+  font: inherit;
+  font-size: 0.85em;
+  color: var(--accent);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
 }
 
 .actions {
@@ -441,8 +558,9 @@ button {
   border-radius: 16px;
   background: var(--accent);
   color: var(--on-accent);
-  font: 400 17px var(--display);
-  letter-spacing: 0.02em;
+  font: 600 18px var(--display);
+  font-variation-settings: 'opsz' 18, 'SOFT' 30, 'WONK' 0;
+  letter-spacing: -0.005em;
   padding: 0 14px;
   transition: background 0.4s, transform 0.1s, opacity 0.2s;
 }
@@ -499,7 +617,9 @@ button {
   margin: 12px 0 0;
   padding: 2px 0 2px 14px;
   border-left: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  font: 17px/1.45 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font: 17.5px/1.5 var(--fell);
+  /* Fell's discretionary ligatures: the ct and st ties that date the face */
+  font-variant-ligatures: common-ligatures discretionary-ligatures historical-ligatures;
   color: color-mix(in srgb, var(--text) 82%, var(--accent));
   max-width: 62ch;
 }
@@ -508,10 +628,53 @@ button {
   margin: 0 0 6px;
 }
 
-.verses sup {
-  font-size: 0.62em;
+.verses .dropcap {
+  float: left;
+  font-family: var(--display);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 144, 'SOFT' 80, 'WONK' 1;
+  font-size: 2.9em;
+  line-height: 0.78;
+  padding: 0.08em 0.1em 0 0;
   color: var(--accent);
-  margin-right: 0.25em;
+}
+
+.verses sup {
+  font-family: var(--mono);
+  font-size: 0.58em;
+  font-feature-settings: 'zero';
+  color: var(--accent);
+  margin-right: 0.3em;
+  vertical-align: 0.55em;
+}
+
+/* who the One was to the next tier, and what it thought of its makers */
+.theology {
+  margin: 14px 0 0;
+  display: grid;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.theology p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--t-1);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.theology .label {
+  display: block;
+  font: 500 10px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1px;
+}
+
+.theology p:first-child {
+  color: var(--text);
 }
 
 .verses cite {
@@ -527,6 +690,12 @@ button {
 .story p {
   margin: 10px 0 0;
   max-width: 62ch;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.55;
+  font-variant-numeric: proportional-nums;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 .callout {
@@ -555,6 +724,7 @@ button {
 .facts dd {
   margin: 2px 0 0;
   font-size: 14px;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .made {
@@ -572,13 +742,15 @@ button {
 
 .made strong {
   font-family: var(--display);
-  font-weight: 400;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: var(--t1);
+  font-variation-settings: 'opsz' 24, 'SOFT' 40, 'WONK' 1;
   line-height: 1.2;
 }
 
 .footnote {
   margin: 14px 0 0;
+  font-family: var(--serif);
   font-size: 13px;
   color: var(--muted);
   font-style: italic;
@@ -625,13 +797,17 @@ button {
 
 .sheet-head h2 {
   margin: 0;
-  font: 400 clamp(20px, 5vw, 28px) / 1.1 var(--display);
+  font: 500 clamp(22px, 5vw, 30px) / 1.1 var(--display);
+  font-variation-settings: 'opsz' 48, 'SOFT' 40, 'WONK' 1;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 .law {
   margin: 14px 0 0;
+  font-family: var(--serif);
   font-size: 17px;
+  line-height: 1.5;
   max-width: 62ch;
 }
 
@@ -692,7 +868,7 @@ button {
 
 .chart .pt {
   fill: var(--text);
-  font: 700 13px var(--body);
+  font: italic 500 13px var(--display);
 }
 
 .table-wrap {
@@ -784,7 +960,7 @@ td.who {
   }
 
   .name {
-    font-size: 34px;
+    font-size: 36px;
   }
 
   .sheet {

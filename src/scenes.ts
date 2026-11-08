@@ -9,6 +9,13 @@ import {
   DISPLAY, MONO, TAU, alpha, at, circle, clamp, easeIn, easeInOut, easeOut, easeOutBack, ellipse, glow, hexPath,
   lerp, line, pulse, rng, rrect, seg, stroke, text, type Ctx,
 } from './draw.ts'
+import { noteFor } from './rotate.ts'
+
+// Which universe we are in: the Rewinder's note changes each time round.
+let universe = 1
+export function setUniverse(u: number) {
+  universe = u
+}
 
 export interface Scene {
   focus: [number, number]
@@ -46,12 +53,20 @@ function agents(seed: number, n: number, place: (r: () => number) => Pt, kinds =
 export class Graph {
   readonly edges: [number, number][]
   readonly n: number
+  // introductions made by hand: a tap on the stage switches on a few more links
+  bonus = 0
   constructor(n: number, edges: [number, number][]) {
     this.n = n
     this.edges = edges
   }
   active(p: number): number {
-    return Math.min(this.edges.length, Math.round((targetDegree(p) * this.n) / 2))
+    return Math.min(this.edges.length, Math.round((targetDegree(p) * this.n) / 2) + this.bonus)
+  }
+  introduce(k = 3) {
+    this.bonus = Math.min(this.edges.length, this.bonus + k)
+  }
+  reset() {
+    this.bonus = 0
   }
   meanDegree(p: number): number {
     return (2 * this.active(p)) / this.n
@@ -108,6 +123,21 @@ function multiply(f: Pt, k: number, spread: number, squash = 0.8): { x: number; 
     out.push({ x: f[0] + Math.cos(a) * d, y: f[1] + Math.sin(a) * d * squash, s: 0.85, i })
   }
   return out
+}
+
+function wrapWords(ctx: Ctx, s: string, maxW: number, size: number, font: string): string[] {
+  ctx.font = `${size}px ${font}`
+  const out: string[] = []
+  let cur = ''
+  for (const w of s.split(' ')) {
+    const next = cur ? `${cur} ${w}` : w
+    if (cur && ctx.measureText(next).width > maxW) {
+      out.push(cur)
+      cur = w
+    } else cur = next
+  }
+  if (cur) out.push(cur)
+  return out.slice(0, 4)
 }
 
 const emerging = (p: number) => pulse(p, 0.42, 0.66)
@@ -819,13 +849,14 @@ const undoers: Scene = {
         stroke(ctx, '#fff1c8', 2 * (1 - bang) + 0.3)
       })
     }
-    // and a note, left in the constants
+    // and a note, left in the constants (a different one each universe)
     const note = seg(p, 0.84, 1)
     if (note > 0) {
+      const lines = wrapWords(ctx, noteFor(universe), 26, 3.9, DISPLAY)
+      const h = 6 + lines.length * 5
       at(ctx, U_F[0] + 10 + note * 24, U_F[1] - 8 - note * 30, easeOutBack(seg(p, 0.84, 0.9)), -0.12 + Math.sin(t * 1.4) * 0.06, () => {
-        rrect(ctx, -11, -9, 22, 18, 1, '#ffe36e')
-        text(ctx, 'fewer', 0, -2.5, 4.4, '#5a4510', DISPLAY)
-        text(ctx, 'meetings', 0, 3.5, 4.4, '#5a4510', DISPLAY)
+        rrect(ctx, -15, -h / 2, 30, h, 1, '#ffe36e')
+        lines.forEach((ln, k) => text(ctx, ln, 0, -h / 2 + 5.5 + k * 5, 3.9, '#5a4510', DISPLAY))
       })
     }
   },

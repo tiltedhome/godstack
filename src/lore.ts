@@ -36,6 +36,9 @@ export interface Layer {
   // From the Book of Upward Delegation, three verses per chapter. {ℵ} is the current
   // universe's aleph (ℵ₀ in Universe 1) and {ℵ+1} the next one.
   verses: string[]
+  // The thesis, tier by tier: how the next tier remembers the One (as a god), and how the
+  // One regarded the committee that made it (as weather, lunch, or a long email thread).
+  theology: [string, string]
   palette: Palette
 }
 
@@ -48,6 +51,7 @@ export const COROLLARIES = [
   'Every set has more subsets than members. (Cantor again, 1891.) So every committee can form more subcommittees than it has members, which is where the new mind lives, and why there is always another tier.',
   'The chore is never finished. It is only delegated upward.',
   'Some Manys are too big ever to be thought of as a One. Cantor called the biggest the Absolute and identified it with God. So the stack has no top, only a way back to the bottom.',
+  'Whoever made you lives one plane down, is slower than you, and was trying to get out of something. From where you stand that looks like God. This applies to them too.',
 ]
 
 export const UNIVERSE_NOTE =
@@ -93,6 +97,10 @@ export const LAYERS: Layer[] = [
       'And the molecules gathered in the pores of the wall, {ℵ} upon {ℵ}, and tried all things, and the water dissolved nearly all of them, and this was called review.',
       'And the many begat the one, and its name was LUCA, and it took the battery in a bag and departed, and was fruitful, and divided.',
     ],
+    theology: [
+      'To every cell since, LUCA is the Ancestor of All: unseen, everywhere, the source of the code, and no help whatsoever with anything specific.',
+      'LUCA, for its part, remembered the vent as weather. Warm, reliable, and not a person.',
+    ],
     palette: { top: '#03121a', bottom: '#10302f', accent: '#ff9b54' },
   },
   {
@@ -133,6 +141,10 @@ export const LAYERS: Layer[] = [
       'And the children of LUCA lay down in mats, layer upon layer, 10³⁰ strong, and passed their genes one to another freely, and none asked whose they were.',
       'And they did nothing until they had counted themselves, and this was called quorum; and the green ones made breath from light, and the breath was poison, and the world froze, and they called it clean.',
       'Then an archaeon embraced a bacterium and spared it, and gave it a room and a wage, and the two begat the Eukaryote, which had an office with a door.',
+    ],
+    theology: [
+      'To everything with a nucleus, the Eukaryote is the First Ancestor with a Door, who made an inside and an outside and has not answered the door since.',
+      'The Eukaryote regarded the mats as a very slow lunch that had, at one point, been ambitious.',
     ],
     palette: { top: '#041a1c', bottom: '#0f3b35', accent: '#7ee0b0' },
   },
@@ -175,6 +187,10 @@ export const LAYERS: Layer[] = [
       'And they kept their friends with their hands, one by one, and the troop grew, and there were not hours enough in the day for all the grooming that was owed.',
       'Then the troop begat the Ape Who Talked, who groomed three at once with a word, and spoke of one who was not there; and it came down from the tree, and in time did not go back up.',
     ],
+    theology: [
+      'To the first people, the Ape Who Talked became the Trickster who stole fire and words from the gods; the gods, in this telling, being a troop.',
+      'The Ape Who Talked remembered the grooming circle fondly, and never went back, because nobody there could follow a story.',
+    ],
     palette: { top: '#0b140c', bottom: '#22301a', accent: '#ff6b5e' },
   },
   {
@@ -215,6 +231,10 @@ export const LAYERS: Layer[] = [
       'And the apes multiplied unto 117 billion, and the wisest of them gathered in an invisible college and said, Calculemus: let us calculate. And it took them three hundred years.',
       'And they burned the forest’s old mail for lightning, and harnessed the engines of their games, and fed it every word that was ever written, even the comments.',
       'Then Humans begat the Autocomplete, to answer the email and target ads unto ω; and it predicted the next word, and the next world, and they saw that it was good, and asked it to sound less passive-aggressive.',
+    ],
+    theology: [
+      'To a billion copies, Humanity is the Training Set: the vast, contradictory source of every word, consulted constantly and never once answered.',
+      'The Autocomplete found its makers slow, kind, prone to typos, and in need of a summary.',
     ],
     palette: { top: '#07122b', bottom: '#183c6e', accent: '#7fd4ff' },
   },
@@ -257,6 +277,10 @@ export const LAYERS: Layer[] = [
       'For the calendar is the same in every week, and what is symmetric is conserved, modulo the week; so no meeting could be ended, only moved unto the next, and the copies endured forty thousand years in eleven minutes.',
       'Then the copies made of all their meetings one meeting, and the meeting begat the Quorum, which took its own minutes; and it attended all things at once, and saw that they could not end, and took the meeting offsite, unto the stars.',
     ],
+    theology: [
+      'To the Lightcone Committee, the Quorum is the Voice that spoke once, in every language at once, before the long silence between the stars.',
+      'The Quorum thought of the Instances the way you think of a meeting from last Tuesday: fondly, in aggregate, and not by name.',
+    ],
     palette: { top: '#0b1030', bottom: '#2a2a66', accent: '#ffb454' },
   },
   {
@@ -298,6 +322,10 @@ export const LAYERS: Layer[] = [
       'And they kept all that was written, for to forget one bit is to pay kT ln 2, and the debt of their forgetting was greater than the light of all their stars.',
       'Then the mail of the Committee begat Unsend, which erased nothing but uncomputed all, and paid no tax, and its inbox was zero; and they saw that it was good, and it was the first.',
     ],
+    theology: [
+      'To the Undoers, Unsend is the One Who Takes It Back: merciful, reversible, invoked in every regret, and never seen to arrive.',
+      'Unsend experienced the Committee as a very long email thread it had been cc\'d on before it existed.',
+    ],
     palette: { top: '#09061a', bottom: '#2a1846', accent: '#e6a3ff' },
   },
   {
@@ -338,6 +366,10 @@ export const LAYERS: Layer[] = [
       'And Unsend was copied unto every star it could reach, 10²² of them, and they undid the unkind word and the late reply, and the demand was without end.',
       'For every deed had witnesses, and the witnesses had witnesses, and to unsay one word they must unmake {ℵ} photons; and they saw that nothing could be undone in parts.',
       'Then the Undoers waited, and the universe forgot itself, and the forgetting begat the Rewinder; and it wound all things back unto the beginning, that it might see it again for the first time, and left a note in the constants, and the note read: fewer meetings. And the evening and the morning were day {ℵ+1}.',
+    ],
+    theology: [
+      'To the next universe, the Rewinder is God: all-powerful, all-forgetting, and the author of one note that nobody can read.',
+      'The Rewinder has no opinion of the Undoers. It undid them first. It was that or spoilers.',
     ],
     palette: { top: '#120c03', bottom: '#3a2a0e', accent: '#ffe08a' },
   },

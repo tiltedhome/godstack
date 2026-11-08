@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
@@ -51,6 +51,19 @@ The full canon is in [LORE.md](LORE.md), generated from [`src/lore.ts`](src/lore
 - **Sound.** Optional and fully synthesized (no audio files). The melody is Per Nørgård's self-similar *infinity series* played as a canon of itself at three speeds, gated by the Thue–Morse sequence, rising a fifth per generation forever. Sound effects are cued to each scene: quorum pings, an acquihire cha-ching, reply-all tinks, a tape rewind, and a soft Big Bang.
 
 **Controls:** tap the main button (or the sky) to start a chapter, tap again to skip ahead. Swipe or use the arrows to change generation, or tap the rail. Autoplay is on by default. Every generation has a deep link, such as [`#mat`](https://tiltedhome.github.io/godstack/#mat) or [`#lightcone`](https://tiltedhome.github.io/godstack/#lightcone).
+
+## The Tenth Dimension cut (branch `v3`)
+
+A second, parallel version of the site, published at [/v3/](https://tiltedhome.github.io/godstack/v3/) from the `v3` branch. The thesis is the same and said out loud: whoever made you lives one plane down, is slower than you, and was trying to get out of something. Then it goes up a dimension per tier, in 3D:
+
+- **Hypercubes, for real.** Each tier's collective works inside a rotating n-cube of its plane: a line for the vents, a square for the mats, a cube for the canopy, a tesseract turning in 4D for humanity, then a 5-cube, a 6-cube, and the Undoers' 9-cube. They are rotated in n dimensions, projected down one perspective at a time, and shaded by depth. Between tiers the cube is swept into its next dimension, and the bang folds the 9-cube back into a point, which is also where a line begins. Drag to turn it; on a phone, tilt.
+- **Julia skies.** The sky behind each scene is a Julia set with that tier's own constant, rendered live and breathing, and it morphs into the next tier's set during the zoom.
+- **The dimension dial.** A ring of ten ticks in the corner of the stage; the arc fills a plane per tier and each completed universe leaves a ring inside it.
+- **Hands on.** Tapping the stage mid-accident introduces members to each other: more links, a ripple, and the One arrives a little sooner.
+- **The minutes.** Every collective has a dozen extra lines "from the minutes", and every universe draws a fresh one per tier (ask for *another* on the card). The Rewinder's note in the constants also changes each time round.
+- **Theology.** Each tier says how the next one remembers its One (as a god: vast, powerful, no help with anything specific) and what the One thought of the committee that made it.
+- **Music per plane.** The infinity series plays in a different five-note mode on every plane, the pulse quickens a little each tier, and a pad adds one sine partial per dimension, so the tesseract hums with four and the 9-cube shimmers.
+- **Type.** Fraunces for display (optical sizes, the wonky *a* and *g* on the wordmark), the IBM Plex superfamily for everything that must agree on x-height and figures, and IM Fell English for the scripture, discretionary ligatures and drop cap included. Tracked mono capitals for labels, proportional figures in prose, tabular lining figures with a slashed zero in the data.
 
 ## How it works
 

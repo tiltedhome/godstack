@@ -3,9 +3,11 @@ import { LAYERS, UNIVERSE_NOTE, chapter, roman, versesFor } from './lore.ts'
 import { DUR, REDUCED_DUR, advance, back, initial, progress, step, trigger, type EngineState, type Phase } from './engine.ts'
 import { formatIQ, genLabel } from './format.ts'
 import { Renderer } from './render.ts'
-import { SCENES } from './scenes.ts'
+import { SCENES, setUniverse } from './scenes.ts'
 import { buildLedger } from './ledger.ts'
 import { Sound, type Sfx } from './audio.ts'
+import { DIMENSIONS } from './minutes.ts'
+import { minuteFor } from './rotate.ts'
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T
 const N = LAYERS.length
@@ -47,6 +49,8 @@ let autoplay = store.get('godstack:autoplay') !== 'off'
 const sound = new Sound()
 let wantSound = store.get('godstack:sound') === 'on'
 let speed = 1
+// how many times "another" has been asked of this tier's minutes
+let rerolls = 0
 
 const renderer = new Renderer(canvas, SCENES, LAYERS)
 
@@ -70,8 +74,22 @@ function renderCard() {
   const L = LAYERS[state.index]
   document.documentElement.style.setProperty('--accent', L.palette.accent)
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', L.palette.top)
+  setUniverse(state.octave)
+  const dim = DIMENSIONS[L.id]
+  const prev = LAYERS[(state.index + N - 1) % N]
   $('octave').textContent = `Universe ${state.octave}`
+  $('dim').textContent = `${dim.d}D · ${dim.label}`
   $('gen').textContent = `Generation ${genLabel(L.gen)}`
+  // the thesis, every tier: whoever made these was one plane down
+  $('plane').textContent =
+    state.index === 0
+      ? `Plane ${dim.d} · made by ${prev.one}, one universe down`
+      : `Plane ${dim.d} · made by ${prev.one}, one plane down`
+  $('t-below').textContent = L.theology[0]
+  $('t-above').textContent = L.theology[1]
+  $('f-plane').textContent = `${dim.d}D, ${dim.label}. ${dim.note}`
+  rerolls = 0
+  renderMinutes()
   // the algorithm in one line: what each member could do, and what they made together
   $('iq').textContent = `IQ ${formatIQ(L.memberIq)} → ${formatIQ(L.oneIq)}`
   $('name').textContent = state.octave > 1 ? `${L.name}, Universe ${state.octave}` : L.name
@@ -86,7 +104,13 @@ function renderCard() {
       const p = document.createElement('p')
       const n = document.createElement('sup')
       n.textContent = `${ch}:${k + 1}`
-      p.append(n, v)
+      if (k === 0) {
+        // a drop cap on the chapter's first letter (::first-letter would take the verse number)
+        const cap = document.createElement('span')
+        cap.className = 'dropcap'
+        cap.textContent = v[0]
+        p.append(n, cap, v.slice(1))
+      } else p.append(n, v)
       return p
     }),
   )
@@ -122,6 +146,10 @@ function renderCard() {
   } catch {
     /* sandboxed frames may refuse; deep links are a nicety */
   }
+}
+
+function renderMinutes() {
+  $('minutes').textContent = minuteFor(LAYERS[state.index].id, state.octave, rerolls)
 }
 
 let lastPhase: Phase | null = null
@@ -165,6 +193,7 @@ function renderAutoplay() {
 
 function go(next: EngineState) {
   const changed = next.index !== state.index || next.octave !== state.octave
+  if (changed) SCENES[state.index].graph.reset()
   state = next
   lastPhase = null
   if (changed) renderCard()
@@ -211,7 +240,11 @@ autoBtn.addEventListener('click', () => {
   autoplay = !autoplay
   store.set('godstack:autoplay', autoplay ? 'on' : 'off')
   renderAutoplay()
-renderSound()
+  renderSound()
+})
+$('reroll').addEventListener('click', () => {
+  rerolls++
+  renderMinutes()
 })
 scripture.addEventListener('toggle', () => layoutStage())
 
@@ -305,16 +338,49 @@ window.addEventListener('keydown', (e) => {
   }
 })
 
-// Tap the sky to set things in motion; swipe sideways to move between generations.
-let touchStart: { x: number; y: number } | null = null
-canvas.addEventListener('pointerdown', (e) => (touchStart = { x: e.clientX, y: e.clientY }))
+// The sky is hands-on. A tap sets things in motion, or, mid-accident, introduces a few
+// members to each other (more links, a ripple, and the One arrives a little sooner). A drag
+// turns the hypercube; a quick flick sideways moves between generations.
+let touchStart: { x: number; y: number; t: number; lx: number; ly: number } | null = null
+canvas.addEventListener('pointerdown', (e) => {
+  touchStart = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, ly: e.clientY }
+  canvas.setPointerCapture(e.pointerId)
+})
+canvas.addEventListener('pointermove', (e) => {
+  if (!touchStart) return
+  const dx = e.clientX - touchStart.lx
+  const dy = e.clientY - touchStart.ly
+  touchStart.lx = e.clientX
+  touchStart.ly = e.clientY
+  renderer.spin.yaw += dx * 0.006
+  renderer.spin.pitch += dy * 0.006
+  renderer.spinVel.yaw = dx * 0.25
+  renderer.spinVel.pitch = dy * 0.25
+})
 canvas.addEventListener('pointerup', (e) => {
   if (!touchStart) return
   const dx = e.clientX - touchStart.x
   const dy = e.clientY - touchStart.y
+  const dt = performance.now() - touchStart.t
   touchStart = null
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? advance(state) : back(state, N))
-  else if (Math.hypot(dx, dy) < 12) go(trigger(state))
+  const flick = dt < 350 && Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2
+  if (flick) {
+    renderer.spinVel.yaw = 0
+    go(dx < 0 ? advance(state) : back(state, N))
+  } else if (Math.hypot(dx, dy) < 12) {
+    if (state.phase === 'act') {
+      SCENES[state.index].graph.introduce(3)
+      renderer.ripple(e.clientX, e.clientY, LAYERS[state.index].palette.accent)
+      // a little nearer the moment of emergence, never past it
+      go({ ...state, t: Math.min(dur().act * 0.64, state.t + 0.35) })
+    } else go(trigger(state))
+  }
+})
+canvas.addEventListener('pointercancel', () => (touchStart = null))
+// On phones that offer it, tilting the device leans the hypercube a little.
+window.addEventListener('deviceorientation', (e) => {
+  if (reducedMq.matches || e.gamma == null || e.beta == null) return
+  renderer.tilt = [Math.max(-1, Math.min(1, e.gamma / 35)), Math.max(-1, Math.min(1, (e.beta - 40) / 35))]
 })
 
 window.addEventListener('resize', () => layoutStage(true))
@@ -372,5 +438,12 @@ window.godstack = {
   setAutoplay(on: boolean) {
     autoplay = on
     renderAutoplay()
+  },
+  reroll() {
+    rerolls++
+    renderMinutes()
+  },
+  spin() {
+    return { ...renderer.spin }
   },
 }

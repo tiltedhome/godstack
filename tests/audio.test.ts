@@ -16,7 +16,7 @@ it('gates rhythm with Thue–Morse', () => {
 
 it('climbs a fifth per generation and lands on the pentatonic scale', () => {
   expect(LAYERS.map((_, i) => rootSemis(i))).toEqual([0, 7, 2, 9, 4, 11, 6])
-  expect([-1, 0, 4, 5, 7].map(degreeSemis)).toEqual([-3, 0, 9, 12, 16])
+  expect([-1, 0, 4, 5, 7].map((d) => degreeSemis(d))).toEqual([-3, 0, 9, 12, 16])
 })
 
 it('cues sound effects for every scene, in order, inside the accident', () => {

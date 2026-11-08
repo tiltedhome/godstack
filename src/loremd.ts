@@ -1,5 +1,6 @@
 import { COROLLARIES, LAW, LAYERS, UNIVERSE_NOTE, chapter, roman, versesFor } from './lore.ts'
 import { formatIQ, genLabel } from './format.ts'
+import { DIMENSIONS, MINUTES, NOTES } from './minutes.ts'
 
 export function renderLoreMarkdown(): string {
   const out: string[] = [
@@ -18,10 +19,13 @@ export function renderLoreMarkdown(): string {
   ]
   LAYERS.forEach((L, i) => {
     const ch = chapter(i, 1)
+    const dim = DIMENSIONS[L.id]
     out.push(
       `## ${genLabel(L.gen)}: ${L.name}`,
       '',
       `*${L.latin}.* ${L.epithet}`,
+      '',
+      `**Plane ${dim.d}, ${dim.label}.** ${dim.note}`,
       '',
       `> *The Book of Upward Delegation, chapter ${roman(ch)}*`,
       '>',
@@ -35,9 +39,19 @@ export function renderLoreMarkdown(): string {
       `- **Made, together:** ${L.one} (IQ ${formatIQ(L.oneIq)}). ${L.oneNote}`,
       `- **Then:** ${L.multiplied}`,
       '',
+      `**Seen from the plane above:** ${L.theology[0]}`,
+      '',
+      `**Seen from the One itself:** ${L.theology[1]}`,
+      '',
+      '<details><summary>From the minutes</summary>',
+      '',
+      ...(MINUTES[L.id] ?? []).map((m) => `- ${m}`),
+      '',
+      '</details>',
+      '',
     )
     if (L.footnote) out.push(`> ${L.footnote}`, '')
   })
-  out.push('## ∞: Universe 2', '', UNIVERSE_NOTE, '')
+  out.push('## ∞: Universe 2', '', UNIVERSE_NOTE, '', '### What the note in the constants says, some universes', '', ...NOTES.map((n) => `- ${n}`), '')
   return out.join('\n')
 }
