@@ -2,9 +2,14 @@ name: ci
 
 # Safe for pull requests from forks: this uses `pull_request` (never `pull_request_target`),
 # so fork PRs run with a read-only token and no secrets. Every action is pinned to a commit.
+#
+# The site has two cuts: `main` is published at the root and the `v3` branch at /v3/. Every
+# deploy builds both branches, so publishing one never knocks the other off the air. Only
+# `main` may deploy to the github-pages environment; a green push to `v3` asks main's
+# workflow to run, which rebuilds both and deploys.
 on:
   push:
-    branches: [main]
+    branches: [main, v3]
   pull_request:
   workflow_dispatch:
 
@@ -83,15 +88,60 @@ jobs:
         with:
           name: claude-artifact
           path: dist-artifact/godstack.html
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+  # A green v3 asks main to publish (workflow_dispatch is one of the two events a
+  # GITHUB_TOKEN may trigger). The deploy itself only ever runs from main.
+  publish:
+    name: ask main to publish
+    needs: [lint, workflows, build]
+    if: github.ref == 'refs/heads/v3' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - run: gh workflow run ci.yml --ref main --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  # Both cuts are built fresh from their branches, so the published site is never half of one.
+  site:
+    name: assemble the site
+    needs: [lint, workflows, build]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          path: dist
+          ref: main
+          path: main
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v3
+          path: v3
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - run: npm ci && npm run build
+        working-directory: main
+      - run: npm ci && npm run build
+        working-directory: v3
+      - run: |
+          mkdir -p site/v3
+          cp main/dist/index.html site/index.html
+          cp v3/dist/index.html site/v3/index.html
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
 
   deploy:
     name: deploy to GitHub Pages
-    needs: [lint, workflows, build]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: site
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
