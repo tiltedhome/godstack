@@ -1,23 +1,34 @@
 // The sky behind each scene is a Julia set, computed live at low resolution and stretched
-// over the stage. Each tier has its own constant c, chosen for a shape that suits it, and the
-// constant drifts in a slow circle so the set breathes. During a zoom c slides from one tier's
-// value to the next, so the sky morphs instead of cutting.
+// over the stage. Each plane has its own constant c, and the constant drifts in a slow circle
+// so the set breathes. Between planes the camera leaves the Julia set for the Mandelbrot set,
+// crosses it from the old constant to the new one, and drops into the new plane's sky.
 
 import { type Ctx, clamp, lerp } from './draw.ts'
 
 export type Complex = [number, number]
 
-// One constant per tier: dendrites for the vents, a stromatolite-ish blob for the mats, a
-// branching canopy, a spiral galaxy, and so on. All sit on or near the Mandelbrot boundary.
+// One constant per plane, all on or near the boundary of the Mandelbrot set, which is the
+// map of every Julia set there is: pick a point on it and that point's Julia set looks, up
+// close, like the map does there (Tan Lei proved a precise version in 1990). So the zoom
+// between planes can honestly travel across the map from one constant to the next.
 export const JULIA_C: Complex[] = [
-  [-0.79, 0.15], // vents: branching dendrites, like fluid through rock
-  [-0.4, 0.6], // mat: fat lobes, layered
-  [0.285, 0.01], // troop: a canopy of fronds
+  [-0.79, 0.15], // overtones: dendrites, like a plucked string photographed badly
+  [0.285, 0.01], // orrery: nested ovals, wheels in wheels
+  [-0.4, 0.6], // cluster: fat lobes, a ball of lobes
   [-0.7017, 0.3842], // humans: spirals within spirals
-  [-0.835, -0.2321], // instances: a tiling of copies
-  [0.355, 0.355], // lightcone: pinwheels, like galaxies
-  [-0.7269, 0.1889], // undoers: a filigree about to dissolve
+  [-0.835, -0.2321], // polis: a tiling of copies
+  [0.355, 0.355], // brood: pinwheels budding pinwheels
+  [-0.7269, 0.1889], // caucus: a filigree about to become one line
 ]
+
+// Each loop nudges every constant a little way round a small circle, so the same plane has a
+// recognisably similar sky that is never the same sky twice.
+export function juliaFor(index: number, loop: number): Complex {
+  const [re, im] = JULIA_C[index % JULIA_C.length]
+  if (loop <= 1) return [re, im]
+  const a = (loop - 1) * 2.39996
+  return [re + Math.cos(a) * 0.006, im + Math.sin(a) * 0.006]
+}
 
 export class JuliaSky {
   readonly canvas = document.createElement('canvas')
@@ -75,6 +86,57 @@ export class JuliaSky {
           d[k++] = Math.min(255, lerp(tg * 0.35, tg, u * band) + 255 * lift) * a
           d[k++] = Math.min(255, lerp(tb * 0.35, tb, u * band) + 255 * lift) * a
           d[k++] = 255 * a * 0.9
+        }
+      }
+    }
+    this.g.putImageData(this.img!, 0, 0)
+    return this.canvas
+  }
+
+  // Renders the Mandelbrot set around a point: the map the zoom travels across. Same colouring as the skies, so the two crossfade cleanly.
+  renderMap(center: Complex, tint: [number, number, number], w: number, h: number, span: number, t: number) {
+    w = Math.max(24, Math.round(w))
+    h = Math.max(16, Math.round(h))
+    if (w !== this.w || h !== this.h) {
+      this.canvas.width = this.w = w
+      this.canvas.height = this.h = h
+      this.img = this.g.createImageData(w, h)
+    }
+    const d = this.img!.data
+    const aspect = w / h
+    const maxIt = 48
+    const [tr, tg, tb] = tint
+    let k = 0
+    for (let y = 0; y < h; y++) {
+      const ci = center[1] + ((y / h) * 2 - 1) * (span / 2)
+      for (let x = 0; x < w; x++) {
+        const cr = center[0] + ((x / w) * 2 - 1) * (span / 2) * aspect
+        let zr = 0
+        let zi = 0
+        let i = 0
+        let r2 = 0
+        for (; i < maxIt; i++) {
+          const nr = zr * zr - zi * zi + cr
+          zi = 2 * zr * zi + ci
+          zr = nr
+          r2 = zr * zr + zi * zi
+          if (r2 > 16) break
+        }
+        if (i >= maxIt) {
+          d[k++] = tr * 0.16
+          d[k++] = tg * 0.16
+          d[k++] = tb * 0.16
+          d[k++] = 150
+        } else {
+          const nu = i + 1 - Math.log2(Math.log(r2) / 2)
+          const u = clamp(nu / maxIt)
+          const band = 0.55 + 0.45 * Math.sin(nu * 0.7 - t * 0.6)
+          const a = Math.pow(u, 0.9) * (0.5 + 0.5 * band)
+          const lift = Math.pow(u, 3) * 0.7
+          d[k++] = Math.min(255, lerp(tr * 0.35, tr, u * band) + 255 * lift) * a
+          d[k++] = Math.min(255, lerp(tg * 0.35, tg, u * band) + 255 * lift) * a
+          d[k++] = Math.min(255, lerp(tb * 0.35, tb, u * band) + 255 * lift) * a
+          d[k++] = 255 * a
         }
       }
     }

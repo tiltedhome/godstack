@@ -16,16 +16,16 @@ function chart(): SVGSVGElement {
   const W = 480
   const H = 310
   const m = { l: 46, r: 16, t: 20, b: 36 }
-  const lo = -10
-  const hi = 17
+  const lo = -13
+  const hi = 23
   const x = (g: number, half = 0) => m.l + ((g + 3 + half * 0.45) / 6.6) * (W - m.l - m.r)
   const y = (v: number) => m.t + ((hi - Math.log10(v)) / (hi - lo)) * (H - m.t - m.b)
   const svg = el('svg', {
     viewBox: `0 0 ${W} ${H}`,
     role: 'img',
-    'aria-label': 'Staircase chart of IQ by generation on a log scale. In each generation a collective of members builds one smarter mind, which becomes the next collective. IQ rises from 10⁻⁹ for a molecule to 10¹⁶ for the Rewinder.',
+    'aria-label': 'Staircase chart of IQ by plane on a log scale. On each plane a collective of members builds one greater mind, which becomes the members of the next plane. IQ rises from 10⁻¹² for a single harmonic to 10²² for the String.',
   })
-  for (let e = -9; e <= 15; e += 6) {
+  for (let e = -12; e <= 22; e += 6) {
     svg.append(el('line', { x1: m.l, x2: W - m.r, y1: y(10 ** e), y2: y(10 ** e), class: 'grid' }))
     svg.append(el('text', { x: m.l - 8, y: y(10 ** e) + 4, class: 'tick', 'text-anchor': 'end' }, `10${sup(e)}`))
   }
@@ -55,7 +55,7 @@ export function buildLedger() {
   document.getElementById('chart')!.append(chart())
   const table = document.getElementById('ledger-table') as HTMLTableElement
   const head = table.createTHead().insertRow()
-  for (const h of ['Gen', 'Collective', 'Members', 'Took', 'Officially', 'Actually', 'Made, together', 'IQ']) {
+  for (const h of ['Plane', 'Collective', 'Members', 'Took', 'Officially', 'Why, really', 'Made, together', 'IQ']) {
     const th = document.createElement('th')
     th.scope = 'col'
     th.textContent = h
@@ -64,7 +64,7 @@ export function buildLedger() {
   const body = table.createTBody()
   for (const L of LAYERS) {
     const row = body.insertRow()
-    const cells = [genLabel(L.gen), L.name, L.members, L.took, L.officially, L.actually, L.one, `${formatIQ(L.memberIq)} → ${formatIQ(L.oneIq)}`]
+    const cells = [genLabel(L.gen), L.name, L.members, L.took, L.officially, L.why, L.one, `${formatIQ(L.memberIq)} → ${formatIQ(L.oneIq)}`]
     cells.forEach((c, j) => {
       const td = row.insertCell()
       td.textContent = c

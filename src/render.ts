@@ -1,10 +1,10 @@
 import { clamp, easeInOut, easeOut, lerp, rgba, rng, seg, type Ctx } from './draw.ts'
 import { progress, type Durations, type EngineState } from './engine.ts'
-import { chapter, roman, versesFor, type Layer } from './lore.ts'
-import type { Scene } from './scenes.ts'
-import { formatLogIQ } from './format.ts'
-import { JULIA_C, JuliaSky, hexToRgb, type Complex } from './fractal.ts'
-import { drawHyper, tierDimension, type Spin } from './hyper.ts'
+import { BOOK, chapter, roman, versesFor, type Layer } from './lore.ts'
+import { stage as sceneStage, type Scene } from './scenes.ts'
+import { formatLogIQ, genLabel } from './format.ts'
+import { JuliaSky, hexToRgb, juliaFor, type Complex } from './fractal.ts'
+import { accentFor, noteFor } from './rotate.ts'
 
 export interface Rect {
   x: number
@@ -13,14 +13,31 @@ export interface Rect {
   h: number
 }
 
-// How much deeper each layer sits inside its parent's creation.
-const ZOOM = 18
+// How much smaller each plane sits inside the next one up.
+export const ZOOM = 18
 // A clock reading where every creature has its eyes open.
 const FROZEN_TIME = 1
 const FELL = '"IM Fell English", Georgia, "Times New Roman", serif'
 const DISPLAY = '"Fraunces", "Iowan Old Style", Georgia, serif'
 const MONO = '"IBM Plex Mono", ui-monospace, monospace'
 const TAU = Math.PI * 2
+
+export interface Spin {
+  yaw: number
+  pitch: number
+}
+
+// Where the camera is during the pull-back between planes, in scene units. `u` runs 0 to 1.
+// The plane being left (inner) shrinks to 1/ZOOM and comes to rest on the socket of the
+// plane being entered (outer), which starts ZOOM times too big and centred on that socket.
+export function pullBack(sock: [number, number], u: number) {
+  const zo = Math.pow(ZOOM, 1 - u)
+  const zi = zo / ZOOM
+  return {
+    outer: { c: [sock[0] - (sock[0] * u) / zo, sock[1] - (sock[1] * u) / zo] as [number, number], z: zo },
+    inner: { c: [(-sock[0] * u) / zi, (-sock[1] * u) / zi] as [number, number], z: zi },
+  }
+}
 
 interface VerseLine {
   text: string
@@ -33,6 +50,7 @@ interface Ripple {
   y: number
   t0: number
   color: string
+  word: string
 }
 
 export class Renderer {
@@ -48,10 +66,11 @@ export class Renderer {
   private scenes: Scene[]
   private layers: Layer[]
   private sky = new JuliaSky()
+  private map = new JuliaSky()
   private skyFrame = 0
   private skyKey = ''
   private ripples: Ripple[] = []
-  // the hypercube's attitude: dragged by hand, nudged by the phone's tilt, with a little inertia
+  // the form's attitude: dragged by hand, nudged by the phone's tilt, with a little inertia
   spin: Spin = { yaw: 0, pitch: 0 }
   spinVel: Spin = { yaw: 0, pitch: 0 }
   tilt: [number, number] = [0, 0]
@@ -86,8 +105,13 @@ export class Renderer {
     return [(px - (stage.x + stage.w / 2)) / k, (py - (stage.y + stage.h / 2)) / k]
   }
 
-  ripple(px: number, py: number, color: string) {
-    this.ripples.push({ x: px, y: py, t0: this.lastTime, color })
+  // A tap leaves rings and a word for what the tap did on this plane.
+  ripple(px: number, py: number, color: string, word = '') {
+    this.ripples.push({ x: px, y: py, t0: this.lastTime, color, word })
+  }
+
+  private accent(i: number, loop: number) {
+    return accentFor(this.layers[i].palette.accent, loop)
   }
 
   frame(s: EngineState, now: number, dur: Durations, reduced: boolean) {
@@ -100,62 +124,69 @@ export class Renderer {
     const st = this.stage
     // the stage glides to its new place, except with reduced motion, where it snaps
     for (const k of ['x', 'y', 'w', 'h'] as const) st[k] = reduced ? this.target[k] : lerp(st[k], this.target[k], 0.18)
-    // inertia on the hand-spun hypercube
+    // inertia on the hand-spun form
     this.spin.yaw += this.spinVel.yaw * dt
-    this.spin.pitch += this.spinVel.pitch * dt
+    this.spin.pitch = clamp(this.spin.pitch + this.spinVel.pitch * dt, -1.1, 1.1)
     const decay = Math.pow(0.08, dt)
     this.spinVel.yaw *= decay
     this.spinVel.pitch *= decay
+    sceneStage.yaw = this.spin.yaw + this.tilt[0] * 0.35
+    sceneStage.pitch = this.spin.pitch + this.tilt[1] * 0.3
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     const n = this.scenes.length
     const cur = s.index
     const next = (cur + 1) % n
+    const loop = s.octave
+    const nextLoop = next === 0 ? loop + 1 : loop
     const p = progress(s, dur)
+    const accent = this.accent(cur, loop)
     if (s.phase !== 'zoom') {
-      this.gradient(cur, 1)
-      this.julia(JULIA_C[cur], this.layers[cur].palette.accent, 1, time, reduced, 1)
+      this.gradient(cur, accent, 1)
+      this.julia(juliaFor(cur, loop), accent, time, reduced, 1)
       this.starfield(time, 0, reduced)
-      this.hyper(cur, p, 0, time, 1)
-      this.scripture(cur, s.octave, time, s.phase === 'idle' ? -1 : p, 1)
-      this.scene(cur, time, p, [0, 0], 1, 1)
+      this.scripture(cur, loop, time, s.phase === 'idle' ? -1 : p, 1)
+      this.scene(cur, time, p, [0, 0], 1, 1, accent)
+      this.detail(cur, loop, time, 1 - seg(p, 0.04, 0.16))
       this.ripplesDraw(now)
-      this.hud(cur, s.phase === 'idle' ? 0 : p, 1)
-      this.dial(cur, p, s.octave, 0, 1)
+      this.hud(cur, s.phase === 'idle' ? 0 : p, accent, 1)
+      this.ouroboros(cur, cur + seg(p, 0, 1) * 0.86, loop, accent, 1)
       return
     }
     const raw = clamp(s.t / dur.zoom)
     const u = easeInOut(raw)
-    this.gradient(cur, 1)
-    this.gradient(next, u)
-    const c: Complex = [lerp(JULIA_C[cur][0], JULIA_C[next][0], u), lerp(JULIA_C[cur][1], JULIA_C[next][1], u)]
-    this.julia(c, u < 0.5 ? this.layers[cur].palette.accent : this.layers[next].palette.accent, 1 + raw * 0.8, time, reduced, 1)
-    this.starfield(time, reduced ? 0 : Math.sin(Math.PI * raw), reduced)
-    // the cube is swept into its next dimension; after the Undoers, a point sweeps into a line
-    this.hyper(cur, 1, u, time, 1)
-    this.scripture(cur, s.octave, time, 1, 1 - u)
-    this.scripture(next, next === 0 ? s.octave + 1 : s.octave, time, -1, u)
+    const accentNext = this.accent(next, nextLoop)
+    this.gradient(cur, accent, 1)
+    this.gradient(next, accentNext, u)
+    this.scripture(cur, loop, time, 1, 1 - u)
+    this.scripture(next, nextLoop, time, -1, u)
     if (reduced) {
-      this.scene(cur, time, 1, [0, 0], 1, 1 - u)
-      this.scene(next, time, 0, [0, 0], 1, u)
-      this.dial(cur, 1, s.octave, u, 1)
+      // no travelling: the old sky and scene fade out as the new ones fade in
+      this.julia(juliaFor(u < 0.5 ? cur : next, u < 0.5 ? loop : nextLoop), u < 0.5 ? accent : accentNext, time, true, 1)
+      this.starfield(time, 0, true)
+      this.scene(cur, time, 1, [0, 0], 1, 1 - u, accent)
+      this.scene(next, time, 0, [0, 0], 1, u, accentNext)
+      this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, u < 0.5 ? accent : accentNext, 1)
       return
     }
-    // Fly into the focus point of the current scene; the next scene is already sitting
-    // there at 1/ZOOM scale, so it grows to fill the stage as we arrive. The focus point's
-    // on-screen offset shrinks linearly, so it never drifts off-screen as the zoom grows.
-    const f = this.scenes[cur].focus
-    const z1 = Math.pow(ZOOM, u)
-    const off: [number, number] = [(f[0] * (1 - u)) / z1, (f[1] * (1 - u)) / z1]
-    const c1: [number, number] = [f[0] - off[0], f[1] - off[1]]
-    const c2: [number, number] = [-off[0] * ZOOM, -off[1] * ZOOM]
-    this.scene(cur, time, 1, c1, z1, 1 - seg(raw, 0.5, 0.95))
-    this.scene(next, time, 0, c2, z1 / ZOOM, seg(raw, 0.05, 0.6))
-    this.fold(cur, raw)
+    // The sky leaves the old plane's Julia set for the Mandelbrot set, which is the map of
+    // all of them, crosses it from the old constant to the new, and drops into the new sky.
+    const c0 = juliaFor(cur, loop)
+    const c1 = juliaFor(next, nextLoop)
+    const onMap = seg(raw, 0.08, 0.3) * (1 - seg(raw, 0.7, 0.92))
+    this.julia(raw < 0.5 ? c0 : c1, raw < 0.5 ? accent : accentNext, time, false, 1 - onMap, (this.skyFrame & 1) === 0)
+    this.atlas([lerp(c0[0], c1[0], u), lerp(c0[1], c1[1], u)], u < 0.5 ? accent : accentNext, 0.45 + 1.9 * Math.sin(Math.PI * raw), time, onMap, (this.skyFrame & 1) === 1)
+    this.starfield(time, Math.sin(Math.PI * raw), reduced)
+    // Pull back: the plane being left shrinks to 1/ZOOM and turns out to be one member of
+    // the plane above, which was there all along, ZOOM times too big to see.
+    const cam = pullBack(this.scenes[next].socket(time), u)
+    this.scene(next, time, 0, cam.outer.c, cam.outer.z, easeInOut(seg(raw, 0.38, 0.86)), accentNext)
+    this.scene(cur, time, 1, cam.inner.c, cam.inner.z, 1, accent)
+    this.fold(accent, raw)
     this.ripplesDraw(now)
-    this.dial(cur, 1, s.octave, u, 1)
+    this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, u < 0.5 ? accent : accentNext, 1)
   }
 
-  private scene(i: number, time: number, p: number, c: [number, number], z: number, a: number) {
+  private scene(i: number, time: number, p: number, c: [number, number], z: number, a: number, accent: string) {
     if (a <= 0.002) return
     const { ctx, dpr, stage } = this
     const k = (Math.min(stage.w, stage.h) / 215) * z
@@ -164,99 +195,127 @@ export class Renderer {
     ctx.save()
     ctx.globalAlpha = a
     ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * (cx - c[0] * k), dpr * (cy - c[1] * k))
-    this.scenes[i].draw(ctx, time, p)
+    this.scenes[i].draw(ctx, time, p, accent)
     ctx.restore()
   }
 
-  /* ------------------------------------------------------------ dimensions */
+  /* ---------------------------------------------------------------- scales */
 
-  // The tier's hypercube, turning behind the scene. extrude > 0 sweeps it into the next
-  // dimension (the zoom); the Undoers' bang folds theirs back into a point.
-  private hyper(i: number, p: number, extrude: number, time: number, a: number) {
+  // The plane below is still there after the pull-back: it sits on one member of this plane,
+  // at 1/ZOOM scale, inside a small reticle, until this plane's own story gets going.
+  private detail(i: number, loop: number, time: number, a: number) {
+    if (a <= 0.01) return
+    const n = this.scenes.length
+    const prev = (i + n - 1) % n
+    const prevLoop = i === 0 ? loop - 1 : loop
+    if (prevLoop < 1) return
     const { ctx, stage } = this
-    const last = i === this.scenes.length - 1
-    const collapse = last ? seg(p, 0.74, 0.86) : 0
-    let d = tierDimension(i, p)
-    if (last && extrude > 0) d = 0
-    const r = Math.min(stage.w, stage.h) * (0.3 + 0.02 * d)
-    const cx = stage.x + stage.w / 2 + this.tilt[0] * 14
-    const cy = stage.y + stage.h * 0.46 + this.tilt[1] * 10
-    const spin = { yaw: this.spin.yaw + this.tilt[0] * 0.35, pitch: this.spin.pitch + this.tilt[1] * 0.35 }
-    const accent = this.layers[i].palette.accent
+    const sock = this.scenes[i].socket(time)
+    this.scene(prev, time, 1, [-sock[0] * ZOOM, -sock[1] * ZOOM], 1 / ZOOM, a, this.accent(prev, prevLoop))
+    const k = Math.min(stage.w, stage.h) / 215
+    const x = stage.x + stage.w / 2 + sock[0] * k
+    const y = stage.y + stage.h / 2 + sock[1] * k
+    const r = (215 / ZOOM) * k * 0.62
     ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
-    drawHyper(ctx, { d, extrude, collapse: extrude === 0 ? collapse : 0, t: time, spin, cx, cy, r, color: accent, alpha: 0.42 * a })
+    ctx.globalAlpha = a * 0.75
+    ctx.strokeStyle = this.accent(i, loop)
+    ctx.lineWidth = 1
+    ctx.setLineDash([3, 3])
+    ctx.beginPath()
+    ctx.arc(x, y, r, 0, TAU)
+    ctx.stroke()
+    ctx.setLineDash([])
+    ctx.font = `500 9px ${MONO}`
+    ctx.fillStyle = this.accent(i, loop)
+    const label = `${this.layers[prev].one.toUpperCase()}  ×1/${ZOOM}`
+    const left = x > stage.x + stage.w / 2
+    ctx.textAlign = left ? 'right' : 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(label, x + (left ? -r - 5 : r + 5), y)
     ctx.restore()
   }
 
-  // The dimension dial: a ring of ten ticks in the corner of the stage. The arc fills as the
-  // stack climbs, one tick per dimension; each completed universe leaves a thin ring inside.
-  private dial(i: number, p: number, octave: number, zoomU: number, a: number) {
+  // The timeline is a snake eating its tail. The seven planes are laid round the ring from
+  // the tail (the lowest plane, thin) to the head (the highest, thick), and the head meets
+  // the tail at the top. `at` is how far round the story is, in planes. Every completed loop
+  // leaves a ring inside the ring.
+  private ouroboros(i: number, at: number, loop: number, accent: string, a: number) {
     const { ctx, stage } = this
-    const r = 23
+    const n = this.scenes.length
+    const r = 24
     const cx = stage.x + stage.w - r - 14
-    const cy = stage.y + r + 10
-    const accent = this.layers[i].palette.accent
-    const d0 = tierDimension(i, p)
-    const dNext = i === this.scenes.length - 1 ? 10 : tierDimension(i + 1, 0)
-    const d = lerp(d0, dNext, zoomU)
-    const a0 = (-Math.PI * 5) / 6 - Math.PI / 2 // ten o'clock, going clockwise through 300°
-    const ang = (k: number) => a0 + (k / 10) * ((TAU * 5) / 6)
+    const cy = stage.y + r + 12
+    const gap = 0.2
+    const ang = (k: number) => -Math.PI / 2 + gap + (k / n) * (TAU - gap * 1.6)
     ctx.save()
     ctx.globalAlpha = a
-    ctx.lineCap = 'round'
-    for (let u = 1; u < Math.min(octave, 5); u++) {
+    ctx.lineCap = 'butt'
+    for (let u = 1; u < Math.min(loop, 6); u++) {
       ctx.beginPath()
-      ctx.arc(cx, cy, r - 5 - u * 3, ang(0), ang(10))
-      ctx.strokeStyle = rgba(accent, 0.22)
-      ctx.lineWidth = 1
+      ctx.arc(cx, cy, r - 6.5 - u * 2.6, 0, TAU)
+      ctx.strokeStyle = rgba(accent, 0.3)
+      ctx.lineWidth = 0.9
       ctx.stroke()
     }
-    ctx.beginPath()
-    ctx.arc(cx, cy, r, ang(0), ang(10))
-    ctx.strokeStyle = rgba('#ffffff', 0.14)
-    ctx.lineWidth = 1.5
-    ctx.stroke()
-    ctx.beginPath()
-    ctx.arc(cx, cy, r, ang(0), ang(d))
-    ctx.strokeStyle = rgba(accent, 0.85)
-    ctx.lineWidth = 2.2
-    ctx.stroke()
-    for (let k = 0; k <= 10; k++) {
-      const t = ang(k)
-      const lit = k <= d + 0.01
+    // the body, in short segments that thicken toward the head
+    const SEG = 56
+    for (let k = 0; k < SEG; k++) {
+      const f = k / SEG
+      const lit = f * n <= at
       ctx.beginPath()
-      ctx.arc(cx + Math.cos(t) * r, cy + Math.sin(t) * r, lit ? 1.9 : 1.1, 0, TAU)
-      ctx.fillStyle = lit ? accent : 'rgba(255,255,255,.35)'
+      ctx.arc(cx, cy, r, ang(f * n) - 0.01, ang(((k + 1) / SEG) * n) + 0.01)
+      ctx.strokeStyle = lit ? rgba(accent, 0.55 + 0.4 * f) : 'rgba(255,255,255,.16)'
+      ctx.lineWidth = 1.2 + 3.6 * f
+      ctx.stroke()
+    }
+    // a scale for each plane, and a brighter one where the story is now
+    for (let k = 0; k < n; k++) {
+      const t = ang(k + 0.5)
+      ctx.beginPath()
+      ctx.arc(cx + Math.cos(t) * r, cy + Math.sin(t) * r, k === i ? 2.6 : 1.1, 0, TAU)
+      ctx.fillStyle = k === i ? '#fff' : k < at ? '#0b0a12' : 'rgba(255,255,255,.4)'
       ctx.fill()
     }
-    const tip = ang(d)
+    // the head, biting the tail at twelve o'clock
+    const h = ang(n)
+    const hx = cx + Math.cos(h) * r
+    const hy = cy + Math.sin(h) * r
+    ctx.translate(hx, hy)
+    ctx.rotate(h + Math.PI / 2)
     ctx.beginPath()
-    ctx.arc(cx + Math.cos(tip) * r, cy + Math.sin(tip) * r, 3.2, 0, TAU)
-    ctx.fillStyle = '#fff'
+    ctx.moveTo(-3, -3.4)
+    ctx.quadraticCurveTo(6.5, -4.2, 9.5, 0)
+    ctx.quadraticCurveTo(6.5, 4.2, -3, 3.4)
+    ctx.closePath()
+    ctx.fillStyle = at >= n - 0.02 ? accent : rgba(accent, 0.75)
     ctx.fill()
+    ctx.beginPath()
+    ctx.arc(3.4, -1.5, 0.9, 0, TAU)
+    ctx.fillStyle = '#0b0a12'
+    ctx.fill()
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0)
     ctx.fillStyle = accent
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.font = `italic 500 15px ${DISPLAY}`
-    ctx.fillText(`${Math.round(d)}D`, cx, cy - 1)
-    ctx.font = `500 7.5px ${MONO}`
-    ctx.fillStyle = 'rgba(255,255,255,.5)'
-    ctx.fillText('PLANE', cx, cy + 10)
+    ctx.fillText(genLabel(this.layers[i].gen), cx, cy - 2)
+    ctx.font = `500 7px ${MONO}`
+    ctx.fillStyle = 'rgba(255,255,255,.55)'
+    ctx.fillText(`LOOP ${loop}`, cx, cy + 9)
     ctx.restore()
   }
 
-  // During the zoom a ring sweeps out from the focus, ticked like the dial: the fold.
-  private fold(i: number, raw: number) {
+  // During the pull-back a ring closes in on the plane being left, ticked like a dial.
+  private fold(accent: string, raw: number) {
     const { ctx, stage } = this
     const cx = stage.x + stage.w / 2
     const cy = stage.y + stage.h / 2
-    const R = Math.max(stage.w, stage.h) * easeOut(raw) * 0.9
+    const R = Math.max(stage.w, stage.h) * (1 - easeOut(raw)) * 0.9
     const a = Math.sin(raw * Math.PI) * 0.6
     if (R < 2 || a <= 0.01) return
     ctx.save()
     ctx.globalAlpha = a
-    ctx.strokeStyle = this.layers[i].palette.accent
+    ctx.strokeStyle = accent
     ctx.lineWidth = 1
     ctx.beginPath()
     ctx.arc(cx, cy, R, 0, TAU)
@@ -289,13 +348,22 @@ export class Renderer {
         ctx.arc(r.x, r.y, rad, age * 2 * k, age * 2 * k + TAU)
         ctx.stroke()
       }
+      ctx.setLineDash([])
+      if (r.word) {
+        ctx.globalAlpha = Math.min(1, (1 - age) * 1.6)
+        ctx.fillStyle = r.color
+        ctx.font = `500 11px ${MONO}`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(r.word.toUpperCase(), r.x, r.y - 22 - age * 16)
+      }
       ctx.restore()
     }
   }
 
   /* -------------------------------------------------------------- scripture */
 
-  // Faint verses from the Book of Upward Delegation behind each scene. The verse the
+  // Faint verses from the Book of Scales behind each scene. The verse the
   // animation is acting out glows a little brighter; none of it competes with the creatures.
   private scripture(i: number, octave: number, time: number, p: number, a: number) {
     if (a <= 0.01) return
@@ -310,17 +378,17 @@ export class Renderer {
     const x0 = stage.x + (stage.w - maxW) / 2
     let y = stage.y + (stage.h - total) / 2 + Math.sin(time * 0.06) * size * 0.5
     const live = p < 0 ? -1 : Math.min(2, Math.floor(p * 3))
-    const accent = this.layers[i].palette.accent
+    const accent = this.accent(i, octave)
     ctx.save()
     ctx.textBaseline = 'alphabetic'
     ctx.textAlign = 'left'
     ctx.fillStyle = accent
-    ctx.globalAlpha = 0.14 * a
+    ctx.globalAlpha = 0.11 * a
     ctx.font = `${Math.round(size * 0.62)}px ${FELL}`
-    ctx.fillText(`THE BOOK OF UPWARD DELEGATION  ·  CHAPTER ${roman(ch)}`, x0, y + size)
+    ctx.fillText(`${BOOK.toUpperCase()}  ·  CHAPTER ${roman(ch)}`, x0, y + size)
     y += head
     for (const line of lines) {
-      ctx.globalAlpha = (line.verse === live ? 0.21 : 0.095) * a
+      ctx.globalAlpha = (line.verse === live ? 0.17 : 0.07) * a
       let x = x0
       if (line.num) {
         ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
@@ -335,7 +403,7 @@ export class Renderer {
   }
 
   // A quiet readout of the algorithm: how many members, how connected, how long.
-  private hud(i: number, p: number, a: number) {
+  private hud(i: number, p: number, accent: string, a: number) {
     const { ctx, stage } = this
     const L = this.layers[i]
     // the real mean degree of the network drawn on screen: 2 × active edges / nodes
@@ -346,7 +414,7 @@ export class Renderer {
     const lines = [L.members, `⟨k⟩ ${k.toFixed(2)}${k >= 1 ? '  giant component' : ''}`, `t ${years} yr`]
     ctx.save()
     ctx.globalAlpha = 0.5 * a
-    ctx.fillStyle = L.palette.accent
+    ctx.fillStyle = accent
     ctx.font = `500 10.5px ${MONO}`
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
@@ -360,7 +428,7 @@ export class Renderer {
     if (hit) return hit
     const { ctx } = this
     const out: VerseLine[] = []
-    versesFor(i, octave).forEach((verse, v) => {
+    versesFor(i, octave, noteFor(octave)).forEach((verse, v) => {
       const num = `${ch}:${v + 1}`
       ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
       let room = maxW - ctx.measureText(num + ' ').width
@@ -389,7 +457,7 @@ export class Renderer {
 
   /* ------------------------------------------------------------------- sky */
 
-  private gradient(i: number, a: number) {
+  private gradient(i: number, accent: string, a: number) {
     if (a <= 0.002) return
     const { ctx, W, H, stage } = this
     const pal = this.layers[i].palette
@@ -404,29 +472,47 @@ export class Renderer {
     const cy = stage.y + stage.h / 2
     const r = Math.max(stage.w, stage.h) * 0.7
     const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
-    glow.addColorStop(0, rgba(pal.accent, 0.14))
-    glow.addColorStop(1, rgba(pal.accent, 0))
+    glow.addColorStop(0, rgba(accent, 0.14))
+    glow.addColorStop(1, rgba(accent, 0))
     ctx.fillStyle = glow
     ctx.fillRect(0, 0, W, H)
     ctx.restore()
   }
 
-  // The Julia sky, rendered small every other frame and stretched over the whole window.
-  private julia(c: Complex, accent: string, zoom: number, time: number, reduced: boolean, a: number) {
-    const { ctx, W, H } = this
+  private skySize(): [number, number] {
+    const { W, H } = this
     const w = Math.min(200, Math.max(110, Math.round(W / 6)))
-    const h = Math.max(48, Math.round((w * H) / W))
-    // reduced motion: render once per tier and leave it still; otherwise every second frame
-    const key = `${c[0].toFixed(3)},${c[1].toFixed(3)},${w}`
+    return [w, Math.max(48, Math.round((w * H) / W))]
+  }
+
+  // The Julia sky, rendered small every other frame and stretched over the whole window.
+  private julia(c: Complex, accent: string, time: number, reduced: boolean, a: number, render?: boolean) {
+    const { ctx, W, H } = this
+    const [w, h] = this.skySize()
+    // reduced motion: render once per plane and leave it still; otherwise every second frame
+    const key = `${c[0].toFixed(4)},${c[1].toFixed(4)},${w},${accent}`
     if (reduced) {
       if (key !== this.skyKey) {
-        this.sky.render(c, hexToRgb(accent), w, h, zoom, 0, 0)
+        this.sky.render(c, hexToRgb(accent), w, h, 1, 0, 0)
         this.skyKey = key
       }
-    } else if ((this.skyFrame++ & 1) === 0 || zoom !== 1) this.sky.render(c, hexToRgb(accent), w, h, zoom, time, 1)
+    } else if (render ?? (this.skyFrame++ & 1) === 0) this.sky.render(c, hexToRgb(accent), w, h, 1, time, 1)
     ctx.save()
     ctx.globalCompositeOperation = 'screen'
     this.sky.blit(ctx, 0, 0, W, H, 0.6 * a)
+    ctx.restore()
+  }
+
+  // The Mandelbrot set, centred on the constant as it travels from one plane's to the next.
+  private atlas(c: Complex, accent: string, span: number, time: number, a: number, render: boolean) {
+    const { ctx, W, H } = this
+    this.skyFrame++
+    if (a <= 0.004) return
+    const [w, h] = this.skySize()
+    if (render) this.map.renderMap(c, hexToRgb(accent), w, h, span, time)
+    ctx.save()
+    ctx.globalCompositeOperation = 'screen'
+    this.map.blit(ctx, 0, 0, W, H, 0.7 * a)
     ctx.restore()
   }
 

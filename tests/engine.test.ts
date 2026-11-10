@@ -23,7 +23,7 @@ describe('engine', () => {
     expect(s).toMatchObject({ index: 1, octave: 1, phase: 'idle' })
   })
 
-  it('wraps from the Verdict back to the turtle, one octave up', () => {
+  it('wraps from the top plane back to the bottom, one loop on', () => {
     const s = run(advance(initial(6, 1)), DUR.zoom + 0.1)
     expect(s).toMatchObject({ index: 0, octave: 2, phase: 'idle' })
   })
@@ -36,7 +36,7 @@ describe('engine', () => {
     expect(trigger(z)).toBe(z)
   })
 
-  it('back steps down a generation and across octaves, but not below the first turtle', () => {
+  it('back steps down a plane and across loops, but not below the first plane', () => {
     expect(back(initial(3, 1), N)).toMatchObject({ index: 2, octave: 1 })
     expect(back(initial(0, 2), N)).toMatchObject({ index: 6, octave: 1 })
     expect(back(initial(0, 1), N)).toMatchObject({ index: 0, octave: 1 })

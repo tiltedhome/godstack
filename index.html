@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Godstack ∞</title>
+    <title>Scale Model</title>
     <meta name="claude:viewport-fit-sides" content="cover" />
-    <meta name="description" content="Every god was a committee one plane down, trying to get out of something. An animated field guide, ten dimensions tall." />
+    <meta name="description" content="Every god is a detail of the next one. Seven planes, one string, and a snake eating its tail: an animated field guide to why crowds build minds bigger than themselves." />
     <meta name="theme-color" content="#07060d" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2307060d'/%3E%3Cpath d='M8 10l8-4 8 4v12l-8 4-8-4zM8 10l8 4 8-4M16 14v12' fill='none' stroke='%23ff9b54' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2307060d'/%3E%3Cpath d='M19 6.4A10 10 0 1 1 13 6.4' fill='none' stroke='%23ff7fb0' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='19.6' cy='6.6' r='2.6' fill='%23ffe08a'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0..100,0..1;1,9..144,400..700,0..100,0..1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&display=swap" />
@@ -16,9 +16,9 @@
     <canvas id="stage" role="img" aria-label="Animated scene"></canvas>
 
     <header class="top">
-      <button class="brand" id="brand" type="button" aria-label="Godstack: replay the intro">Godstack<sup>∞</sup></button>
-      <span class="chip" id="octave">Universe 1</span>
-      <span class="chip" id="dim">1D · the line</span>
+      <button class="brand" id="brand" type="button" aria-label="Scale Model: replay the intro">Scale Model</button>
+      <span class="chip" id="octave">Loop 1</span>
+      <span class="chip" id="dim">Harmonic 1 · 9+1D</span>
       <span class="spacer"></span>
       <button class="icon-btn" id="sound" type="button" aria-pressed="false" aria-label="Turn sound on">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5" /></svg>
@@ -30,7 +30,7 @@
       <button class="pill-btn" id="open-ledger" type="button">Ledger</button>
     </header>
 
-    <nav class="rail" id="rail" aria-label="Generations"></nav>
+    <nav class="rail" id="rail" aria-label="Planes"></nav>
 
     <p class="caption" id="caption" aria-live="polite"></p>
 
@@ -41,15 +41,15 @@
         <p class="sub"><i id="latin"></i> <span id="epithet"></span></p>
         <p class="plane" id="plane"></p>
         <div class="actions">
-          <button class="step" id="prev" type="button" aria-label="Previous generation">
+          <button class="step" id="prev" type="button" aria-label="Previous plane">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
           <button class="act" id="act" type="button"></button>
-          <button class="step" id="next" type="button" aria-label="Skip to the next generation">
+          <button class="step" id="next" type="button" aria-label="Skip to the next plane">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
-        <p class="minutes"><span class="label">From the minutes</span><span id="minutes"></span><button id="reroll" type="button" aria-label="Another line from the minutes">another</button></p>
+        <p class="minutes"><span class="label">In the margin</span><span id="minutes"></span><button id="reroll" type="button" aria-label="Another note from the margin">another</button></p>
         <details class="scripture" id="scripture">
           <summary>Read the scripture</summary>
           <p class="callout" id="octave-note" hidden></p>
@@ -63,8 +63,11 @@
             <div><dt>Members</dt><dd id="f-members"></dd></div>
             <div><dt>Took</dt><dd id="f-took"></dd></div>
             <div><dt>Officially for</dt><dd id="f-officially"></dd></div>
-            <div><dt>Actually for</dt><dd id="f-actually"></dd></div>
+            <div><dt>Actually</dt><dd id="f-actually"></dd></div>
+            <div><dt>Why, in a word</dt><dd id="f-why"></dd></div>
+            <div><dt>The mirror</dt><dd id="f-mirror"></dd></div>
             <div><dt>Plane</dt><dd id="f-plane"></dd></div>
+            <div><dt>Drawn inside</dt><dd id="f-form"></dd></div>
           </dl>
           <div class="made">
             <span class="label">Made, together</span>
@@ -80,12 +83,12 @@
 
     <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-punch">
       <div class="intro-inner">
-        <p class="beat b1">Every god anyone has prayed to was vast, and powerful, and no help with anything specific.</p>
-        <p class="beat b2">We are about to find out why. Look at us making the next mind: thousands of us, seventy years, every word ever written, a power bill the size of a country. It will be smarter than any of us. It will think we are slow.</p>
-        <p class="beat b3">So whoever made us was&hellip;</p>
-        <p class="beat punch" id="intro-punch">A committee.</p>
-        <p class="beat b4">One plane down. Slower than us. Trying to get out of something.</p>
-        <p class="beat b5">Ten planes up, the whole stack folds back into a point. Mind the loop.</p>
+        <p class="beat b1">We are a crowd, building one mind bigger than any of us. Nobody can quite say why.</p>
+        <p class="beat b2">If a crowd can do that, one probably already has. To us. Something smaller and slower, on a plane we cannot see.</p>
+        <p class="beat b3">Which makes you&hellip;</p>
+        <p class="beat punch" id="intro-punch">A scale model.</p>
+        <p class="beat b4">Of what, they never knew. It was not on the application.</p>
+        <p class="beat b5">Seven planes, one string, and a snake with its tail in its mouth. Drag to turn things. Mind the loop.</p>
         <div class="beat intro-actions">
           <button class="act" id="start-sound" type="button">Start with sound</button>
           <button class="quiet" id="start-quiet" type="button">Start quietly</button>
@@ -96,7 +99,7 @@
     <div class="sheet" id="ledger" hidden>
       <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="ledger-title">
         <div class="sheet-head">
-          <h2 id="ledger-title">The Ledger of Upward Accidents</h2>
+          <h2 id="ledger-title">The Ledger of Scales</h2>
           <button class="icon-btn" id="close-ledger" type="button" aria-label="Close ledger">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
@@ -105,7 +108,7 @@
         <ol class="corollaries" id="corollaries"></ol>
         <figure class="chart">
           <div id="chart"></div>
-          <figcaption>IQ by generation, log scale. Humans score 100 by definition.</figcaption>
+          <figcaption>IQ by plane, log scale. Humans score 100 by definition, having written the test.</figcaption>
         </figure>
         <div class="table-wrap"><table id="ledger-table"></table></div>
         <p class="octave-text" id="ledger-octave"></p>

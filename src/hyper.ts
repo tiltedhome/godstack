@@ -1,8 +1,8 @@
 // Hypercubes, drawn for real: an n-cube is rotated in n dimensions, projected down one
-// perspective at a time to 3D, then to the screen, and shaded by depth. The tiers climb the
-// dimensions (a line, a square, a cube, a tesseract...), and between tiers the current cube
-// is swept along a new axis into the next one, the way a square swept sideways is a cube.
-// Zero vertices of fuss: a 0-cube is a point, which is also where the tenth dimension ends up.
+// perspective at a time to 3D, then to the screen, and shaded by depth. The Polis lives in
+// one (a mind made of numbers lives in a space with a great many axes; five are shown), and
+// the cube can be swept along a new axis into the next dimension, the way a square swept
+// sideways is a cube.
 
 import { type Ctx, clamp, rgba } from './draw.ts'
 
@@ -60,7 +60,7 @@ function rotate(v: number[], n: number, t: number, spin: Spin) {
   }
 }
 
-type Projected = { x: number; y: number; z: number }
+export type Projected = { x: number; y: number; z: number }
 
 function project(v: number[], n: number, r: number): Projected {
   // the extra dimensions each get a perspective division, so far-away "hyper-depth" shrinks
@@ -131,9 +131,15 @@ export function drawHyper(ctx: Ctx, o: HyperOpts) {
   ctx.restore()
 }
 
-// Which dimension each tier lives in. The Undoers climb 7, 8, 9 across their act, and the
-// bang folds the lot back into a point, which is dimension 10 and also 0.
-export function tierDimension(index: number, p: number): number {
-  if (index < 6) return index + 1
-  return 7 + Math.min(2, Math.floor(clamp((p - 0.05) / 0.45) * 3))
+// The corners of an n-cube, turned and flattened exactly as drawHyper draws them, for scenes
+// that want to stand things on the corners. Positions are relative to the cube's centre.
+export function cubeCorners(n: number, t: number, spin: Spin, r: number): Projected[] {
+  const g = cube(n)
+  const scale = 1 / Math.sqrt(Math.max(1, n))
+  const v: number[] = new Array(n)
+  return g.verts.map((src) => {
+    for (let k = 0; k < n; k++) v[k] = src[k] * scale
+    rotate(v, n, t, spin)
+    return project(v, n, r)
+  })
 }

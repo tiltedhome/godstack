@@ -4,7 +4,7 @@
 export type Ctx = CanvasRenderingContext2D
 
 export const TAU = Math.PI * 2
-export const DISPLAY = '"Dela Gothic One", "Arial Black", Impact, sans-serif'
+export const DISPLAY = '"Fraunces", "Iowan Old Style", Georgia, serif'
 export const MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace'
 
 export const clamp = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x))

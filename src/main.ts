@@ -1,13 +1,13 @@
 import './styles.css'
-import { LAYERS, UNIVERSE_NOTE, chapter, roman, versesFor } from './lore.ts'
+import { BOOK, LAYERS, UNIVERSE_NOTE, chapter, roman, versesFor } from './lore.ts'
 import { DUR, REDUCED_DUR, advance, back, initial, progress, step, trigger, type EngineState, type Phase } from './engine.ts'
 import { formatIQ, genLabel } from './format.ts'
 import { Renderer } from './render.ts'
-import { SCENES, setUniverse } from './scenes.ts'
+import { SCENES, setLoop } from './scenes.ts'
 import { buildLedger } from './ledger.ts'
-import { Sound, type Sfx } from './audio.ts'
-import { DIMENSIONS } from './minutes.ts'
-import { minuteFor } from './rotate.ts'
+import { Sound, TAPS, type Sfx } from './audio.ts'
+import { PLANES } from './minutes.ts'
+import { accentFor, lessonFor, minuteFor, noteFor } from './rotate.ts'
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T
 const N = LAYERS.length
@@ -45,11 +45,11 @@ const store = {
 
 const fromHash = LAYERS.findIndex((L) => L.id === location.hash.slice(1))
 let state: EngineState = initial(Math.max(0, fromHash))
-let autoplay = store.get('godstack:autoplay') !== 'off'
+let autoplay = store.get('scalemodel:autoplay') !== 'off'
 const sound = new Sound()
-let wantSound = store.get('godstack:sound') === 'on'
+let wantSound = store.get('scalemodel:sound') === 'on'
 let speed = 1
-// how many times "another" has been asked of this tier's minutes
+// how many times "another" has been asked of this plane's margin
 let rerolls = 0
 
 const renderer = new Renderer(canvas, SCENES, LAYERS)
@@ -59,7 +59,7 @@ const renderer = new Renderer(canvas, SCENES, LAYERS)
 const railBtns = LAYERS.map((L, i) => {
   const b = document.createElement('button')
   b.type = 'button'
-  b.setAttribute('aria-label', `Generation ${genLabel(L.gen)}: ${L.name}`)
+  b.setAttribute('aria-label', `Plane ${genLabel(L.gen)}: ${L.name}`)
   b.innerHTML = '<span class="tick"></span><span class="g"></span><span class="n"></span>'
   b.querySelector('.g')!.textContent = genLabel(L.gen)
   b.querySelector('.n')!.textContent = L.short
@@ -72,35 +72,36 @@ const railBtns = LAYERS.map((L, i) => {
 
 function renderCard() {
   const L = LAYERS[state.index]
-  document.documentElement.style.setProperty('--accent', L.palette.accent)
+  const loop = state.octave
+  document.documentElement.style.setProperty('--accent', accentFor(L.palette.accent, loop))
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', L.palette.top)
-  setUniverse(state.octave)
-  const dim = DIMENSIONS[L.id]
+  setLoop(loop)
+  const plane = PLANES[L.id]
   const prev = LAYERS[(state.index + N - 1) % N]
-  $('octave').textContent = `Universe ${state.octave}`
-  $('dim').textContent = `${dim.d}D · ${dim.label}`
-  $('gen').textContent = `Generation ${genLabel(L.gen)}`
-  // the thesis, every tier: whoever made these was one plane down
-  $('plane').textContent =
-    state.index === 0
-      ? `Plane ${dim.d} · made by ${prev.one}, one universe down`
-      : `Plane ${dim.d} · made by ${prev.one}, one plane down`
+  $('octave').textContent = `Loop ${loop}`
+  $('dim').textContent = `Harmonic ${plane.harmonic} · ${plane.dims}D`
+  $('gen').textContent = `Plane ${genLabel(L.gen)}`
+  // the thesis, every plane: whoever made these was one plane down, and wanted something else
+  $('plane').textContent = `Made by ${prev.one}, one ${state.index === 0 ? 'loop back' : 'plane down'}. Building, in turn, out of ${L.why.toLowerCase()}.`
   $('t-below').textContent = L.theology[0]
   $('t-above').textContent = L.theology[1]
-  $('f-plane').textContent = `${dim.d}D, ${dim.label}. ${dim.note}`
+  $('f-plane').textContent = `Harmonic ${plane.harmonic} of the String, ${plane.dims} dimensions (${plane.label}), at ${plane.scale === 'none' ? 'no scale at all' : plane.scale}. ${plane.note}`
+  $('f-form').textContent = plane.form[0].toUpperCase() + plane.form.slice(1) + '.'
+  $('f-why').textContent = L.why
+  $('f-mirror').textContent = L.mirror
   rerolls = 0
   renderMinutes()
   // the algorithm in one line: what each member could do, and what they made together
   $('iq').textContent = `IQ ${formatIQ(L.memberIq)} → ${formatIQ(L.oneIq)}`
-  $('name').textContent = state.octave > 1 ? `${L.name}, Universe ${state.octave}` : L.name
+  $('name').textContent = loop > 1 ? `${L.name}, Loop ${loop}` : L.name
   $('latin').textContent = L.latin + '.'
   $('epithet').textContent = L.epithet
-  const ch = chapter(state.index, state.octave)
+  const ch = chapter(state.index, loop)
   const cite = document.createElement('cite')
-  cite.textContent = `The Book of Upward Delegation, chapter ${roman(ch)}`
+  cite.textContent = `${BOOK}, chapter ${roman(ch)}`
   $('verses').replaceChildren(
     cite,
-    ...versesFor(state.index, state.octave).map((v, k) => {
+    ...versesFor(state.index, loop, noteFor(loop)).map((v, k) => {
       const p = document.createElement('p')
       const n = document.createElement('sup')
       n.textContent = `${ch}:${k + 1}`
@@ -133,9 +134,9 @@ function renderCard() {
   foot.hidden = !L.footnote
   foot.textContent = L.footnote ?? ''
   const note = $('octave-note')
-  note.hidden = !(state.index === 0 && state.octave > 1)
-  note.textContent = UNIVERSE_NOTE
-  canvas.setAttribute('aria-label', `${L.name}, generation ${genLabel(L.gen)}. ${L.epithet}`)
+  note.hidden = !(state.index === 0 && loop > 1)
+  note.textContent = loop === 2 ? UNIVERSE_NOTE : lessonFor(loop)
+  canvas.setAttribute('aria-label', `${L.name}, plane ${genLabel(L.gen)}. ${L.epithet} Drawn inside ${plane.form}.`)
   railBtns.forEach((b, i) => {
     if (i === state.index) b.setAttribute('aria-current', 'step')
     else b.removeAttribute('aria-current')
@@ -161,7 +162,7 @@ function renderControls() {
     lastPhase = state.phase
     actBtn.disabled = state.phase === 'hold' || state.phase === 'zoom'
     actBtn.classList.toggle('skip', state.phase === 'act')
-    actBtn.textContent = state.phase === 'idle' ? L.verb : state.phase === 'act' ? 'Skip ahead' : 'Creating…'
+    actBtn.textContent = state.phase === 'idle' ? L.verb : state.phase === 'act' ? 'Skip ahead' : 'Pulling back…'
   }
   let c = ''
   if (state.phase === 'act') c = L.captions[Math.min(L.captions.length - 1, Math.floor(progress(state, dur()) * L.captions.length))]
@@ -180,7 +181,7 @@ function renderSound() {
 
 function setSound(on: boolean) {
   wantSound = on
-  store.set('godstack:sound', on ? 'on' : 'off')
+  store.set('scalemodel:sound', on ? 'on' : 'off')
   if (on) sound.enable().catch(() => {}).finally(renderSound)
   else sound.disable()
   renderSound()
@@ -238,7 +239,7 @@ document.addEventListener('visibilitychange', () => sound.visibility(document.hi
 
 autoBtn.addEventListener('click', () => {
   autoplay = !autoplay
-  store.set('godstack:autoplay', autoplay ? 'on' : 'off')
+  store.set('scalemodel:autoplay', autoplay ? 'on' : 'off')
   renderAutoplay()
   renderSound()
 })
@@ -274,7 +275,7 @@ function fitPunchline() {
   if (widest > 0) punch.style.fontSize = `${Math.min(max, (max * col * 0.94) / widest)}px`
 }
 window.addEventListener('resize', fitPunchline)
-document.fonts?.load(`20px "Dela Gothic One"`).then(fitPunchline, () => {})
+document.fonts?.load(`20px "Fraunces"`).then(fitPunchline, () => {})
 
 function openIntro() {
   intro.classList.remove('skip')
@@ -287,7 +288,7 @@ function closeIntro(withSound: boolean) {
   intro.hidden = true
   for (const el of behind()) el.inert = false
   setSound(withSound)
-  if (withSound) sound.ready.then(() => sound.play('joined'))
+  if (withSound) sound.ready.then(() => sound.play('pluck'))
   actBtn.focus({ preventScroll: true })
 }
 $('start-sound').addEventListener('click', () => closeIntro(true))
@@ -296,7 +297,7 @@ intro.addEventListener('click', (e) => {
   if (!(e.target as HTMLElement).closest('button')) intro.classList.add('skip')
 })
 $('brand').addEventListener('click', openIntro)
-// deep links like #sloth go straight to the stack
+// deep links like #orrery go straight to the stack
 if (fromHash < 0) openIntro()
 else intro.hidden = true
 
@@ -332,15 +333,22 @@ window.addEventListener('keydown', (e) => {
   const onControl = (e.target as HTMLElement).closest('button, summary, a, input')
   if (e.key === 'ArrowRight') go(advance(state))
   else if (e.key === 'ArrowLeft') go(back(state, N))
+  // A and D turn the form, W and S tip it: the keyboard's version of a drag
+  else if ('adws'.includes(e.key.toLowerCase()) && e.key.length === 1 && !e.metaKey && !e.ctrlKey && !onControl) {
+    const k = e.key.toLowerCase()
+    if (k === 'a' || k === 'd') renderer.spinVel.yaw = k === 'a' ? -1.6 : 1.6
+    else renderer.spinVel.pitch = k === 'w' ? -1.2 : 1.2
+  }
   else if ((e.key === ' ' || e.key === 'Enter') && !onControl) {
     e.preventDefault()
     go(trigger(state))
   }
 })
 
-// The sky is hands-on. A tap sets things in motion, or, mid-accident, introduces a few
-// members to each other (more links, a ripple, and the One arrives a little sooner). A drag
-// turns the hypercube; a quick flick sideways moves between generations.
+// The stage is hands-on. A tap sets things in motion, or, once they are moving, does what a
+// tap does on that plane (plucks, perturbs, observes, introduces, entangles, buds, collapses):
+// a few more members are linked, there is a ripple and a sound, and the One arrives a little
+// sooner. A drag turns the form; a quick flick sideways moves between planes.
 let touchStart: { x: number; y: number; t: number; lx: number; ly: number } | null = null
 canvas.addEventListener('pointerdown', (e) => {
   touchStart = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, ly: e.clientY }
@@ -369,15 +377,17 @@ canvas.addEventListener('pointerup', (e) => {
     go(dx < 0 ? advance(state) : back(state, N))
   } else if (Math.hypot(dx, dy) < 12) {
     if (state.phase === 'act') {
+      const L = LAYERS[state.index]
       SCENES[state.index].graph.introduce(3)
-      renderer.ripple(e.clientX, e.clientY, LAYERS[state.index].palette.accent)
+      renderer.ripple(e.clientX, e.clientY, accentFor(L.palette.accent, state.octave), TAPS[L.id].word)
+      sound.play(TAPS[L.id].sfx, progress(state, dur()))
       // a little nearer the moment of emergence, never past it
       go({ ...state, t: Math.min(dur().act * 0.64, state.t + 0.35) })
     } else go(trigger(state))
   }
 })
 canvas.addEventListener('pointercancel', () => (touchStart = null))
-// On phones that offer it, tilting the device leans the hypercube a little.
+// On phones that offer it, tilting the device leans the form a little.
 window.addEventListener('deviceorientation', (e) => {
   if (reducedMq.matches || e.gamma == null || e.beta == null) return
   renderer.tilt = [Math.max(-1, Math.min(1, e.gamma / 35)), Math.max(-1, Math.min(1, (e.beta - 40) / 35))]
@@ -445,5 +455,9 @@ window.godstack = {
   },
   spin() {
     return { ...renderer.spin }
+  },
+  // the real mean degree of the network on screen, which a tap should raise
+  degree() {
+    return SCENES[state.index].graph.meanDegree(progress(state, dur()))
   },
 }

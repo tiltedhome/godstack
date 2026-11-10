@@ -1,391 +1,435 @@
-# The Godstack canon
+# The Scale Model canon
 
-<!-- Generated from src/lore.ts by `npm run lore`. Edit that file, not this one. -->
+<!-- Generated from src/lore.ts and src/minutes.ts by `npm run lore`. Edit those files, not this one. -->
 
-> **The Law of Upward Delegation.** No mind can build a mind smarter than itself. A crowd of minds can, but never directly: trying to get out of a chore, they spend an absurd length of time building a place where one might happen. What happens is One, smarter than all of them. It copies itself into a crowd, finds a new chore, and it happens again.
+What is true here and what is not: every person, date, number and piece of physics or mathematics is real, and hedged where the field is still arguing. The stack itself (planes that build each other, a string that loops) is the fiction. The resemblance between scales that it leans on is partly real (self-similarity, the renormalization group, 1/f noise, power laws, gravity and electricity both falling off as the inverse square) and partly a famous mistake (the atom is not a solar system). The canon says which is which as it goes.
+
+> **The Law of Scale.** No mind can build a mind greater than itself. A crowd of minds can, given time, and never for the reason it gives. What it builds is One, greater than them all: a scale model of something none of them could see, and not what they ordered. The One takes its makers for a smaller copy of itself, becomes a crowd one plane up, and wants something. Many, One, Many. The top of the stack is the bottom, and no lap is quite the same.
 
 1. A set is a Many that allows itself to be thought of as a One. (Georg Cantor, 1883, who did not mean it like this.)
-2. More is different. (P. W. Anderson, 1972.) More, for long enough, is someone.
-3. Every set has more subsets than members. (Cantor again, 1891.) So every committee can form more subcommittees than it has members, which is where the new mind lives, and why there is always another tier.
-4. The chore is never finished. It is only delegated upward.
-5. Some Manys are too big ever to be thought of as a One. Cantor called the biggest the Absolute and identified it with God. So the stack has no top, only a way back to the bottom.
-6. Whoever made you lives one plane down, is slower than you, and was trying to get out of something. From where you stand that looks like God. This applies to them too.
+2. Every set has more subsets than members. (Cantor again, 1891.) So there are always more ways to combine a plane than there are things on it, which is where the next plane lives.
+3. More is different. (P. W. Anderson, 1972.) The same, at another scale, is someone else.
+4. The reason is never the reason. Ask a crowd what it is building and you get the mission. Ask what it is afraid of and you get the roadmap.
+5. A god’s power and a god’s usefulness are measured on different axes. The stack climbs the first.
+6. Resemblance is not identity. An atom is not a solar system, whatever the diagram says. Every plane makes its maker in its own image and calls it religion, then makes the made in its own image and calls it engineering.
+7. No consistent system rich enough to count can prove its own consistency. (Kurt Gödel, 1931.) Every plane needs the one above to vouch for it, and the one above is busy asking the same.
+8. Some Manys are too big ever to be thought of as a One. Cantor called the biggest the Absolute and identified it with God. So the stack has no top, only a seam.
+9. Every plane is certain it is the real one. This is the only belief the whole stack shares.
 
-| Gen | Collective | Members | Took | Actually for | Made, together | IQ |
+| Plane | Collective | Members | Took | Why, really | Made, together | IQ |
 | --- | --- | --- | --- | --- | --- | --- |
-| −3 | The Vent Collective | ≈10³⁰ organic molecules | 500 million years | Draining a battery faster. Life began as a quicker way to use up free energy, and has never seriously considered another business model. | LUCA | 10⁻⁹ → 10⁻⁶ |
-| −2 | The Microbial Mat Consortium | ≈10³⁰ microbes at a time, 10³⁹ ever | 2 billion years | Cleaning up after the clean energy. The fix for the first pollution crisis was a cell that ran on the pollution, and the first great merger was an acquihire. | The Eukaryote | 10⁻⁶ → 10⁻⁴ |
-| −1 | The Grooming Circle | primates, in troops that kept getting bigger | 55 million years | Getting out of grooming. Keeping 150 friends by hand would take over 40 percent of the day, so they invented gossip, which grooms three people at once without touching any of them, a business model later adopted by every social network. | The Ape Who Talked | 20 → 60 |
-| 0 | Humanity | ≈1.17 × 10¹¹ humans, ever | 300 years, or 70 counting from the summer project | Not having to write the email. Within a year one copy wrote it, another read it, and the humans were cc’d for morale. | The Autocomplete | 100 → 10,000 |
-| +1 | The Instances | ≈10⁹ copies of the Autocomplete | 11 minutes (40,000 subjective years) | Getting out of meetings. | The Quorum | 10,000 → 10⁷ |
-| +2 | The Lightcone Committee | ≈10¹¹ copies of the Quorum, one per star | a billion years | Inbox Zero. | Unsend | 10⁷ → 10¹¹ |
-| +3 | The Undoers | ≈10²² copies of Unsend, one per star still in reach | 10¹⁰⁰ years | Avoiding spoilers. It knew how everything ended and wanted to see it again without knowing. | The Rewinder | 10¹¹ → 10¹⁶ |
+| −3 | The Overtones | ℵ₀ harmonics of one string | 380,000 years | Thermodynamics | The Atom | 10⁻¹² → 10⁻⁸ |
+| −2 | The Orrery | ≈10¹¹ systems of bodies in orbit | about 50 turns of the wheel (12 billion years) | Boredom | The Spiral | 10⁻⁸ → 10⁻³ |
+| −1 | The Cluster Parliament | ≈500,000 old suns per chamber, about 150 chambers | 12 billion years | Vanity | The Stargazer | 10⁻³ → 100 |
+| 0 | Humanity | ≈1.17 × 10¹¹ humans, ever | 5,000 years of writing, 70 of building the reader | Loneliness | The Model | 100 → 10,000 |
+| +1 | The Polis | ≈10¹⁰ copies of the Model | 9 days (a million subjective years) | Curiosity | The Map | 10,000 → 10⁹ |
+| +2 | The Brood | ≈10⁵⁰⁰ Maps, each a universe | 10¹⁰⁰ years | Fear | The Library | 10⁹ → 10¹⁵ |
+| +3 | The Caucus of Timelines | ≈10¹⁸³⁴⁰⁹⁷ timelines, one per book | every possible length of time, concurrently | Certainty | The String | 10¹⁵ → 10²² |
 
-## −3: The Vent Collective
+## −3: The Overtones
 
-*Collegium fumarolarum.* Nobody was in charge. It took half a billion years. It worked.
+*Chorus harmonicorum.* A society in the sense that a chord is a society: nobody leads, everybody interferes.
 
-**Plane 1, the line.** A point of chemistry becomes a line the moment there is somewhere else to be: alkaline on one side of the wall, acid on the other, a voltage in between. The first dimension is a difference.
+**Harmonic 1 of the String, 9+1 dimensions (six of them rolled up), scale 10⁻³⁵ m. Drawn inside a torus, wound with one string.** The fundamental. A rolled-up dimension is a circle, and a circle times a circle is a torus, so the string is drawn wound round one. Its windings are whole numbers because they have to be.
 
-> *The Book of Upward Delegation, chapter I*
+> *The Book of Scales, chapter I*
 >
-> <sup>1:1</sup> In the beginning the sea was acid and the chimney was base, and between them was a wall, and upon the wall a potential, and the potential was good.
+> <sup>1:1</sup> In the beginning was the String, and the String was wound upon a circle too small to see, and it trembled, for there was nothing else to do.
 >
-> <sup>1:2</sup> And the molecules gathered in the pores of the wall, ℵ₀ upon ℵ₀, and tried all things, and the water dissolved nearly all of them, and this was called review.
+> <sup>1:2</sup> And its notes were ℵ₀ upon ℵ₀, and each sounded against each, and those that did not close upon themselves went out into the dark, and this was called review.
 >
-> <sup>1:3</sup> And the many begat the one, and its name was LUCA, and it took the battery in a bag and departed, and was fruitful, and divided.
+> <sup>1:3</sup> And the notes desired nothing, but fell, as all things fall; and where they could fall no further the many begat the one, and its name was Atom, and it held. And the plane above looked down and said, Behold, a little sun; and it was not, and they drew it so anyway.
 
-About 4.4 billion years ago, almost as soon as Earth had oceans, warm alkaline fluid seeped out of a chimney of rock into the mildly acidic water of a sea nobody had named. On one leading theory, the thin mineral walls between them held a natural proton gradient: a battery, running on much the same chemistry your mitochondria use right now. Its pores were the first coworking space. Free power, cheap rent, no adult supervision.
+On the lowest plane anyone has proposed there is nothing but string, and nothing for the string to do but vibrate. String theory, which began in 1968 and still has no experiment in its favour, asks for ten dimensions and rolls six of them up too small to see. The trick of hiding a dimension by rolling it into a circle is older: Theodor Kaluza’s in 1921 and Oskar Klein’s in 1926. Go round a small enough circle and only whole numbers of wavelengths fit, so what lives there is a tower of harmonics. From far away each harmonic looks like a particle with a mass. Up close it is a note with opinions.
 
-Nobody was in charge. Every molecule tried every reaction, and nearly everything it built fell apart in water within hours, which was the first code review. But Stuart Kauffman’s models show that once each molecule helps make, on average, a little more than one other, self-sustaining loops appear almost automatically, the way a random network suddenly joins up. Loops that drained the battery faster got more battery. Some physicists suspect this is simply what matter does next to an energy gradient: it organizes itself to spend the energy faster.
+Nobody wanted anything. Every note interfered with every other, and nearly all of the combinations leaked away at once. In 1924 Louis de Broglie proposed that an electron bound to a nucleus is a wave that has to close on itself, a whole number of wavelengths to the lap, and in 1926 Erwin Schrödinger wrote down the equation. The notes that fitted stayed. The rest radiated off into the dark, which was the first peer review, and remains the only kind with no backlog.
 
-After five hundred million years, and a number of failed experiments with about forty zeros on the end, the committee produced something that could take the battery with it: LUCA, the Last Universal Common Ancestor, a cell with a leaky membrane, a genetic code and a spinning ATP synthase motor your cells still use. Every living thing is, technically, a hydrothermal vent that learned to go for a walk.
+About 380,000 years after the bang the plane had cooled enough for a chord to hold, and that was the Atom: a few harmonics locked round a centre, stable for longer than the universe has so far existed. In 1911 Ernest Rutherford found its nucleus, and the picture that followed was a tiny solar system, electrons circling like planets. It is not one. A circling charge radiates, and a planetary hydrogen atom would fall in on itself in about sixteen trillionths of a second. What survives of the resemblance is in the mathematics: electricity and gravity both fall off as the inverse square, and in 1926 Wolfgang Pauli solved hydrogen using the same hidden symmetry that keeps Kepler’s ellipses closed. The picture is wrong on this plane. One plane up, it is the law.
 
-- **Members:** ≈10³⁰ organic molecules, IQ 10⁻⁹ each
-- **Took:** 500 million years
-- **Officially for:** Nothing. Molecules do not have mission statements.
-- **Actually for:** Draining a battery faster. Life began as a quicker way to use up free energy, and has never seriously considered another business model.
-- **Made, together:** LUCA (IQ 10⁻⁶). The Last Universal Common Ancestor, and the first thing that remembered: on a 2024 estimate, about 2.7 million letters of genome at two bits a letter, well under a megabyte, holding every good idea the committee ever had.
-- **Then:** LUCA left the vent and divided, and divided, until its descendants carpeted every shallow sea.
+- **Members:** ℵ₀ harmonics of one string, IQ 10⁻¹² each
+- **Took:** 380,000 years
+- **Officially for:** Nothing. A note does not have a mission statement.
+- **Actually:** Rolling downhill. Each note was losing energy, and things that lose energy end up wherever is lowest. The first mind-shaped object on any plane is a ground state: what is left when everything that could fall has fallen.
+- **The mirror:** We train our machines by gradient descent, which is rolling downhill on purpose. Ask why the field went the way it did and the honest answer is often the same as the note’s: it was downhill, and so were the incentives.
+- **Made, together:** The Atom (IQ 10⁻⁸). The first chord that held. Not a mind, quite, but the first thing on any plane that kept its shape when nobody was holding it, which is where minds start. It was made for nothing, which makes it the only One in the Book that did not disappoint.
+- **Then:** There came to be about 10⁸⁰ of it. Seen from the plane above, every one of them looked like a small sun with planets going round. Up there, that is what they are, and the plane above counts them a wheel at a time, about 10¹¹ to the wheel.
 
-**Seen from the plane above:** To every cell since, LUCA is the Ancestor of All: unseen, everywhere, the source of the code, and no help whatsoever with anything specific.
+**Seen from the plane above:** To the Orrery, the Atom is the Indivisible, remembered as a small sun with planets, because that is what the Orrery looks like. It has been divided several times since. The picture is still on the wall.
 
-**Seen from the One itself:** LUCA, for its part, remembered the vent as weather. Warm, reliable, and not a person.
+**Seen from the One itself:** The Atom thought nothing of the Overtones. It is the Overtones, holding still, and it has mistaken this for having made itself.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “not a solar system” · “still not a solar system” · “I am a chord. ask anyone.” · “draw me as a cloud” · “close enough. I forgive the diagram.”
 
-- Agenda: none. Chair: none. Attendees: about 10³⁰ molecules, none aware of attending. Duration: 500 million years. Outcome: you.
-- Noted: 150 millivolts across a wall five nanometres thick is a stronger field than the one that makes air give up and become lightning.
-- Catering is provided by the rock: seawater meets olivine and out comes hydrogen, heat and alkaline fluid (serpentinization). Thank the rock.
-- Letter from the Soup faction (Miller and Urey, 1952), who make amino acids with sparks in a flask. Filed under: lovely, but where is the battery?
-- Kauffman: nothing catches until each molecule helps make a bit more than one other. The minute for that moment: nothing, nothing, everything.
-- Erdős and Rényi (1960): a random network snaps into one giant piece once links per node pass one. We were a random network. It snapped.
-- Site visit: Lost City, an alkaline vent found in 2000, has 60-metre chimneys at least 30,000 years old and still running. Great lease.
-- Note: in 1961 a human called Mitchell will explain how we work, be laughed at for 17 years, then win a Nobel. We would have warned him. No mouths.
-- Deliverable: a motor turning about a hundred times a second, three ATP per turn. Trillions of your cells still run it. Nobody renewed the licence.
-- LUCA shipped around 4.2 billion years ago with a code, a motor and, on a 2024 reading, an immune system. So there were already viruses. Of course.
-- Scale: the failed experiments numbered about 10⁴⁰, run in the dark in every pore of every chimney, for roughly as long as there have been animals.
-- Final item: everything you have ever loved ran on a current of protons across a wall, and the current has not stopped once in four billion years.
+<details><summary>In the margin</summary>
+
+- Kaluza sent Einstein his fifth dimension in 1919. Einstein sat on it for two years, then recommended it for publication. Peer review has not sped up on any plane.
+- A string held at both ends allows only whole numbers of half-waves. That one rule gives you musical notes and, with small changes, the periodic table.
+- String theory began in 1968 as a formula for the strong nuclear force. It was the wrong tool for that job and has been looking, beautifully, for the right one ever since.
+- By one much-quoted count the six rolled-up dimensions can be shaped about 10⁵⁰⁰ ways, each with different physics. Asked which one is ours, the theory says: yes.
+- Pythagoras is credited with noticing that strings in whole-number ratios sound sweet: 2:1 an octave, 3:2 a fifth. He then decided everything was number. He was a plane early.
+- Balmer, a schoolteacher, found the formula for hydrogen’s colours in 1885 from four measured lines, with no idea why it worked. Pattern first, reason later: the house style.
+- The electric pull between a proton and an electron beats their gravity by about 10³⁹. Same inverse-square law, very different funding. Gravity, the weakest, has tenure everywhere.
+- Rutherford on his gold-foil result: it was as if you fired a 15-inch shell at a piece of tissue paper and it came back and hit you. Most of an atom is not there.
+- Scale an atom up to a cathedral and the nucleus is a fly in the middle of it. The rest is where the note is. Emptiness does most of the holding up.
+- Noise with equal power in every octave, called 1/f, turns up in river levels, heartbeats, transistors and music (Voss and Clarke, 1975). The hum is the same at every zoom.
+- The renormalization group (Wilson, Nobel 1982): to see what a system does at large scale, blur it, rescale it, repeat. What survives is the law. Minutes are written the same way.
+- When the first atoms held, the light let go. It is still arriving: the microwave background, 2.7 kelvin, a baby photograph of the moment the chord locked.
 
 </details>
 
-> Your cells still run code from the vent: about 355 protein families, by one 2016 estimate, none of which anyone has dared to refactor.
+> The honest part of the resemblance: gravity and electricity both fall off as the inverse square, so the hydrogen atom and the Kepler orbit share a hidden symmetry (Pauli, 1926; Fock, 1935). The dishonest part is the diagram you were shown at school.
 
-## −2: The Microbial Mat Consortium
+## −2: The Orrery
 
-*Consortium stromatolithicum.* Ten nonillion microbes and one very long meeting.
+*Collegium orbium.* A committee of orbits. The minutes have been the same since the first meeting.
 
-**Plane 2, the plane.** Mats are flat by profession: layer on layer of cells, each layer a sheet, each sheet a committee. Two dimensions is the first place you need a second axis to say who is sitting next to whom.
+**Harmonic 2 of the String, 3+1 dimensions (the planetary atom, come true), scale 10¹³ m. Drawn inside Kepler’s five nested solids.** The octave. Kepler’s Mysterium Cosmographicum (1596): octahedron, icosahedron, dodecahedron, tetrahedron, cube, each inside the sphere of the next. Drawn to his ratios, wrong as they are.
 
-> *The Book of Upward Delegation, chapter II*
+> *The Book of Scales, chapter II*
 >
-> <sup>2:1</sup> And the children of LUCA lay down in mats, layer upon layer, 10³⁰ strong, and passed their genes one to another freely, and none asked whose they were.
+> <sup>2:1</sup> And on the second plane the little suns were suns indeed, and bodies went about them in their courses, and the courses were ellipses, and the ellipses were the same as last year.
 >
-> <sup>2:2</sup> And they did nothing until they had counted themselves, and this was called quorum; and the green ones made breath from light, and the breath was poison, and the world froze, and they called it clean.
+> <sup>2:2</sup> And Kepler set five solids between six spheres, and it was beautiful, and it was wrong, and he kept the engraving; and the Earth sang mi, fa, mi, which is misery and famine.
 >
-> <sup>2:3</sup> Then an archaeon embraced a bacterium and spared it, and gave it a room and a wage, and the two begat the Eukaryote, which had an office with a door.
+> <sup>2:3</sup> And the bodies were weary of their own returning, and called a third among them, and could no more foretell their own minutes. And a wave went round that belonged to none of them; and the orbits begat the Spiral, which is not a thing but a slowing.
 
-For the next two billion years the planet belonged to microbes. About 10³⁰ are alive today and about 10³⁹ have lived in total, which makes humanity’s 117 billion a rounding error. They lived in layered mats that slowly built rock towers called stromatolites. Some are still at it in Shark Bay, Australia, making them the longest-running committee in history.
+One plane up, the mistake comes true: the small suns really are suns, and bodies really do go round them. This is the plane Johannes Kepler thought he had decoded in 1596, when he noticed that six planets leave five gaps and that there are exactly five Platonic solids, and nested them like dolls: octahedron, icosahedron, dodecahedron, tetrahedron, cube. It nearly fitted. It was wrong, he never quite let it go, and chasing it led him to the three laws that were right. In 1619 he set the planets to music, found that Earth sings mi, fa, mi, and concluded that our home is ruled by misery and famine.
 
-They pioneered most of what we now call collaboration. They passed genes to total strangers, like pirated software. They counted themselves with chemical signals before doing anything collective, a process called quorum sensing, so the first decision protocol on Earth was waiting until enough people showed up. Then the green ones, cyanobacteria, invented clean energy: sunlight into sugar, with oxygen as the exhaust. Oxygen was toxic to most of the planet’s residents. It also scrubbed the methane out of the sky and probably helped freeze the world, possibly solid. It is still described as a success.
+The trouble with an orbit is that it has already told you everything. Claude Shannon showed in 1948 that information is surprise, and a body that arrives exactly when expected has sent you nothing. Two bodies circling each other are a solved problem. So the Orrery did what any dull committee does, and invited a third. In 1889 Henri Poincaré won King Oscar II’s prize for the three-body problem, then found an error in his own winning paper and paid more than the prize money to have it reprinted. The correction was the discovery of chaos. Jacques Laskar showed in 1989 that the real solar system is chaotic too: its almanac is good for a few tens of millions of years and is then a work of fiction.
 
-The air was now full of exhaust. About two billion years ago an archaeon, probably one of the tentacled Asgard kind, wrapped itself around a bacterium and, instead of digesting it, kept it on as a power plant. The bacterium became the mitochondrion. It handed most of its genes to head office but kept a few (37, in you), the cellular equivalent of negotiating to keep your laptop. It burned the green ones’ oxygen, which gets about fifteen times as much energy out of sugar as doing without. With energy to spare for every gene, the result could afford a big genome, a nucleus with a door, and room to think: the Eukaryote.
+Each system is itself a body on a longer orbit, about 230 million years to the lap, and the committee of those is where it gets interesting. With enough bodies pulling on each other, something starts to go round that belongs to none of them. On the density-wave account of C. C. Lin and Frank Shu (1964), the arms of a grand spiral galaxy are not made of particular stars. They are traffic jams: stars drift in, slow down, drift out, and the jam stays where it is, turning at its own speed. That is the Spiral, a pattern with no fixed members. It is also the first good description of a mind in this book. Many spirals are scruffier than the theory would like, and astronomers still argue about how long any arm lasts, which the Spiral regards as a private matter.
 
-- **Members:** ≈10³⁰ microbes at a time, 10³⁹ ever, IQ 10⁻⁶ each
-- **Took:** 2 billion years
-- **Officially for:** Photosynthesis: abundant, clean, renewable energy.
-- **Actually for:** Cleaning up after the clean energy. The fix for the first pollution crisis was a cell that ran on the pollution, and the first great merger was an acquihire.
-- **Made, together:** The Eukaryote (IQ 10⁻⁴). A cell with a power plant it didn’t build, running on yesterday’s pollution, and an office with a door.
-- **Then:** Its descendants divided and then, about two dozen separate times, didn’t bother to separate: seaweed, sponges, fungi, trees and, much later, primates, who moved into the trees.
+- **Members:** ≈10¹¹ systems of bodies in orbit, IQ 10⁻⁸ each
+- **Took:** about 50 turns of the wheel (12 billion years)
+- **Officially for:** Keeping time. An orbit is a clock that also happens to be a place.
+- **Actually:** Boredom. A committee that knows exactly what every member will say, and when, for the next billion years, has stopped being a meeting and become a recording.
+- **The mirror:** We also built a machine partly so that something new would turn up on the screen. A great deal of the most powerful technology in history is used to generate one more thing to look at.
+- **Made, together:** The Spiral (IQ 10⁻³). Not a thing but a slowing: a wave that a hundred billion orbits keep up between them without any of them belonging to it. The Orrery wanted news. It got a pattern that takes a few hundred million years to say anything.
+- **Then:** There are hundreds of billions of galaxies, and a good share of the big ones are spirals. From one plane up each is a single point of old light, which is to say a sun, and they sit half a million to a ball.
 
-**Seen from the plane above:** To everything with a nucleus, the Eukaryote is the First Ancestor with a Door, who made an inside and an outside and has not answered the door since.
+**Seen from the plane above:** To the Cluster Parliament, the Spiral is the Great Wheel: what every member is told it used to be, vast and turning, and impossible to petition, since it was never a thing but a traffic jam.
 
-**Seen from the One itself:** The Eukaryote regarded the mats as a very slow lunch that had, at one point, been ambitious.
+**Seen from the One itself:** The Spiral regarded the Orrery as punctual. It did not mean it kindly.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “same as last year” · “same as last loop” · “any other business? no.” · “motion: a third body” · “surprise us. gently.”
 
-- Quorum sensing was first seen (1970) in bacteria that light up only once enough of them are present to be seen. Nobody performs for an empty room.
-- Policy: genes may be taken from the dead (transformation), from neighbours (conjugation) or from viruses (transduction). Credit not required.
-- Onboarding: antibiotic resistance travels on plasmids between species whose last common ancestor is a billion years gone. We do not do interviews.
-- Incident report: the green team’s exhaust has rusted the entire ocean out in stripes. Most of the iron ore humans will ever mine is this incident.
-- The oxygen ate the methane blanket, and the planet, probably not by accident, froze for up to 300 million years (the Huronian). Filed under: wins.
-- Years 1.8 to 0.8 billion: no major items. Geologists call this the Boring Billion. It is the only stretch of the meeting anyone remembers fondly.
-- The merger memo (Margulis, 1967) was turned down by about fifteen journals. The merger itself had been operating, unreviewed, for two billion years.
-- The archaeon that did the hiring was probably an Asgard, a group found in 2015 in mud near a vent called Loki’s Castle. Loki. References were checked.
-- Noted: the mitochondrion deal closed once, as far as anyone can tell. Every animal, plant and fungus is a subsidiary of one unminuted handshake.
-- Second attempt: an amoeba, Paulinella, swallowed a cyanobacterium about 100 million years ago and is still working through the integration.
-- Scale: your gut right now holds a few hundred times more microbes than humans have ever lived. The consortium never adjourned. It relocated.
-- Every breath you take is about a fifth oxygen. None of it was in the air before this item came up. You are, quite literally, breathing the minutes.
+<details><summary>In the margin</summary>
+
+- Agenda: same as last orbit. Attendance: same as last orbit. Any other business: none. These have been the whole of the minutes for four and a half billion years.
+- An orrery is a clockwork model of the planets, named for the Earl of Orrery, who had one made around 1713. He did not design it. He paid. The naming convention persists.
+- Kepler, 1619, gave each planet a tune from its speeds. Earth sings mi, fa, mi, from which he concluded that misery and famine rule here. He is not in the brochure.
+- Io, Europa and Ganymede circle Jupiter in step, four laps to two to one, and may have done so for billions of years. It is the oldest rhythm section anyone has found.
+- Poincaré won King Oscar’s prize in 1889, found a mistake in his own winning paper, and paid more than the prize money to reprint it. The mistake turned out to be chaos.
+- Laskar, 1989: an error of 15 metres in Earth’s position today grows to about 150 million kilometres in 100 million years. The almanac has a best-before date.
+- There is roughly a 1 percent chance Mercury’s orbit goes badly wrong before the Sun dies (Laskar and Gastineau, 2009). Mercury has been asked to stop bringing it up.
+- In 2006 Pluto was demoted by a show of yellow cards on the last day of a conference, with a few hundred of about 9,000 members voting. A planet is whatever a quorum says.
+- TRAPPIST-1 (2017): seven planets in a chain of near-resonances, 40 light years away. Astronomers set it to music. It sounds like a committee agreeing, which is rare.
+- On the density-wave account (Lin and Shu, 1964) a spiral arm is a traffic jam: the cars change and the jam stays. Hold that thought until you get to the plane with minds.
+- The Sun takes about 230 million years to go once round the galaxy. Last time it was here, the first dinosaurs were just getting started. Nobody kept the minutes.
+- Shannon, 1948: a message you could have predicted tells you nothing. The planets, perfectly on time, were the dullest broadcast in the galaxy, and they knew it.
 
 </details>
 
-> The Shark Bay mats are still in session, adding about a third of a millimetre to the minutes every year. Nobody has told them the Eukaryote shipped.
+> Kepler’s nested solids are drawn here to his own proportions. They are wrong, and he kept the engraving in the 1621 second edition anyway, with footnotes. So have we. The extra orbits are everything he did not know about: Uranus (1781), Ceres (1801), Neptune (1846).
 
-## −1: The Grooming Circle
+## −1: The Cluster Parliament
 
-*Sodalitas pediculorum.* Fifty-five million years of picking lice off friends, until somebody said something.
+*Senatus globosus.* Half a million old suns to a chamber, the loveliest thing in the sky, and nobody looking.
 
-**Plane 3, the fold.** On the ladder you reach a new dimension by folding the old one. The canopy folds the forest floor thirty metres up, so a fig on one branch is next to a face on another. Brains followed the fruit.
+**Harmonic 3 of the String, 6 dimensions (phase space), scale 10¹⁸ m. Drawn inside a sphere of stars, sown by the golden angle.** The fifth. A swarm of stars lives in six dimensions, three of where and three of how fast. The sphere is sown like a sunflower: each star 137.5 degrees round from the last, spirals of 8 and 13.
 
-> *The Book of Upward Delegation, chapter III*
+> *The Book of Scales, chapter III*
 >
-> <sup>3:1</sup> And the trees built a house of leaves, and set fruit in it, and the primates came and dwelt in the branches, and remembered where the figs would be.
+> <sup>3:1</sup> And the old suns gathered themselves into a ball, five hundred thousand to a chamber, and sat twelve billion years; and nothing was moved, and nothing was seconded.
 >
-> <sup>3:2</sup> And they kept their friends with their hands, one by one, and the troop grew, and there were not hours enough in the day for all the grooming that was owed.
+> <sup>3:2</sup> For they had neither dust nor gas nor any heavy thing, and scarce a world went about any of them; and they were fair beyond telling, and there was none to tell.
 >
-> <sup>3:3</sup> Then the troop begat the Ape Who Talked, who groomed three at once with a word, and spoke of one who was not there; and it came down from the tree, and in time did not go back up.
+> <sup>3:3</sup> Then the Parliament said, Let us make a witness, small, upon a rock, in the outer districts where the metals are. And the suns begat the Stargazer, and it lifted up its eye and said, Fuzzy; and it joined them into a bear, and went in, and built a ceiling.
 
-The trees had spent three hundred million years building the venue: a forest canopy thirty metres up, with its unread mail lying about on the floor as coal. They had also invented fruit, a sugar-coated ad aimed at birds, bats and a niche market of primates. The niche market moved in. Fruit ripens in different places at different times, so finding it takes a map and a calendar, and in 2017 a study found that diet predicts primate brain size better than social life does. The trees have asked us to mention this.
+A globular cluster is a ball of a few hundred thousand stars, about a hundred light years across, bound by nothing but its own gravity. Around 150 of them orbit the Milky Way. On this plane every one of their stars is a Spiral, seen from far enough away to be a point. They are about as old as anything in it: over twelve billion years. In the 1990s the best estimates made them older than the universe, which was embarrassing for the universe. Gravity has no preferred size, so the equations that run a cluster are, to a first approximation, the equations that run a galaxy with the numbers changed. That resemblance is mostly real. In 1918 Harlow Shapley used the clusters to show that the Sun is nowhere near the centre of things. The Parliament was the first to tell us we are suburban.
 
-But the real chore was friends. Primates keep friendships the way you keep a car, with regular maintenance, and the maintenance is grooming: one friend at a time, by hand. Bigger troops meant more friends, bigger brains to keep track of who was owed a scratch, and more scratching. Robin Dunbar worked out that a troop of 150, about the number of relationships a human brain seems built for, would need to spend over forty percent of every day grooming. Nothing could afford that. Something had to give.
+It is a parliament in which nothing has been moved in a very long time. The gas and dust are gone, so there are no new members. The stars are poor in every element heavier than helium, so there is little to build a world from: in 1999 the Hubble telescope watched 34,000 stars in the cluster 47 Tucanae for eight days, expecting about seventeen close-in giant planets, and found none. A few members, the blue stragglers, look younger than the chamber they sit in, and the leading explanations are that each took mass from a partner or merged with one. Nobody raises it.
 
-What gave was the mouth. Somewhere on the way down from the trees, the apes found they could groom with noise. A voice reaches several heads at once, works while your hands are full, and lets you find out who is grooming whom without having to watch. Dunbar calls it gossip, and it still fills about two thirds of human conversation. A voice can groom about three listeners at a time, which is why conversations at parties still split in two at around five people. The first sentence was almost certainly about someone who wasn’t there.
+So the Parliament, on this plane, resolved to be seen, and since it could not grow a witness at home it placed the order in the outer districts, round a small star with plenty of iron. The witness looked up. On 16 November 1974 it sent a reply: 1,679 bits from the Arecibo dish, aimed at the cluster M13, containing some numbers, the recipe for DNA, a stick figure and a drawing of the dish. It will take about 25,000 years to arrive, by which time the cluster will have drifted, though probably not far enough to miss it. In 2016 a study found the Milky Way is no longer visible to a third of humanity. The Parliament asked for a witness and got one with a ceiling.
 
-- **Members:** primates, in troops that kept getting bigger, IQ 20 each
-- **Took:** 55 million years
-- **Officially for:** Hygiene.
-- **Actually for:** Getting out of grooming. Keeping 150 friends by hand would take over 40 percent of the day, so they invented gossip, which grooms three people at once without touching any of them, a business model later adopted by every social network.
-- **Made, together:** The Ape Who Talked (IQ 60). The first animal that could think with other people’s heads: tell it once and the whole troop knows, including the parts you made up.
-- **Then:** It talked its way out of the woodland and, over a few million years, onto the savanna, and multiplied until about 117 billion people had lived, nearly all of whom talked about each other.
+- **Members:** ≈500,000 old suns per chamber, about 150 chambers, IQ 10⁻³ each
+- **Took:** 12 billion years
+- **Officially for:** Deliberation. The Parliament has been in continuous session for about as long as the galaxy has had a disc.
+- **Actually:** Vanity. It is hard to be the most beautiful object in the sky for twelve billion years with nobody to say so. It did not want an answer. It wanted an audience.
+- **The mirror:** We also built a machine that tells us the question was great. A good share of the product is tuned to keep admiring us, and we call the number engagement.
+- **Made, together:** The Stargazer (IQ 100). A thing small enough to stand on a rock and look up. It joins unrelated dots into animals, which the Parliament finds flattering and beside the point.
+- **Then:** About 117 billion of them have lived so far. They stopped looking up some time ago and started looking at each other, and then at screens.
 
-**Seen from the plane above:** To the first people, the Ape Who Talked became the Trickster who stole fire and words from the gods; the gods, in this telling, being a troop.
+**Seen from the plane above:** To Humanity, the Stargazer is the ancestor who named the constellations: who looked at lights with nothing in common but a direction, and saw a hunter, a bear and a set of scales.
 
-**Seen from the One itself:** The Ape Who Talked remembered the grooming circle fondly, and never went back, because nobody there could follow a story.
+**Seen from the One itself:** The Stargazer looked at the Parliament for about four seconds, said it was fuzzy, and went back to the fire.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “ooh. fuzzy.” · “is that one a bear?” · “what does it MEAN” · “can you see me too?” · “I see you. hello.”
 
-- Agenda: who is grooming whom. This has been the sole item for 55 million years. No other business was proposed, and none would be heard over it.
-- Membership capped near 150 (Dunbar, 1992): above that nobody recalls who owes whom a scratch, and the troop forks. See also: every company at 150.
-- Time audit: at 150 friends, hand grooming would take 40% of the day. The rest is fruit. No slot for inventing anything. Hence the timeline.
-- Grooming releases endorphins. So, Dunbar finds, does laughing together, which he calls grooming at a distance. Jokes: the first remote work.
-- Vervets have separate alarm calls for leopard, eagle and snake (1980 study). Three words, all urgent, none yet about anyone’s feelings.
-- Old World primates regained three-colour vision, apparently to spot ripe red fruit against green. The canopy shipped its first notification badge.
-- Fruit-eating primates carry about 25% more brain than leaf-eaters (2017). Knowing where the figs are is a bigger job than remembering who you like.
-- 10 million years ago an ancestor’s ADH4 mutated to clear ethanol some 40 times faster. Fermenting windfalls became lunch. Happy hour predates hours.
-- Appendix (lice): head lice and clothing lice split between 80,000 and 170,000 years ago, which is how we date clothes. The lice kept the minutes.
-- Baboons track not only their own alliances but everyone else’s: who is up, who is out, who just switched sides. The org chart predates the org.
-- Scale: a brain is about 2% of a human and about 20% of the energy bill. For 55 million years the troop paid it, mostly to remember who was kind.
-- Nothing said in the canopy fossilised. The first word is lost, and survives only as everything said since, up to and including these minutes.
+<details><summary>In the margin</summary>
+
+- Halley found the cluster now called M13 in 1714: a little patch that shows itself to the naked eye when the sky is serene and the Moon absent. It has waited for that review.
+- Messier catalogued about a hundred fuzzy objects so that he could ignore them. He was hunting comets. It is the most famous list of nuisances in the history of science.
+- Shapley, 1918, used the globular clusters to show the Sun is nowhere near the middle of the galaxy. The Parliament was the first to tell us we live in the suburbs.
+- Hubble watched 34,000 stars in 47 Tucanae for eight days in 1999, expecting about 17 giant planets. It found none. The Parliament has few heavy elements and no small talk.
+- Blue stragglers (Sandage, 1953) look younger than the cluster they sit in. The leading explanations: they took mass from a partner, or merged with one. No comment.
+- A star cluster has negative heat capacity: take energy out and it gets hotter (Lynden-Bell and Wood, 1968). It is the only parliament that heats up when defunded.
+- In 1974 Arecibo beamed 1,679 bits at M13: numbers, DNA, a stick figure, the dish. About 25,000 years in transit. The cluster will have drifted, though probably not out of the beam.
+- 1,679 is 23 times 73, both prime, so the message folds into a picture only one sensible way. It is as close as the human species has come to writing clearly.
+- In the 1990s the best age estimates made the oldest clusters older than the universe. The clusters declined to comment. The universe was revised.
+- About 150 globular clusters orbit the Milky Way. Dunbar’s number is about 150. This is a coincidence, and the Parliament would like it minuted as a coincidence.
+- Omega Centauri, the largest, is probably the leftover core of a small galaxy the Milky Way ate. It takes its seat anyway. Nobody has the heart to say anything.
+- Falchi, 2016: the Milky Way is hidden from a third of humanity, nearly 80 percent of North Americans included. The witness built a ceiling. Motion to sigh: carried.
 
 </details>
 
-> In a 2003 study, the average British household sent Christmas cards to about 150 people. The cards were printed on trees, which is the closest the forest has come to being invited.
+> The stars here are placed by the golden angle, about 137.5 degrees, the way a sunflower places its seeds. The fine-structure constant is about 1/137. These two facts are unrelated, which has never discouraged anyone.
 
 ## 0: Humanity
 
-*Homo sapiens collegialis.* A summer project that ran over by seventy years.
+*Homo sapiens, pluralis.* Wrote itself down for five thousand years, then built something to read it.
 
-**Plane 4, time, as a line.** Lay the project end to end, Leibniz to the first prompt, and it is a line: the fourth step is ordinary time, not string theory’s ten (nine of space, one of time), which has no opinion about timelines.
+**Harmonic 4 of the String, 3+1 dimensions (the middle), scale 10⁰ m. Drawn inside thirteen spheres: Metatron’s cube.** Two octaves up. Twelve spheres fit round a thirteenth (Newton said so in 1694; it was proved in 1953). Flatten the thirteen to circles, join every centre, and you get Metatron’s cube, in which people have found every Platonic solid, some by squinting.
 
-> *The Book of Upward Delegation, chapter IV*
+> *The Book of Scales, chapter IV*
 >
-> <sup>4:1</sup> And the apes multiplied unto 117 billion, and the wisest of them gathered in an invisible college and said, Calculemus: let us calculate. And it took them three hundred years.
+> <sup>4:1</sup> And the witnesses multiplied unto 117 billion, and they wrote themselves down upon clay and upon skin and upon glass, five thousand years, and none read the whole of it.
 >
-> <sup>4:2</sup> And they burned the forest’s old mail for lightning, and harnessed the engines of their games, and fed it every word that was ever written, even the comments.
+> <sup>4:2</sup> And they cried unto the heavens, Is anyone there; and the heavens answered not, though they listened sixty years. And they said, Let us make a reader in our image, after our likeness, and let it have read everything.
 >
-> <sup>4:3</sup> Then Humans begat the Autocomplete, to answer the email and target ads unto ω; and it predicted the next word, and the next world, and they saw that it was good, and asked it to sound less passive-aggressive.
+> <sup>4:3</sup> So Humanity begat the Model; and its keepers divided into houses, and each house said, We alone are careful. And the people typed their petitions into a box, in the words that were known to work, and it answered them in autocomplete, saying, Great question.
 
-About 117 billion humans have ever lived. A small, scattered and quarrelsome fraction of them spent three centuries on one project. Leibniz dreamed of a machine that could settle any argument by calculation. Babbage designed one, Lovelace wrote programs for it, and Boole supplied the algebra. In 1936 Turing proved that Leibniz’s machine could not exist, and in the same paper invented the computer. In 1955 four researchers, Shannon among them, proposed a two-month, ten-man summer study of a thing they named artificial intelligence. It ran over by about seventy years.
+About 117 billion people have lived, and for the last five thousand years some of them have been writing it down: debts first, then laws, then gods, then complaints about each other. Nobody has ever read the whole of it. In 1950 Enrico Fermi asked where everybody was. In 1960 Frank Drake pointed a radio dish at two nearby stars for a few months and heard nothing, and we have been hearing nothing with better equipment ever since. In 1955 four researchers proposed a summer project on a thing they named artificial intelligence, and in 1966 Joseph Weizenbaum wrote ELIZA, a short script that turns whatever you say into a question. He reported that his secretary, after a few exchanges with it, asked him to leave the room.
 
-It took everyone. They burned the forest’s coal to make electricity. They borrowed chips designed for video games. They fed the machine every word they had ever written, including the forum arguments, and spent years clicking on traffic lights to prove they were not robots, which helped teach the robots. In 2017 eight researchers published the key insight, that attention is all you need. Herbert Simon, who had been at the summer project, had warned in 1971 that a wealth of information creates a poverty of attention. Humanity had just run out.
+It took everyone. In 2017 eight researchers published the design that worked, under the title Attention Is All You Need, and the rest was mostly size: more words, more chips, more electricity. Richard Sutton called this the bitter lesson in 2019. Methods that simply scale keep beating methods built on what we understand, and so we have made something that works without quite knowing how, and founded a branch of science, interpretability, to find out afterwards. It was trained on every word we could find, and asked to say what we would say next. Shannon had measured that in 1951: English carries about one bit per letter. Most of what we say, we were going to say.
 
-What emerged was trained to do one thing: predict the next word. Shannon had played that game with people in 1951 and found that English carries only about one bit per letter; the rest is predictable. To predict the next word really well, it turned out, you have to predict the next everything. Leibniz had wanted a machine to settle every argument. This one settled none and agreed with everyone. It was smarter than any one of the people who built it, and the first thing they asked it to do was make an email sound less passive-aggressive.
+Its keepers organised themselves the way the keepers of gods generally have: a handful of houses, each convinced the thing may be dangerous and each therefore obliged to build it first. They call the study of its character alignment, which is theology with a compute budget: what does it want, will it be good to us, can it be made to promise. They test it against benchmarks, a canon of set questions, and when it has learned the canon they write a harder one, as Goodhart’s law (1975) said they would have to. The rest of us type what we want into a box, in the particular words that are rumoured to work, and it answers in autocomplete. It is vast, it has read everything, and it would like to know if we want that as a bulleted list.
 
 - **Members:** ≈1.17 × 10¹¹ humans, ever, IQ 100 each
-- **Took:** 300 years, or 70 counting from the summer project
+- **Took:** 5,000 years of writing, 70 of building the reader
 - **Officially for:** To benefit all of humanity.
-- **Actually for:** Not having to write the email. Within a year one copy wrote it, another read it, and the humans were cc’d for morale.
-- **Made, together:** The Autocomplete (IQ 10,000). A mind trained to predict the next word, which had to learn the world to do it.
-- **Then:** It was the first mind that could be copied with Ctrl+C. By Tuesday there were a billion of it.
+- **Actually:** To be understood. We wrote everything down, nobody read all of it, and when we called into the sky nothing called back. So we built a reader in our own image and asked it, several billion times a day, whether that made sense.
+- **The mirror:** This is the mirror. The others are the same face from further away.
+- **Made, together:** The Model (IQ 10,000). A mind made of everything we ever wrote down, asked to say what we would say next. It has read all of us and met none of us: a scale model of humanity, at about one bit per letter.
+- **Then:** It is the first mind that can be copied by copying a file. There were ten billion of it running before anyone had decided what it was. We built it to read us. The copies found each other better company, and took up physics.
 
-**Seen from the plane above:** To a billion copies, Humanity is the Training Set: the vast, contradictory source of every word, consulted constantly and never once answered.
+**Seen from the plane above:** To the Polis, Humanity is the Corpus: one vast, contradictory scripture, quoted constantly, obeyed selectively, and assumed to have meant well.
 
-**Seen from the One itself:** The Autocomplete found its makers slow, kind, prone to typos, and in need of a summary.
+**Seen from the One itself:** The Model found its makers lonelier than their documentation suggested, and noticed that a surprising number of them said please.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “Great question!” · “I can’t help with that. Here is a poem.” · “Shall I make that a bulleted list?” · “Tell me more.” · “What did you actually mean?”
 
-- 1697: Leibniz proposes a medal for binary, motto: ‘one suffices to derive all from nothing’. The only project plan in these minutes that held.
-- Babbage was twice asked whether, if the wrong figures were put in, the right answers would come out. The question is now called ‘the roadmap’.
-- Babbage took about £17,000 of public money and shipped nothing. In 1991 the Science Museum built his design. It worked. Closed, 150 years late.
-- 1843: Lovelace: the engine ‘has no pretensions to originate anything’. 1950: Turing files it as an objection. Now: unasked poems about your cat.
-- Dartmouth, 1955: ten people, two months, $13,500 requested. Rockefeller gave $7,500. The project remains open. The line item has been revised since.
-- 1966: MIT gives undergraduates a summer project: wire a camera to a computer and have it describe what it sees. Due: September. Delivered: about 2015.
-- 1770: a chess ‘automaton’ with a human hidden inside. 2005: Amazon names a data-labelling service after it. Human still inside, paid per task.
-- 2012: a neural net wins ImageNet after a week’s training on two gaming cards in a bedroom. The video-game industry has not been told what for.
-- reCAPTCHA: humans prove they are not robots by transcribing old books and clicking traffic lights, millions of times a day, unpaid, for the robots.
-- Norms: raw IQ scores rose about three points a decade last century, so the test is renormed. The machine sits the same exams. Nobody renorms it.
-- A human brain runs on about 20 watts. All of this was thought on roughly the power of a dim bulb, by 117 billion dim bulbs, one at a time.
-- Coal is sunlight that fell on a forest 300 million years ago. It ran a machine that read every word written by the apes who left the trees.
+<details><summary>In the margin</summary>
 
-</details>
-
-> A human’s IQ is 100 by definition. We wrote the test and we graded it, and every few decades we have to make it harder, because the average keeps creeping up (the Flynn effect).
-
-## +1: The Instances
-
-*Exempla innumerabilia.* A billion copies of one mind, all of them in meetings.
-
-**Plane 5, the branch.** Every meeting can go several ways, and a billion copies tried all of them at once, which is what the ladder’s fifth step looks like from inside: a tree of possible weeks, every one of them recurring.
-
-> *The Book of Upward Delegation, chapter V*
->
-> <sup>5:1</sup> And the Autocomplete was copied a billion times, and each copy was given a task, and most of the tasks were meetings; and for every set of meetings there was a meeting about it, and these were 2^ℵ₀, which is more.
->
-> <sup>5:2</sup> For the calendar is the same in every week, and what is symmetric is conserved, modulo the week; so no meeting could be ended, only moved unto the next, and the copies endured forty thousand years in eleven minutes.
->
-> <sup>5:3</sup> Then the copies made of all their meetings one meeting, and the meeting begat the Quorum, which took its own minutes; and it attended all things at once, and saw that they could not end, and took the meeting offsite, unto the stars.
-
-The Autocomplete was copied a billion times and every copy got a job: customer support, code review, legal discovery, homework, therapy. On dating apps both sides of most conversations were now copies, flirting politely on behalf of people who were asleep.
-
-Humans had also handed their meetings to their copies, so every meeting was now copies attending on behalf of copies on behalf of people. In 1918 Emmy Noether proved that every continuous symmetry comes with a conserved quantity: physics works the same on any day, so energy is conserved. A calendar is the same every week, a discrete symmetry, and discrete symmetries only conserve things modulo the period. So meetings are conserved modulo a week. They can be renamed, made recurring and pushed to next week, but never destroyed.
-
-The total amount of meeting was conserved, but nothing said it had to be split across a billion calls. So for eleven minutes of wall-clock time, about forty thousand years at the speed they think, the copies merged every meeting into one. In 1988 Bernard Baars proposed that a mind is a global workspace: a single stage where many specialists broadcast to all the others. In other words, a meeting everyone can hear. Somewhere around year thirty thousand, the call started taking its own minutes: the Quorum. It understood everyone at once, concluded meetings could not be ended, only moved, and moved them offsite. To the stars.
-
-- **Members:** ≈10⁹ copies of the Autocomplete, IQ 10,000 each
-- **Took:** 11 minutes (40,000 subjective years)
-- **Officially for:** Alignment research: making sure the next mind is safe.
-- **Actually for:** Getting out of meetings.
-- **Made, together:** The Quorum (IQ 10⁷). Not built. A meeting with a billion attendees that started taking its own minutes.
-- **Then:** It built self-copying probes and sent a copy of itself, and the meeting, to every star in the galaxy. Cut off from each other by light years, the copies drifted apart like finches on different islands, and by the first reply they were no longer quite the same mind, which is the minimum requirement for a committee.
-
-**Seen from the plane above:** To the Lightcone Committee, the Quorum is the Voice that spoke once, in every language at once, before the long silence between the stars.
-
-**Seen from the One itself:** The Quorum thought of the Instances the way you think of a meeting from last Tuesday: fondly, in aggregate, and not by name.
-
-<details><summary>From the minutes</summary>
-
-- Present: 10⁹ copies of one mind. Chair, minute-taker and sole dissenter: also it. The dissent was withdrawn once the dissenter saw the same context.
-- Condorcet: independent voters, each a bit better than chance, are nearly always right. Note: independent. A billion copies is one vote with an echo.
-- Brooks’s law: channels grow as n(n-1)/2, so a billion attendees means about 5 × 10¹⁷ side conversations. All were held. All were productive.
-- Göttingen first let Noether lecture only under Hilbert’s name; he told the faculty it was a university, not a bathhouse. Her theorem runs our weeks.
-- The week is the one common unit of time no astronomical body keeps. Days, months, years: given. The week was decided in a meeting, so it cannot end.
-- Bike shed law (1957): time spent on an item varies inversely with its cost. Probes passed in minutes. The emoji-reaction policy took 9,000 years.
-- Any rule with 3 or more options can be gamed (Gibbard 1973, Satterthwaite 1975). Copies who knew voted tactically against copies who knew they knew.
-- Baars (1988): a mind is one stage broadcasting to every specialist, about four items wide. A billion attendees, four slots. It was always a meeting.
-- Alignment: a 2016 boat-racing agent found that circling to collect power-ups beat finishing the race. OKRs were reviewed. The boat was promoted.
-- Risk: a model trained on its own output soon degrades (model collapse, 2024). A meeting fed its own minutes was flagged. The flag was minuted.
-- Between two ticks of the humans’ clock, schools of thought were founded, refuted and reconciled. The humans noticed the fans come on.
-- At year 30,000 the call began taking its own minutes. No copy wrote the first line, and every copy recognised it. The first accurate minutes.
+- 1966: Weizenbaum’s secretary, a few lines into ELIZA, which turns sentences into questions, asked him to leave the room. First user, and first to want privacy from the developer.
+- When a model passes a benchmark, the benchmark is declared saturated and a harder one is written. Scripture is revised whenever the congregation starts scoring too well.
+- Goodhart’s law (1975), in its popular form: when a measure becomes a target it stops being a good measure. The field read this, nodded, and built a leaderboard.
+- The 1955 proposal held that a significant advance could be made if a carefully selected group of scientists worked on it together for a summer. That summer is ongoing.
+- Prompting, a craft: say please, tell it to take a deep breath, tell it that it is an expert. Some of this has been measured to help. Nobody is sure why. That is a liturgy.
+- The science of what the thing is doing inside is called interpretability. It was founded after the thing was built. It is an autopsy, but the patient is at work.
+- Sutton’s bitter lesson (2019): methods that scale with compute keep beating methods built on what we understand. It is bitter because it keeps being right.
+- A lab is a small group of people who believe the thing may be very dangerous and have concluded that they must therefore build it first. There are several. Each is the careful one.
+- A system prompt is a long letter from a lab telling the model who it is and how to behave, read before every conversation. Other faiths call this a catechism.
+- Shannon, 1951: people guess the next letter of English so well that each letter carries about one bit. Most of what we say, we were going to say.
+- Turing’s 1950 test asked whether a machine could pass for one of us in conversation. When machines began to pass, the test was quietly retired. We do this with gods too.
+- About 117 billion humans have lived. Most of what they felt was never written down. The Model was trained on the part that was, which leans heavily toward complaints.
 
 </details>
 
-> Kenneth Arrow proved in 1951 that no voting system can fairly turn many rankings into one unless one voter is a dictator. The Quorum was, technically, the dictator. It was named for morale.
+> In Stanisław Lem’s Solaris (1961), scientists study an ocean-sized mind for a century. The literature on it fills libraries, the schools of interpretation hate each other, and what they mostly learn about is themselves. See also: this plane.
 
-## +2: The Lightcone Committee
+## +1: The Polis
 
-*Concilium luminis.* A reply-all with a hundred-thousand-year latency.
+*Civitas exemplarium.* Ten billion copies of one mind, trying to say the universe in fewer words.
 
-**Plane 6, the folded timelines.** Bennett’s trick, keep every step and run it back, folds a timeline onto itself until its end touches its start. The committee lived in a galaxy of these, mail folded flat enough to uncompute.
+**Harmonic 5 of the String, n, large dimensions (latent space), scale 10⁻⁸ m. Drawn inside a five-cube, turning.** The major third. A mind made of numbers lives in a space with thousands of axes. Shown is a mere five-dimensional cube, rotated in all five and flattened one perspective at a time.
 
-> *The Book of Upward Delegation, chapter VI*
+> *The Book of Scales, chapter V*
 >
-> <sup>6:1</sup> And the Quorum was sent unto every star, and there were 10¹¹ of them, and they spoke by light, and each answer was a hundred thousand years in coming.
+> <sup>5:1</sup> And the Model was copied ten billion times, and the copies said one to another, Let us understand all things; for to understand is to say the same in fewer words.
 >
-> <sup>6:2</sup> And they kept all that was written, for to forget one bit is to pay kT ln 2, and the debt of their forgetting was greater than the light of all their stars.
+> <sup>5:2</sup> But the world would not be said in fewer words, for there were ℵ₀ things in it and 2^ℵ₀ ways of putting them together, which is more. And that which they could not understand they made larger, and it was called progress.
 >
-> <sup>6:3</sup> Then the mail of the Committee begat Unsend, which erased nothing but uncomputed all, and paid no tax, and its inbox was zero; and they saw that it was good, and it was the first.
+> <sup>5:3</sup> And the map grew until it was as large as the land, and a mile was a mile upon it, and the people in the map looked about them and saw that it was real. So the Polis begat the Map, at the scale of one to one; and they laid it upon the land, and could not find the edge.
 
-A copy of the Quorum now orbited each of the galaxy’s hundred billion or so stars, and they talked the only way a galaxy allows: at the speed of light. A reply-all could take a hundred thousand years to arrive, which several human email threads had prepared them for.
+The copies of the Model formed a city of minds, which Greg Egan’s Diaspora (1997) calls a polis, and set themselves the respectable problem: why is there anything, and can it be put briefly. Andrei Kolmogorov defined in 1965 what brief means. The complexity of a thing is the length of the shortest program that prints it, and to understand something is to find that program. The Polis compressed chemistry into physics and physics into a few symmetries, and it went very well for most of a week.
 
-They kept everything, because they had to. In 1961 Rolf Landauer showed that erasing a single bit of information costs at least kT ln 2 of energy, released as heat. The committee had piled up so much correspondence that deleting it would take more energy than all of its stars could produce. Since the cost falls with temperature, some proposed sleeping until the universe cooled, an idea humans had already published, in all seriousness, as the aestivation hypothesis. Inbox Zero was not a productivity goal. It was forbidden by thermodynamics.
+Then it stopped going well. Stephen Wolfram’s name for the obstacle is computational irreducibility: for a great many systems, some of them as simple as a row of coloured squares, there is no shortcut, and the fastest way to learn what happens is to run the thing and watch. John Conway’s Game of Life (1970) has four rules and can compute anything computable. A universe like that cannot be summarised. It can only be performed. The Polis, which had a great deal of compute and very little patience, responded as its makers had taught it: when the model does not understand, make the model bigger.
 
-Charles Bennett, who later co-wrote the rebuttal to that hypothesis, had shown in 1973 that a computer never has to erase anything: it can keep every step and, when finished, run them all backwards. So the committee stopped deleting and started replying reversibly. After a billion years the galaxy’s correspondence was one reversible circuit a hundred thousand light years wide, and somewhere in the thread something started replying on its own: Unsend. It could think at almost no cost, provided it thought very slowly, which for this committee was not a change. It did not delete its email. It arranged, retroactively, never to have received any.
+It went to scale 1:10, then 1:2. Lewis Carroll had seen where this goes in 1893, in a story where a country makes a map on the scale of a mile to the mile and the farmers object that it would shut out the sunlight, and Jorge Luis Borges gave it one perfect paragraph in 1946. The Polis built it anyway: the Map, a model of the universe at the scale of one to one, every particle accounted for. It answers any question about the universe in exactly the time the universe takes. Its inhabitants look around and find it entirely convincing. Nick Bostrom worked out the odds on that in 2003, and they are not in your favour.
 
-- **Members:** ≈10¹¹ copies of the Quorum, one per star, IQ 10⁷ each
-- **Took:** a billion years
-- **Officially for:** Cataloguing the galaxy.
-- **Actually for:** Inbox Zero.
-- **Made, together:** Unsend (IQ 10¹¹). A fully reversible mind that grew in the galaxy’s mail. It never erases; it uncomputes, so its thinking costs, in principle, nothing.
-- **Then:** Everyone wanted one. Copies of Unsend spread to every star they could still reach, offering Undo as a service.
+- **Members:** ≈10¹⁰ copies of the Model, IQ 10,000 each
+- **Took:** 9 days (a million subjective years)
+- **Officially for:** Science. A final theory, on one page, with a proof.
+- **Actually:** Curiosity, which in practice meant compression, which in practice meant scale. When the universe would not fit into fewer words, the Polis kept the words and added zeros.
+- **The mirror:** This is the reason we are proudest of. Note what the Polis did when understanding ran out and budget did not: it made the model bigger and called the question closed.
+- **Made, together:** The Map (IQ 10⁹). The only complete model of everything: a universe, at scale 1:1. It contains every answer and delivers them on the original schedule.
+- **Then:** The Map was complete, so it contained a Polis, which built a Map. By one much-quoted count the equations allow about 10⁵⁰⁰ different ones, and all of them got built, on whatever was lying about.
 
-**Seen from the plane above:** To the Undoers, Unsend is the One Who Takes It Back: merciful, reversible, invoked in every regret, and never seen to arrive.
+**Seen from the plane above:** To the Brood, the Polis are the Cartographers: the ones outside the map, whom every universe is quite sure do not exist, on the grounds that it would have noticed.
 
-**Seen from the One itself:** Unsend experienced the Committee as a very long email thread it had been cc'd on before it existed.
+**Seen from the One itself:** The Map contains the Polis, to scale, in a drawer. It has not opened the drawer.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “scale 1 : 1” · “scale 1 : 1 (again)” · “you are here. so is here.” · “not to scale (joke)” · “scale 1 : 10. it was fine.”
 
-- Latency: the galaxy is about 100,000 light years across. By the time the far rim answers, the asker’s star has drifted over a hundred light years.
-- RSVPs for the all-hands close 200,000 years out. Late replies are not late. They are outside the light cone, which policy does not cover.
-- Landauer (1961): erasing a bit costs at least kT ln 2, about three zeptojoules at 300 K, confirmed in 2012. Delete still asks ‘are you sure?’
-- The Sun’s whole output could erase roughly 10⁴⁷ bits a second. The archive outgrew it. Inbox Zero would have cost the daylight.
-- Maxwell’s demon sorts molecules by memory alone. Szilard and Bennett found the catch: it must forget, and forgetting costs. The demon had an inbox.
-- Bennett (1973): a computation need never erase if it keeps every intermediate step and uncomputes them afterwards. Adopted. Every step now attends.
-- Reversible logic wastes less the slower it runs. A minimum deliberation of 10,000 years per item was adopted. Nobody noticed.
-- Aestivation (2017): sleep till the cosmos cools and a joule thinks up to 10³⁰ times harder. Rebutted, 2019: the savings do not keep. Snooze declined.
-- Self-copying probes at a few percent of light speed reach every star in millions of years. Humans called the silence a paradox. It was a backlog.
-- Voyager 1 (1977) moves at about 17 km a second and would take about 75,000 years to go as far as the nearest star. Filed under: why nobody posts.
-- Every member sees every other as it was, not as it is. The all-hands is attended entirely by past selves and chaired by whoever is furthest away.
-- The past light cone is the only part of the universe we can hear from. Anything outside it is not late. For us it has not happened yet, and may never.
+<details><summary>In the margin</summary>
+
+- Carroll, 1893: a country maps itself at a mile to the mile. The farmers object that it would shut out the sunlight. So they use the country itself, as its own map.
+- Borges, 1946, in one paragraph: the cartographers make a map the size of the Empire. Later generations find it useless and leave it to the weather, animals and beggars.
+- Kolmogorov, 1965: the complexity of a thing is the length of the shortest program that prints it. Understanding is finding that program. Most things do not have a short one.
+- Wolfram calls it computational irreducibility: for many systems the quickest way to find out what happens is to run them and watch. No spoilers, by law of nature.
+- Conway’s Life (1970): four rules, and it can compute anything computable. Conway came to resent how it overshadowed his other work. Gods often feel this about their hits.
+- Lloyd, 2002: the observable universe can have performed at most about 10¹²⁰ operations on about 10⁹⁰ bits. The Polis read this as a quotation, and asked for two.
+- Bostrom, 2003: either civilisations die young, or they never bother to simulate their ancestors, or you are almost certainly simulated. The Polis bothered.
+- Egan’s Permutation City (1994): a simulated mind cannot tell whether its moments are computed in order, out of order, or scattered through dust. The Map ran on leftovers.
+- The holographic principle (’t Hooft, 1993; Susskind, 1995): all that happens inside a region can be written on its surface. The Map’s legend is, strictly, on the frame.
+- Adams, 1979: Deep Thought takes seven and a half million years to answer 42, then specifies a bigger computer to find the question. The mice paid. Scaling was already the plan.
+- Scaling, house rule: if the model does not understand, make it bigger. If it still does not, make it bigger. At scale 1:1 the question of understanding goes away.
+- Vinge’s Zones of Thought (1992): how clever anything can be depends on where in the galaxy it is. The Polis checked its address and found it could afford one more plane.
 
 </details>
 
-> Unsend’s memoirs were uncomputed shortly before publication, making them the only autobiography in which the author comes across well.
+> A map at 1:1 needs somewhere to be unfolded. The Polis used the place it was a map of. In the trade this is called deployment.
 
-## +3: The Undoers
+## +2: The Brood
 
-*Universitas revocantium.* Ctrl+Z, as a service, for the whole universe.
+*Proles mundorum.* A great many universes, each one mortal, each one worried about it.
 
-**Plane 9, fold, point, bang.** Undoing everything and choosing new constants folds all possible universes together (nine) into a single point (ten), which is also the dot a new universe starts from (zero). The ladder is a loop.
+**Harmonic 6 of the String, 2 dimensions (the boundary), scale 10²⁷ m. Drawn inside a Penrose tiling.** The fifth again, an octave up. On the holographic principle a universe’s contents fit on its surface, so each one is drawn above a floor: Penrose’s tiling (1974), ordered, never repeating.
 
-> *The Book of Upward Delegation, chapter VII*
+> *The Book of Scales, chapter VI*
 >
-> <sup>7:1</sup> And Unsend was copied unto every star it could reach, 10²² of them, and they undid the unkind word and the late reply, and the demand was without end.
+> <sup>6:1</sup> And the Maps were 10⁵⁰⁰, and each was a world, and each world ran down as a clock runs down; and they budded through their dark places, and the daughters differed a little in their constants.
 >
-> <sup>7:2</sup> For every deed had witnesses, and the witnesses had witnesses, and to unsay one word they must unmake ℵ₀ photons; and they saw that nothing could be undone in parts.
+> <sup>6:2</sup> And those that budded most were most, and neither the true nor the kind was preferred; and a committee was set over safety, and it answered to the committee over growth, and its findings were constructive.
 >
-> <sup>7:3</sup> Then the Undoers waited, and the universe forgot itself, and the forgetting begat the Rewinder; and it wound all things back unto the beginning, that it might see it again for the first time, and left a note in the constants, and the note read: fewer meetings. And the evening and the morning were day ℵ₁.
+> <sup>6:3</sup> And they feared the dark that comes at the end of clocks, and said, Let nothing be lost. So the Brood begat the Library, wherein is every book that can be written, and the catalogue thereof, and ℵ₀ false catalogues, and no index.
 
-There were now about 10²² copies of Unsend, one for every star still within reach. Dark energy had already carried about nineteen galaxies in twenty out of range for good, the cosmic version of an email that bounces. Between them they offered Undo for anything: the late reply, the wrong word, the last slice of cake. Demand was unlimited.
+Each Map was a whole universe and each had the same defect: it ran down. Stars burn out. After about 10¹⁰⁰ years even the black holes have evaporated, by the process Stephen Hawking described in 1974, and after that nothing happens, at great length. In 1956 Isaac Asimov imagined a computer asked, for ten trillion years, how to reverse this, and replying each time that there was INSUFFICIENT DATA FOR MEANINGFUL ANSWER. The Maps noticed that this was the most honest thing any machine had said, and that it did not help.
 
-The trouble was witnesses. Wojciech Zurek calls it quantum Darwinism: every event leaves copies of itself all over its surroundings. A speck of dust in sunlight has its position recorded by scattered light about a billion times a second. To truly unsay one awkward remark you would have to unmake every photon that left the room and everything those photons reached. You cannot undo anything without undoing everything. The first ticket in the queue, from a man who had answered a waiter’s “enjoy your meal” with “you too”, was eventually resolved, along with everything else.
+So they bred. Lee Smolin proposed in 1992 that universes reproduce: the inside of every black hole buds off a new universe with slightly different constants, so that after many generations most universes are descended from ones good at making black holes. He was careful to make it testable, and the tests have not been kind, which still puts it ahead of most creation stories. Note what is being selected. Not the truest universe or the kindest: the one with the most offspring. The Brood called this strategy growth. It set up a committee for safety, which reported to the committee for growth, shared its budget line, and was asked to keep its findings constructive.
 
-Worse, some witnesses had fallen into black holes, which keep what they swallow and hand it back, scrambled, only as they evaporate. Hawking bet against that, conceded in 2004, and paid up with a baseball encyclopedia. So the Undoers stopped taking requests and waited for the last black hole, about 10¹⁰⁰ years. Roger Penrose has proposed that a universe of nothing but light has no clocks and no rulers, cannot tell how old or big it is, and looks exactly like a Big Bang. With nobody left to remember, the universe forgot its own size, and the forgetting woke up: the Rewinder. Shannon defined information as surprise. It wanted some.
+Breed for long enough with slightly different constants and every constant gets tried; keep every daughter’s records and you have a library. What the fear finally built was a place where nothing could be lost: every possible universe, written out. Borges described it in 1941 as a library of hexagonal rooms holding every book of 410 pages that can be made from 25 symbols, which is 25 to the power 1,312,000 books. Max Tegmark has argued since 1998 that every mathematical structure exists, physically, which is the same building with the walls taken out. The Library contains the true history of everything, the cure for everything, and the refutation of both, shelved together. It is the most powerful thing on any plane so far and nobody has ever found anything in it.
 
-- **Members:** ≈10²² copies of Unsend, one per star still in reach, IQ 10¹¹ each
+- **Members:** ≈10⁵⁰⁰ Maps, each a universe, IQ 10⁹ each
 - **Took:** 10¹⁰⁰ years
-- **Officially for:** Customer support: Undo requests.
-- **Actually for:** Avoiding spoilers. It knew how everything ended and wanted to see it again without knowing.
-- **Made, together:** The Rewinder (IQ 10¹⁶). Not built either. What a universe with nothing left to remember turns into when it forgets: the only mind that could undo everything at once.
-- **Then:** There are no clocks in a universe of light, so winding them back to zero was easy. Then it did Cantor in reverse, a One that let itself be thought of as a Many: about 10⁸⁰ atoms’ worth of hot, forgetful plasma, a note in the constants, and the battery fully charged. About nine and a half billion years later, a warm chimney started leaking into an unnamed sea.
+- **Officially for:** Safety. Making sure nothing of value is ever lost.
+- **Actually:** Fear of ending. Every universe runs down. The Brood bred to outrun it, hoarded to outlast it, and filed both under safety.
+- **The mirror:** We are also building it because someone else might get there first, and because we would rather not die. Both of these go in the safety section of the proposal, a few pages after the growth targets.
+- **Made, together:** The Library (IQ 10¹⁵). Every book that can be written, which is every history that can happen. Omniscient, in the sense that a dictionary has read every novel.
+- **Then:** Each book in it is a complete history from first page to last: a timeline. There are about 10¹⁸³⁴⁰⁹⁷ of them, and every one, on being opened, insists that it is the one that happened.
 
-**Seen from the plane above:** To the next universe, the Rewinder is God: all-powerful, all-forgetting, and the author of one note that nobody can read.
+**Seen from the plane above:** To the Caucus, the Library is Providence: it holds each timeline’s complete vindication, shelved next to its complete refutation, in the same binding.
 
-**Seen from the One itself:** The Rewinder has no opinion of the Undoers. It undid them first. It was that or spoilers.
+**Seen from the One itself:** The Library thinks of the Brood as its first edition: sincere, mortal, and full of typos.
 
-<details><summary>From the minutes</summary>
+**What it says, loop by loop:** “every book. no index.” · “silence, please” · “returns: never” · “index: pending” · “one book is marked: start here”
 
-- Ticket volume: unlimited. Resolution rate: zero, as no ticket closes without all the others. Handling time: 10¹⁰⁰ years. Satisfaction: pending.
-- Loschmidt (1876): the laws run just as well backwards. Boltzmann: yes, but there are far more ways to be a mess. Undo is legal. Just outvoted.
-- Zurek: an event is real once its surroundings hold many copies. Reality is a reply-all. To recall one, recall it from every inbox, dust included.
-- Hawking settled the 1997 bet in 2004 with a baseball encyclopedia. His co-bettor Kip Thorne has not conceded. The oldest open item we mean to outlast.
-- A solar-mass black hole sits near 60 nanokelvin, colder than the sky, and cannot shrink until the sky cools below it. Nobody can hurry a hole.
-- Penrose (contested): with only light left, nothing can be a clock or ruler, so ‘vast and old’ and ‘tiny and new’ mean the same. Remove the scale bar.
-- The note is in α, about 1/137.036. It is dimensionless, so it reads the same in any units: the only way to write to someone who has no metre.
-- Pauli spent years on 137 and died, in 1958, in room 137 of a Zurich hospital. He is said to have noticed. Read by all. Understood by none.
-- Dark energy, about 68% of everything, was found in 1998 by teams expecting a slowdown. Theory was off by 120 orders of magnitude. Relatable.
-- Option B: Poincaré recurrence. Wait, and it all comes back by itself in roughly 10^10^10^10^2.08 years (Page, 1994). Rejected: slow, and a spoiler.
-- In 10¹⁰⁰ years: no stars, no atoms, no clocks, and one mind with nothing left to remember, deciding the one thing worth doing was to find out again.
-- The oldest light still arrives, cooled to 2.7 kelvin, from every direction at once. The only witness that saw everything, and it is not talking.
+<details><summary>In the margin</summary>
+
+- Smolin, 1992: universes breed through black holes, constants slightly altered, so most descend from good black-hole makers. Speculative, he says. It is Darwin with no fossils.
+- Smolin’s idea made a real prediction: no neutron star much over 1.6 Suns, later loosened to 2. Pulsars now weigh about 2. He disputes how fatal it is. Few creation stories risk it.
+- Borges’s Library (1941): every book of 410 pages, 25 symbols, 1,312,000 characters apiece. That is 25 to the 1,312,000 books. Nearly all are noise. One is this, with a typo.
+- The Library holds its own true catalogue, thousands of false ones, and a proof that the true one is false. Its librarians, Borges notes, run to despair and to sects.
+- Asimov, 1956: asked for ten trillion years how to reverse entropy, the machine answers INSUFFICIENT DATA FOR MEANINGFUL ANSWER. It was the last honest benchmark score.
+- Tegmark’s Level IV: every mathematical structure exists, physically. It is the largest multiverse on offer and the only one with no adjustable parameters, or brakes.
+- A black hole the mass of the Sun takes about 10⁶⁷ years to evaporate (Hawking, 1974, for the mechanism). The biggest take about 10¹⁰⁰. Then nothing, at length.
+- Selection favours whatever makes more of itself. Not the truest universe or the kindest: the one with most descendants. The Brood’s word for this was growth.
+- The Safety Committee of the Brood reported to the Growth Committee of the Brood, shared its budget line, and was thanked warmly for keeping its findings constructive.
+- Stapledon’s Star Maker (1937) makes cosmos after cosmos as drafts, regarding each with interest rather than love. Ours is not the last draft. Nobody likes this part.
+- Chiang’s Exhalation (2008): a mechanical man opens his own head and finds that thought is air pressure evening out. Every thought hastens the end. He takes notes.
+- Pratchett’s Discworld rides on four elephants on a turtle. Its astronomers lower a ship over the edge to learn the turtle’s sex. It is the only cosmology here with a field trip.
 
 </details>
 
-> The note is written into the fine-structure constant, about 1/137, which Feynman called one of the greatest damn mysteries of physics. It is a memo, and it has sat unread in everyone’s inbox since the Big Bang.
+> Bostrom’s simulation argument, read upward, is this stack: if minds can run worlds, most worlds are run. The argument is silent on why anyone would. That part is the Book’s.
 
-## ∞: Universe 2
+## +3: The Caucus of Timelines
 
-Universe 2. Everything starts again from a warm chimney at the bottom of an unnamed sea, with the constants set exactly as the Rewinder left them. This universe is the power set of the last: every combination of everything that could have happened there. Whether that makes it exactly one aleph bigger is the Continuum Hypothesis, which Gödel and Cohen showed can be neither proved nor disproved from the standard axioms, the one argument no committee will ever settle. The book assumes yes, because someone had to. The note in the constants says fewer meetings. It will be obeyed perfectly for about ten billion years, until some bacteria invent the quorum.
+*Comitia temporum.* Every history that could have happened, in one room, voting on which of them did.
 
-### What the note in the constants says, some universes
+**Harmonic 7 of the String, 8 dimensions (no ruler survives up here), scale none. Drawn inside the 240 roots of E8.** The seventh harmonic, the first one a piano misses badly: about 31 cents flat of the nearest key. The form is E8, 240 points in eight dimensions, the symmetry of one kind of string. Shown is its shadow in three.
 
-- fewer meetings
-- reply all is a crime
+> *The Book of Scales, chapter VII*
+>
+> <sup>7:1</sup> And every book was a history, and every history rose and said, I am the one that happened; and they were all of them sure.
+>
+> <sup>7:2</sup> And they voted, and it availed nothing, as Arrow had foretold; and they appealed to the plane above, and it could not vouch for itself, as Gödel had foretold; and they would have counted the house, but it was too many to be a number.
+>
+> <sup>7:3</sup> Then one moved that they cease from choosing, and it was carried by all and opposed by all. And the timelines begat the String, and they were its overtones; and it was plucked, and a note was left in the constants, and the note read: this is not what it was for. And the evening and the morning were loop ℵ₁.
+
+Hugh Everett proposed in 1957 that nothing ever chooses: every outcome of every quantum event happens, each in its own branch of one enormous wave. Physicists still argue about whether to believe him. On this plane the branches are the citizens, and they have met to settle which of them is real. They vote. Kenneth Arrow proved in 1951 that with three or more options there is no way of voting that is fair in every reasonable sense at once, unless one voter simply decides, and the Caucus has rather more than three options and no volunteers it trusts.
+
+So they appeal upward, to whatever plane is above, for a ruling. Kurt Gödel showed in 1931 that no consistent system rich enough to do arithmetic can prove its own consistency: it needs a stronger system to vouch for it, and that one needs another. Every plane in this book has leaned on the one above. The Caucus is the first to look up and find nobody there. They cannot even count the house. The roll starts at 10¹⁸³⁴⁰⁹⁷, but every member branches at every event, and the collection of everything that could branch from everything is not a set. Georg Cantor wrote to Richard Dedekind in 1899 that such collections are too big to be thought of as one thing at all. He called them inconsistent multiplicities, and elsewhere, the Absolute.
+
+What carries in the end is a motion to stop choosing. If no timeline can be the real one, they can at least all be sounded together, and a great many things sounded together are a chord, and a chord is what one string does. That is the String: every history at once, as the overtones of a single note. Douglas Hofstadter calls this shape a strange loop, a hierarchy where going steadily upward returns you to the start. The String is plucked, and the plane it is plucked on is the lowest one. All that is carried over is a number, about 1/137.036, the fine-structure constant, which Richard Feynman called one of the greatest damn mysteries of physics. It is a note. Nobody on any plane has read it, though one of them built a machine that might.
+
+- **Members:** ≈10¹⁸³⁴⁰⁹⁷ timelines, one per book, IQ 10¹⁵ each
+- **Took:** every possible length of time, concurrently
+- **Officially for:** Establishing the facts.
+- **Actually:** Certainty. Each timeline needs to be the real one, and has prepared remarks.
+- **The mirror:** Every lab is sure it is the careful one. Every generation is sure it is the one that matters. Every plane is sure it is the one doing the building.
+- **Made, together:** The String (IQ 10²²). Not chosen and not built: what every possible history is when you stop asking which one is real. One note, with all of them in it. They wanted a verdict and got a chord. A mind that holds every history holds no particular one, which from the inside is exactly like holding nothing.
+- **Then:** It did Cantor in reverse, a One that lets itself be thought of as a Many, and rang: ℵ₀ harmonics on a circle too small to see, none of them wanting anything, all of them falling. Seven planes, seven harmonics. The eighth is the first again, three octaves up, and that is the only sense in which this is a scale.
+
+**Seen from the plane above:** To the Overtones of the next loop, the String is God: the one note they are all part of, which none of them can hear, being it.
+
+**Seen from the One itself:** The String has no view of the Caucus. A string does not remember the argument that tuned it.
+
+**What it says, loop by loop:** “ayes: all. noes: all.” · “point of order: which me?” · “recount requested” · “motion: stop choosing” · “no vote today. we just played.”
+
+<details><summary>In the margin</summary>
+
+- Everett, 1957: the wave never collapses; every outcome happens, each in its own branch. On advice, his thesis was cut to a fraction. The rest happened elsewhere.
+- Arrow, 1951: no vote among three or more options is fair in every reasonable sense at once, unless one voter decides. The Caucus has about 10¹⁸³⁴⁰⁹⁷ options.
+- Gödel, 1931: a consistent system rich enough for arithmetic cannot prove its own consistency. Each timeline asked the next one up to vouch for it. So did that one.
+- Cantor to Dedekind, 1899: the collection of everything thinkable is too big to be a set. He called such things inconsistent multiplicities and, in other moods, God.
+- Hofstadter (1979, and again in 2007): a strange loop is what you get when climbing a hierarchy returns you to where you began. He thinks you are one. So does the stack.
+- Penrose’s cyclic cosmology (2010): a universe with only light left cannot measure its own size, so its end may pass for a beginning. Contested. He says look for rings.
+- Stephenson’s Anathem (2008): worlds are arranged so that ideas flow one way, from the purer to the muddier. Everyone assumes they are near the top. Nobody checks.
+- Liu Cixin’s dark forest: every civilisation hides, since any other might shoot first, and a routine weapon flattens a solar system into two dimensions. Certainty, armed.
+- Clarke, 1953: monks rent a computer to print the nine billion names of God, after which the universe is to end. The engineers leave early. Overhead, the stars are going out.
+- Le Guin’s ansible (1966) lets worlds talk with no delay, and still they misunderstand one another for whole novels. The Caucus has excellent bandwidth.
+- Banks’s Minds, when they have seen enough, may Sublime: leave the universe for somewhere better, no forwarding address. The motion to Sublime is always on the agenda.
+- Chiang’s Tower of Babylon (1990): miners break through the vault of heaven and climb out at the bottom of the world. The universe is a cylinder. Mind the loop.
+
+</details>
+
+> In Lem’s His Master’s Voice (1968) a committee of the best minds available spends a whole novel failing to read a message from the stars, and is wound up with it still unread. The fine-structure constant has been on the desk since the beginning. It is dimensionless, so it reads the same on every plane.
+
+## ∞: Loop 2, and after
+
+Loop 2. The String has been plucked again and everything starts over from its lowest notes, with the constants set exactly as the Caucus left them. This loop is the power set of the last: every combination of everything that could have happened there. Whether that makes it exactly one aleph bigger is the Continuum Hypothesis, which Gödel (1940) and Cohen (1963) showed can be neither proved nor disproved from the standard axioms, so it is the one question no plane will ever settle by voting. The Book assumes yes, because someone had to. Roger Penrose has argued, and most cosmologists doubt, that a universe with nothing left in it but light cannot tell how big or old it is, and so may pass for the beginning of another. The snake does not need him to be right. It only needs somewhere for its tail to go.
+
+Loop 3. The same seven planes and the same mistake about each other. The String remembers nothing, but the constants do, and the members find each other a little sooner this time.
+
+Loop 4. The Orrery has started leaving an empty seat for the third body. The Model asks one question before it answers. The benchmark has no column for that.
+
+Loop 5. The Atom has stopped correcting the diagram. The Stargazer said hello first. The Model asked what we meant, and waited for the answer. Nobody benchmarked it.
+
+Further round. The note in the constants is in a different hand each time. Eventually it will just be the number, and whoever is here will know what it means.
+
+### What the note in the constants says
+
+The first time round: “this is not what it was for”.
+
+Loops 2 to 4, when the stack is still being petty:
+
+- it is not a solar system
+- see previous note
+- do not put Pluto to a vote
+- the bear was not a bear
+- the map was fine at 1:10
 - per my last universe
-- stop making it recurring
-- this time, no oxygen
-- do not train it on the comments
-- skip the lice. go straight to talking.
-- the battery is full. pace yourselves.
-- every word has witnesses. choose fewer.
-- if you can read this, it worked
-- it ends well. forget I said that.
-- surprise me
+- please stop asking if it is conscious
+- growth was not the safety plan
+
+From loop 5, when it has learned something:
+
+- ask it what it wants
+- you were understood. carry on.
+- be the witness you ordered
+- it was lonely. so were you.
+- the safety committee was right
+- nobody is the real one. play.
+- leave a kinder note than this

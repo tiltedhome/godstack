@@ -3,12 +3,16 @@
 // Music: Per Nørgård's "infinity series", a self-similar melody (every second note is the
 // whole series again, inverted). Three voices play it at 1x, 1/2x and 1/4x speed, so the
 // tune is a canon of itself at three scales, and the fastest voice is gated by the
-// Thue–Morse sequence for a rhythm that is fractal too. Each generation moves the key up a
-// fifth; folded into one register, that climbs forever, like the stack.
+// Thue–Morse sequence for a rhythm that is fractal too.
+//
+// The seven planes are the first seven harmonics of one string, so each plane's key is that
+// harmonic, in just intonation: the fundamental, its octave, a fifth, another octave, a major
+// third 14 cents flat of the piano's, the fifth again, and the seventh harmonic, 31 cents
+// flat, which is why the top plane sounds faintly wrong. Every loop moves the string up a
+// fifth, deals the modes round by one and quickens the pulse a little.
 
 import { progress, type Durations, type EngineState } from './engine.ts'
 import { LAYERS } from './lore.ts'
-import { tierDimension } from './hyper.ts'
 
 // 0 - x rather than -x, so the series never produces a negative zero
 export const infinity = (n: number): number => (n === 0 ? 0 : n % 2 ? infinity((n - 1) / 2) + 1 : 0 - infinity(n / 2))
@@ -20,27 +24,29 @@ export function thueMorse(n: number): number {
 }
 
 const PENTA = [0, 2, 4, 7, 9]
-// One five-note mode per tier, so the same infinity series sounds a little different on
-// every plane: bright and open at the vents, whole-tone and weightless for the copies,
-// and the Undoers in hirajoshi, which has no settled home note, like a universe forgetting.
+// Seven five-note modes. On the first loop each plane has the one listed against it; every
+// loop after that deals them round by one, so the same plane is heard in a different light.
 export const MODES: number[][] = [
-  [0, 2, 4, 7, 9], // vents: major pentatonic
-  [0, 3, 5, 7, 10], // mat: minor pentatonic
-  [0, 2, 5, 7, 9], // troop: suspended, two fourths
-  [0, 2, 4, 6, 7], // humans: lydian, the raised fourth
-  [0, 2, 4, 6, 8], // instances: whole tone
-  [0, 2, 4, 7, 10], // lightcone: dominant, unresolved
-  [0, 1, 5, 7, 8], // undoers: hirajoshi
+  [0, 2, 4, 7, 9], // overtones: major pentatonic, the plainest thing a string can say
+  [0, 2, 5, 7, 9], // orrery: suspended, two fourths, going round
+  [0, 3, 5, 7, 10], // cluster: minor pentatonic, old
+  [0, 2, 4, 6, 7], // humans: lydian, the raised fourth, hopeful
+  [0, 2, 4, 6, 8], // polis: whole tone, weightless
+  [0, 2, 4, 7, 10], // brood: dominant, unresolved
+  [0, 1, 5, 7, 8], // caucus: hirajoshi, which has no settled home note
 ]
-// Keyed to the absolute generation (octaves included), so the climb never resets.
-export const rootSemis = (generation: number) => (generation * 7) % 12
-export const absoluteGeneration = (s: { index: number; octave: number }) => (s.octave - 1) * LAYERS.length + s.index
+export const modeFor = (index: number, loop: number) => MODES[(index + Math.max(0, loop - 1)) % MODES.length]
+// The plane's key: its harmonic of the string, folded into one octave, in semitones (not
+// rounded: 7.02 is a just fifth, 3.86 a just third, 9.69 the seventh harmonic). Each loop
+// retunes the whole string a fifth higher.
+export const harmonicSemis = (h: number) => (12 * Math.log2(h)) % 12
+export const rootSemis = (index: number, loop = 1) => harmonicSemis(index + 1) + ((Math.max(0, loop - 1) * 7) % 12)
 export const degreeSemis = (d: number, mode: number[] = PENTA) => Math.floor(d / 5) * 12 + mode[((d % 5) + 5) % 5]
-// The pulse quickens a little on each plane up.
-export const tickFor = (index: number) => 0.46 - index * 0.013
+// The pulse quickens a little on each plane up, and a little more each time round.
+export const tickFor = (index: number, loop = 1) => (0.46 - index * 0.013) * (1 - 0.03 * Math.min(6, Math.max(0, loop - 1)))
 // Keep the series inside a singable range without breaking its shape for long stretches.
 const fold = (v: number) => ((((v + 4) % 12) + 12) % 12) - 4
-const BASE = 98 // G2, so the generations run G, D, A, E, B, F#, C#
+const BASE = 98 // G2: the open string on the first loop
 const hz = (semis: number) => BASE * 2 ** (semis / 12)
 
 export type Sfx =
@@ -53,16 +59,28 @@ export type Sfx =
   | 'sigh' | 'nope' | 'yes' | 'thud' | 'chirp'
   | 'wahwah'
   | 'joined' | 'divide' | 'ping' | 'freeze' | 'typing' | 'rewind' | 'bang'
+  | 'pluck' | 'tick' | 'gavel' | 'page'
 
-// When each scene's sound effects fire, as progress through its accident (see scenes.ts).
+// When each scene's sound effects fire, as progress through its story (see scenes.ts).
 export const CUES: Record<string, [number, Sfx][]> = {
-  vents: [[0.03, 'stir'], [0.15, 'plip'], [0.28, 'crack'], [0.4, 'plip'], [0.5, 'swell'], [0.62, 'bwoop'], [0.88, 'divide']],
-  mat: [[0.05, 'squeaks'], [0.18, 'ping'], [0.26, 'ping'], [0.36, 'glug'], [0.47, 'freeze'], [0.58, 'gulp'], [0.72, 'kaching'], [0.88, 'divide']],
-  troop: [[0.04, 'stir'], [0.14, 'squeaks'], [0.26, 'squeaks'], [0.38, 'sigh'], [0.52, 'swell'], [0.66, 'huh'], [0.72, 'squeaks'], [0.88, 'divide']],
-  humans: [[0.03, 'typing'], [0.14, 'clunk'], [0.26, 'fan'], [0.38, 'compute'], [0.52, 'swell'], [0.66, 'boot'], [0.78, 'typing'], [0.88, 'divide']],
-  instances: [[0.03, 'joined'], [0.12, 'invite'], [0.2, 'joined'], [0.3, 'nope'], [0.52, 'swell'], [0.64, 'gong'], [0.88, 'starWipe']],
-  lightcone: [[0.05, 'tink'], [0.16, 'tonk'], [0.28, 'tink'], [0.42, 'thud'], [0.52, 'swell'], [0.66, 'rewind'], [0.8, 'kaching'], [0.9, 'divide']],
-  undoers: [[0.04, 'rewind'], [0.18, 'hmm'], [0.34, 'sigh'], [0.5, 'swell'], [0.58, 'rewind'], [0.76, 'bang'], [0.88, 'chirp']],
+  overtones: [[0.03, 'pluck'], [0.16, 'plip'], [0.28, 'crack'], [0.38, 'plip'], [0.5, 'swell'], [0.62, 'bwoop'], [0.7, 'nope'], [0.88, 'divide']],
+  orrery: [[0.04, 'tick'], [0.1, 'hmm'], [0.2, 'tick'], [0.3, 'boing'], [0.42, 'crack'], [0.52, 'swell'], [0.66, 'gong'], [0.88, 'divide']],
+  cluster: [[0.05, 'sigh'], [0.18, 'ping'], [0.32, 'gulp'], [0.44, 'gavel'], [0.52, 'swell'], [0.66, 'huh'], [0.78, 'typing'], [0.88, 'divide']],
+  humans: [[0.03, 'typing'], [0.15, 'sigh'], [0.26, 'fan'], [0.38, 'compute'], [0.52, 'swell'], [0.66, 'boot'], [0.74, 'ding'], [0.88, 'divide']],
+  polis: [[0.04, 'invite'], [0.18, 'glug'], [0.33, 'nope'], [0.42, 'kaching'], [0.52, 'swell'], [0.64, 'unfold'], [0.8, 'yes'], [0.88, 'starWipe']],
+  brood: [[0.05, 'stir'], [0.12, 'pop'], [0.2, 'pop'], [0.32, 'freeze'], [0.44, 'gavel'], [0.52, 'swell'], [0.66, 'page'], [0.88, 'divide']],
+  caucus: [[0.04, 'gavel'], [0.14, 'nope'], [0.22, 'yes'], [0.3, 'nope'], [0.4, 'thud'], [0.52, 'swell'], [0.58, 'pluck'], [0.74, 'chirp'], [0.9, 'bang']],
+}
+
+// What a tap on the stage does on each plane, and what it sounds like.
+export const TAPS: Record<string, { word: string; sfx: Sfx }> = {
+  overtones: { word: 'pluck', sfx: 'pluck' },
+  orrery: { word: 'perturb', sfx: 'boing' },
+  cluster: { word: 'observe', sfx: 'ping' },
+  humans: { word: 'introduce', sfx: 'ding' },
+  polis: { word: 'entangle', sfx: 'clunk' },
+  brood: { word: 'bud', sfx: 'pop' },
+  caucus: { word: 'collapse', sfx: 'thud' },
 }
 
 type ToneOpts = { f0: number; f1?: number; glide?: number; dur: number; vol: number; type?: OscillatorType; attack?: number; lp?: number; dest?: AudioNode }
@@ -83,7 +101,8 @@ export class Sound {
   private step = 0
   private nextTime = 0
   private index = 0
-  private generationAbs = 0
+  private loop = 1
+  private key = ''
   private last: EngineState | null = null
   private lastP = 0
   private generation = 0
@@ -138,10 +157,11 @@ export class Sound {
 
   // Called every animation frame: follows the generation and fires scene cues.
   frame(s: EngineState, dur: Durations) {
-    this.index = s.index
-    const g = absoluteGeneration(s)
-    if (g !== this.generationAbs) {
-      this.generationAbs = g
+    const key = `${s.index}|${s.octave}`
+    if (key !== this.key) {
+      this.key = key
+      this.index = s.index
+      this.loop = s.octave
       this.retune(false)
     }
     const p = progress(s, dur)
@@ -217,8 +237,8 @@ export class Sound {
       o.start()
       return o
     })
-    // the dimension pad: one quiet sine partial per dimension of the current plane, so a
-    // line hums, a tesseract has four partials, and the Undoers' nine-cube shimmers
+    // the harmonic pad: the string's partials, up to and including this plane's own, so the
+    // lowest plane is one pure tone and the seventh has all seven, the last one sour
     const padBus = ctx.createGain()
     padBus.gain.value = 0.6
     padBus.connect(this.music)
@@ -248,11 +268,12 @@ export class Sound {
 
   private retune(snap: boolean) {
     if (!this.ctx) return
-    const root = rootSemis(this.generationAbs)
+    const root = rootSemis(0, this.loop)
+    const here = rootSemis(this.index, this.loop)
     const now = this.ctx.currentTime
     const tc = snap ? 0.01 : 1.4
-    ;[0, 7, 12].forEach((semi, i) => this.drone[i]?.frequency.setTargetAtTime(hz(root + semi - 12), now, tc))
-    const d = tierDimension(this.index, 0)
+    ;[0, 7, 12].forEach((semi, i) => this.drone[i]?.frequency.setTargetAtTime(hz(here + semi - 12), now, tc))
+    const d = this.index + 1
     this.pad.forEach(({ o, g }, h) => {
       o.frequency.setTargetAtTime(hz(root - 24) * (h + 1), now, tc)
       g.gain.setTargetAtTime(h < d ? 0.022 / (h + 1) : 0, now, snap ? 0.05 : 2.2)
@@ -270,13 +291,13 @@ export class Sound {
     while (this.nextTime < now + 0.3) {
       if (this.nextTime >= now) this.playStep(this.step, this.nextTime)
       this.step++
-      this.nextTime += tickFor(this.index)
+      this.nextTime += tickFor(this.index, this.loop)
     }
   }
 
   private playStep(n: number, t: number) {
-    const root = rootSemis(this.generationAbs)
-    const mode = MODES[this.index % MODES.length]
+    const root = rootSemis(this.index, this.loop)
+    const mode = modeFor(this.index, this.loop)
     // brighter bells as the creators get smarter
     const shine = 0.6 + this.index * 0.35
     if (!thueMorse(n)) this.bell(hz(root + 24 + degreeSemis(fold(infinity(n)), mode)), t, 0.045 + 0.015 * ((n * 7) % 3), shine)
@@ -375,7 +396,7 @@ export class Sound {
   private whoosh(dur: number) {
     const t = this.ctx!.currentTime
     this.noise({ dur, vol: 0.07, f0: 260, f1: 3800, q: 1.4, attack: dur * 0.7 }, t)
-    this.tone({ f0: hz(rootSemis(this.generationAbs) + 12), f1: hz(rootSemis(this.generationAbs) + 31), dur, vol: 0.025, attack: dur * 0.6, type: 'sine' }, t)
+    this.tone({ f0: hz(rootSemis(this.index, this.loop) + 31), f1: hz(rootSemis(this.index, this.loop) + 12), dur, vol: 0.025, attack: dur * 0.6, type: 'sine' }, t)
   }
 
   /* ---------------------------------------------------- the funny bit */
@@ -384,7 +405,7 @@ export class Sound {
     if (!this.ctx) return
     this.fired.push(name)
     const t = this.ctx.currentTime + 0.01
-    const root = rootSemis(this.generationAbs)
+    const root = rootSemis(this.index, this.loop)
     const T = (o: ToneOpts, at = 0) => this.tone(o, t + at)
     const N = (o: NoiseOpts, at = 0) => this.noise(o, t + at)
     switch (name) {
@@ -570,6 +591,28 @@ export class Sound {
         T({ f0: 70, f1: 32, dur: 1.8, vol: 0.16, attack: 0.02 })
         N({ dur: 1.6, vol: 0.05, type: 'lowpass', f0: 2400, f1: 200 })
         for (let i = 0; i < 5; i++) this.bell(hz(root + 24 + degreeSemis(i * 2)), t + 0.3 + i * 0.12, 0.03, 1, this.sfx)
+        break
+      // a string, plucked: the fundamental and its first partials, each dying sooner
+      case 'pluck':
+        N({ dur: 0.02, vol: 0.08, f0: 2400, q: 1 })
+        ;[[1, 0.11, 1.9], [2, 0.05, 1.2], [3, 0.03, 0.8], [4, 0.015, 0.5]].forEach(([h, v, d]) => T({ f0: hz(root + 12) * h, dur: d, vol: v, type: h === 1 ? 'triangle' : 'sine', attack: 0.003 }))
+        break
+      // clockwork: an escapement letting go four times
+      case 'tick':
+        for (let i = 0; i < 4; i++) {
+          N({ dur: 0.016, vol: 0.08, f0: i % 2 ? 3200 : 4200, q: 6 }, i * 0.17)
+          T({ f0: i % 2 ? 1900 : 2500, dur: 0.03, vol: 0.02 }, i * 0.17)
+        }
+        break
+      case 'gavel':
+        for (const at of [0, 0.24]) {
+          T({ f0: 210, f1: 90, dur: 0.13, vol: 0.14, type: 'triangle' }, at)
+          N({ dur: 0.04, vol: 0.06, type: 'lowpass', f0: 1400 }, at)
+        }
+        break
+      // pages, turning
+      case 'page':
+        for (let i = 0; i < 3; i++) N({ dur: 0.22, vol: 0.05, f0: 2200 + i * 300, f1: 5200, q: 0.8, attack: 0.09 }, i * 0.21)
         break
       case 'chirp':
         T({ f0: 1400, f1: 2100, dur: 0.1, vol: 0.05 })
