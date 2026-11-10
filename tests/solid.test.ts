@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  GOLDEN_ANGLE, INRADIUS, KEPLER_ORDER, PHI, PLATONIC, e8Edges, e8Roots, e8Shadow, fibSphere, kepler, metatron, penrose, project,
+  GOLDEN_ANGLE, INRADIUS, KEPLER_ORDER, PHI, PLATONIC, convexFaces, e8Edges, e8Roots, e8Shadow, fibSphere, kepler, metatron, penrose, project,
   torus, torusPoint, type SolidName,
 } from '../src/solid.ts'
 import { cube, cubeCorners } from '../src/hyper.ts'
@@ -21,6 +21,11 @@ describe('the Platonic solids', () => {
       const s = PLATONIC[name]
       expect(s.verts, name).toHaveLength(v)
       expect(s.edges, name).toHaveLength(e)
+      // the faces are found from the corners alone, and cut into triangles for the GPU
+      const found = convexFaces(s.verts)
+      expect(found, name).toHaveLength(f)
+      expect(new Set(found.map((face) => face.length)).size).toBe(1)
+      expect(s.tris, name).toHaveLength(f * (found[0].length - 2))
       expect(v - e + f).toBe(2)
       for (const p of s.verts) expect(len(p)).toBeCloseTo(1, 9)
       // every edge the same length, every corner with the same number of edges
@@ -73,6 +78,7 @@ describe('the other forms', () => {
     const t = torus(1, 0.4, 12, 6)
     expect(t.verts).toHaveLength(72)
     expect(t.edges).toHaveLength(144)
+    expect(t.tris).toHaveLength(144)
     for (const [x, y, z] of t.verts) expect((Math.hypot(x, z) - 1) ** 2 + y * y).toBeCloseTo(0.16, 9)
     expect(torusPoint(0, 0, 1, 0.4)).toEqual([1.4, 0, 0])
   })
@@ -126,6 +132,9 @@ describe('the other forms', () => {
   it('tiles the plane Penrose’s way: fivefold, two rhombus edges only, never a repeat', () => {
     const t = penrose(4)
     expect(t.edges.length).toBeGreaterThan(300)
+    // two kinds of rhombus, each made of two triangles, in the golden ratio by number
+    expect((t.fat.length / t.thin.length)).toBeGreaterThan(1.5)
+    expect((t.fat.length / t.thin.length)).toBeLessThan(1.75)
     // every edge is the same length (both rhombi have unit sides)
     const lengths = t.edges.map(([a, b]) => Math.hypot(t.pts[a][0] - t.pts[b][0], t.pts[a][1] - t.pts[b][1]))
     for (const l of lengths) expect(l).toBeCloseTo(lengths[0], 6)

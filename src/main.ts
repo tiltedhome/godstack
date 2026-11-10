@@ -52,7 +52,10 @@ let speed = 1
 // how many times "another" has been asked of this plane's margin
 let rerolls = 0
 
-const renderer = new Renderer(canvas, SCENES, LAYERS)
+// ?gl=off forces the 2D renderer, for comparing the two and for the tests
+const wantGL = new URLSearchParams(location.search).get('gl') !== 'off'
+const renderer = new Renderer(canvas, SCENES, LAYERS, wantGL ? $<HTMLCanvasElement>('gl') : null)
+if (!wantGL) $('gl').hidden = true
 
 /* ---------------------------------------------------------------- the rail */
 
@@ -455,6 +458,13 @@ window.godstack = {
   },
   spin() {
     return { ...renderer.spin }
+  },
+  // whether the WebGL layer is running, how much it drew, and whether it drew anything
+  get webgl() {
+    return renderer.gl !== null
+  },
+  glStats() {
+    return renderer.gl ? { ...renderer.gl.stats(), colours: renderer.gl.distinctColours() } : null
   },
   // the real mean degree of the network on screen, which a tap should raise
   degree() {

@@ -9,7 +9,8 @@ export default defineConfig({
     trace: 'retain-on-failure',
     // CI sets PW_CHANNEL=chrome to use the runner's preinstalled Google Chrome
     channel: process.env.PW_CHANNEL || undefined,
-    launchOptions: process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
+    // headless Chrome has no GPU; let it run WebGL in software so the 3D layer is tested too
+    launchOptions: { args: ['--enable-unsafe-swiftshader'], ...(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {}) },
   },
   projects: [
     { name: 'phone', use: { ...devices['Pixel 7'] } },

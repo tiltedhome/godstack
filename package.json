@@ -20,6 +20,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.56.1",
     "@types/node": "^22.20.5",
+    "@types/three": "^0.187.0",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
     "typescript": "^5.9.3",
@@ -27,5 +28,8 @@
     "vite": "^8.3.5",
     "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
   }
 }

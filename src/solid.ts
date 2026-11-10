@@ -7,9 +7,11 @@
 import { type Ctx, clamp, rgba } from './draw.ts'
 
 export type V3 = [number, number, number]
+export type Tri = [number, number, number]
 export interface Wire {
   verts: V3[]
   edges: [number, number][]
+  tris: Tri[] // the faces, cut into triangles, for the renderer that can fill them
 }
 
 export const PHI = (1 + Math.sqrt(5)) / 2
@@ -36,9 +38,45 @@ function nearestEdges(verts: number[][]): [number, number][] {
 const signs = (v: number[]): number[][] =>
   v.reduce<number[][]>((acc, x) => acc.flatMap((a) => (x === 0 ? [[...a, 0]] : [[...a, x], [...a, -x]])), [[]])
 const cyclic = (v: V3): V3[] => [v, [v[2], v[0], v[1]], [v[1], v[2], v[0]]]
+// The faces of a convex solid: every plane through three corners that has all the other
+// corners on one side of it is a face. Each is returned as its corners in order round the rim.
+export function convexFaces(verts: V3[]): number[][] {
+  const seen = new Set<string>()
+  const out: number[][] = []
+  for (let i = 0; i < verts.length; i++) {
+    for (let j = i + 1; j < verts.length; j++) {
+      for (let k = j + 1; k < verts.length; k++) {
+        const a = verts[i]
+        const u = [verts[j][0] - a[0], verts[j][1] - a[1], verts[j][2] - a[2]]
+        const w = [verts[k][0] - a[0], verts[k][1] - a[1], verts[k][2] - a[2]]
+        let n = unit([u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]])
+        const d = (v: V3) => (v[0] - a[0]) * n[0] + (v[1] - a[1]) * n[1] + (v[2] - a[2]) * n[2]
+        const side = verts.map(d)
+        if (side.some((x) => x > 1e-9) && side.some((x) => x < -1e-9)) continue
+        if (side.some((x) => x > 1e-9)) n = [-n[0], -n[1], -n[2]]
+        const on = verts.map((_, m) => m).filter((m) => Math.abs(side[m]) < 1e-9)
+        const key = on.join(',')
+        if (seen.has(key)) continue
+        seen.add(key)
+        // order the corners by angle round the face's own centre
+        const c = [0, 1, 2].map((q) => on.reduce((t, m) => t + verts[m][q], 0) / on.length)
+        const e1 = unit([verts[on[0]][0] - c[0], verts[on[0]][1] - c[1], verts[on[0]][2] - c[2]])
+        const e2: V3 = [n[1] * e1[2] - n[2] * e1[1], n[2] * e1[0] - n[0] * e1[2], n[0] * e1[1] - n[1] * e1[0]]
+        const ang = (m: number) => {
+          const r = [verts[m][0] - c[0], verts[m][1] - c[1], verts[m][2] - c[2]]
+          return Math.atan2(r[0] * e2[0] + r[1] * e2[1] + r[2] * e2[2], r[0] * e1[0] + r[1] * e1[1] + r[2] * e1[2])
+        }
+        out.push(on.sort((p, q) => ang(p) - ang(q)))
+      }
+    }
+  }
+  return out
+}
+const fan = (faces: number[][]): Tri[] => faces.flatMap((f) => f.slice(1, -1).map((_, i) => [f[0], f[i + 1], f[i + 2]] as Tri))
+
 const solid = (raw: number[][]): Wire => {
   const verts = raw.map((v) => unit(v as V3))
-  return { verts, edges: nearestEdges(verts) }
+  return { verts, edges: nearestEdges(verts), tris: fan(convexFaces(verts)) }
 }
 
 export type SolidName = 'tetrahedron' | 'cube' | 'octahedron' | 'dodecahedron' | 'icosahedron'
@@ -84,14 +122,19 @@ export function torusPoint(u: number, v: number, R: number, r: number): V3 {
 export function torus(R: number, r: number, nu: number, nv: number): Wire {
   const verts: V3[] = []
   const edges: [number, number][] = []
+  const tris: Tri[] = []
   for (let i = 0; i < nu; i++) {
     for (let j = 0; j < nv; j++) {
       verts.push(torusPoint((i / nu) * 2 * Math.PI, (j / nv) * 2 * Math.PI, R, r))
       const a = i * nv + j
-      edges.push([a, i * nv + ((j + 1) % nv)], [a, ((i + 1) % nu) * nv + j])
+      const b = i * nv + ((j + 1) % nv)
+      const c = ((i + 1) % nu) * nv + j
+      const d = ((i + 1) % nu) * nv + ((j + 1) % nv)
+      edges.push([a, b], [a, c])
+      tris.push([a, b, c], [b, d, c])
     }
   }
-  return { verts, edges }
+  return { verts, edges, tris }
 }
 
 // n points spread evenly over the unit sphere the way a sunflower spreads its seeds: each one
@@ -107,7 +150,7 @@ export function fibSphere(n: number): V3[] {
 // Twelve unit spheres fit round a thirteenth, touching it (and no more: Newton against
 // Gregory, 1694, settled in 1953). Their centres are a cuboctahedron. Join all thirteen
 // centres to each other and the 78 lines are Metatron's cube.
-export function metatron(): Wire & { shell: [number, number][] } {
+export function metatron(): Omit<Wire, 'tris'> & { shell: [number, number][] } {
   const outer = cyclic([1, 1, 0]).flatMap(signs).map((v) => unit(v as V3))
   const verts: V3[] = [[0, 0, 0], ...outer]
   const edges: [number, number][] = []
@@ -183,11 +226,11 @@ export function e8Shadow(root: number[], t: number, out: number[] = []): V3 {
 // Penrose's rhombus tiling, by cutting Robinson triangles: start with a wheel of ten, and at
 // every step split each triangle by the golden ratio. Returns the rhombus edges, each once,
 // scaled so the wheel has radius 1. It has fivefold order and never repeats.
-export function penrose(depth: number): { pts: [number, number][]; edges: [number, number][] } {
+export function penrose(depth: number): { pts: [number, number][]; edges: [number, number][]; fat: Tri[]; thin: Tri[] } {
   type C = [number, number]
-  type Tri = [number, C, C, C]
+  type Robinson = [number, C, C, C]
   const mix = (a: C, b: C, f: number): C => [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]
-  let tris: Tri[] = []
+  let tris: Robinson[] = []
   for (let i = 0; i < 10; i++) {
     let b: C = [Math.cos(((2 * i - 1) * Math.PI) / 10), Math.sin(((2 * i - 1) * Math.PI) / 10)]
     let c: C = [Math.cos(((2 * i + 1) * Math.PI) / 10), Math.sin(((2 * i + 1) * Math.PI) / 10)]
@@ -195,7 +238,7 @@ export function penrose(depth: number): { pts: [number, number][]; edges: [numbe
     tris.push([0, [0, 0], b, c])
   }
   for (let d = 0; d < depth; d++) {
-    const next: Tri[] = []
+    const next: Robinson[] = []
     for (const [kind, a, b, c] of tris) {
       if (kind === 0) {
         const p = mix(a, b, 1 / PHI)
@@ -232,11 +275,15 @@ export function penrose(depth: number): { pts: [number, number][]; edges: [numbe
     }
   }
   // the two equal sides of each triangle; the base is where it joins its twin into a rhombus
-  for (const [, a, b, c] of tris) {
+  // (kind 0 triangles are halves of the thin rhombus, kind 1 halves of the fat one)
+  const fat: Tri[] = []
+  const thin: Tri[] = []
+  for (const [kind, a, b, c] of tris) {
     add(c, a)
     add(a, b)
+    ;(kind ? fat : thin).push([id(a), id(b), id(c)])
   }
-  return { pts, edges }
+  return { pts, edges, fat, thin }
 }
 
 /* ------------------------------------------------------------------ the camera */

@@ -95,6 +95,20 @@ button {
   outline-offset: 2px;
 }
 
+/* the WebGL layer: sky and geometry, under the 2D canvas that carries everything else */
+#gl {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+#gl[hidden] {
+  display: none;
+}
+
 #stage {
   position: fixed;
   inset: 0;

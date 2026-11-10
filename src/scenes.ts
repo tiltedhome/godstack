@@ -13,10 +13,11 @@ import {
   MONO, TAU, alpha, at, bubble, circle, clamp, easeInOut, easeOut, easeOutBack, ellipse, glow, hexPath, lerp, line,
   pulse, rgba, rng, rrect, seg, stroke, text, type Ctx,
 } from './draw.ts'
-import { cube, cubeCorners, drawHyper } from './hyper.ts'
+import { cube, cubeCorners } from './hyper.ts'
+import { faces, orbs, wire } from './paint.ts'
 import { headStart, noteFor, sayingFor } from './rotate.ts'
 import {
-  GOLDEN_ANGLE, PLATONIC, drawWire, depthShade, e8Edges, e8Roots, e8Shadow, fibSphere, kepler, metatron, penrose, project,
+  GOLDEN_ANGLE, PLATONIC, depthShade, e8Edges, e8Roots, e8Shadow, fibSphere, kepler, metatron, penrose, project,
   torus, torusPoint, type P, type V3, type View,
 } from './solid.ts'
 
@@ -196,9 +197,11 @@ const overtones: Scene = {
   draw(ctx, t, p, accent) {
     const v = oView(t)
     const lock = oLock(p)
+    const tor = O_TORUS.verts.map((q) => project(q, v, O_R))
+    faces(tor, O_TORUS.tris, accent, 0.05)
+    wire(ctx, tor, O_TORUS.edges, accent, 0.3, 0.9)
     ctx.save()
     ctx.globalCompositeOperation = 'lighter'
-    drawWire(ctx, O_TORUS.verts.map((q) => project(q, v, O_R)), O_TORUS.edges, accent, 0.3, 0.9)
     // the string itself, in two passes so the far half sits behind the near half
     const curve = Array.from({ length: 181 }, (_, k) => project(stringPoint(k / 180, t, lock), v, O_R))
     for (const near of [false, true]) {
@@ -289,13 +292,14 @@ const orrery: Scene = {
   draw(ctx, t, p, accent) {
     const v = kView(t)
     const chaos = seg(p, 0.36, 0.48) * (1 - seg(p, 0.6, 0.7) * 0.6)
-    ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
     const hush = 1 - 0.75 * seg(p, 0.5, 0.64)
     K_SHELLS.forEach((s, i) => {
       const pts = s.verts.map((q) => project([q[0] * s.r, q[1] * s.r, q[2] * s.r], v, K_R))
-      drawWire(ctx, pts, s.edges, accent, (0.26 + i * 0.07) * (i > 1 ? hush : 1), 1)
+      faces(pts, s.tris, accent, (0.045 + i * 0.02) * (i > 1 ? hush : 1))
+      wire(ctx, pts, s.edges, accent, (0.26 + i * 0.07) * (i > 1 ? hush : 1), 1)
     })
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
     // the six orbits Kepler knew, as the circles his spheres cut in the plane of the planets
     K.orbits.forEach((a) => {
       ctx.beginPath()
@@ -398,10 +402,7 @@ const cluster: Scene = {
   },
   draw(ctx, t, p, accent) {
     const v = cView(t)
-    ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
-    drawWire(ctx, C_SHELL.verts.map((q) => project(q, v, C_R)), C_SHELL.edges, accent, 0.26, 0.8)
-    ctx.restore()
+    wire(ctx, C_SHELL.verts.map((q) => project(q, v, C_R)), C_SHELL.edges, accent, 0.26, 0.8)
     glow(ctx, 0, 0, 62, accent, 0.16)
     // a blue straggler takes mass from its neighbour: the neighbour dims as it brightens
     const eat = pulse(p, 0.3, 0.44)
@@ -476,17 +477,14 @@ const humans: Scene = {
   },
   draw(ctx, t, p, accent) {
     const v = hView(t)
-    ctx.save()
-    ctx.translate(0, -12)
-    ctx.globalCompositeOperation = 'lighter'
-    const cube13 = H_CUBE.verts.map((q) => project(q, v, H_R))
-    drawWire(ctx, cube13, H_CUBE.edges, accent, 0.24, 0.8)
-    for (const q of cube13) {
-      ctx.beginPath()
-      ctx.arc(q.x, q.y, 0.5 * H_R * q.k, 0, TAU)
-      stroke(ctx, rgba(accent, 0.1 + 0.16 * depthShade(q.z)), 0.7)
-    }
-    ctx.restore()
+    // the cube floats a little above the crowd
+    const cube13 = H_CUBE.verts.map((q) => {
+      const w = project(q, v, H_R)
+      w.y -= 12
+      return w
+    })
+    orbs(ctx, cube13, 0.5 * H_R, accent, 0.2)
+    wire(ctx, cube13, H_CUBE.edges, accent, 0.24, 0.8)
 
     const pts = hPeople.map((h) => project(h.pos, v, H_R))
     network(ctx, pts, hGraph, p, rgba(accent, 0.35), 0.5)
@@ -539,6 +537,19 @@ const pGraph = (() => {
 })()
 const pScale = (p: number) => 1 - 0.3 * easeInOut(seg(p, 0.16, 0.3)) + 0.3 * easeOutBack(seg(p, 0.32, 0.4)) + 0.16 * easeInOut(seg(p, 0.4, 0.56))
 const pSpin = () => ({ yaw: stage.yaw, pitch: stage.pitch })
+// the square faces of the five-cube: every pair of edges that share a corner spans one
+const P_SQUARES = (() => {
+  const out: [number, number, number][] = []
+  for (let v = 0; v < 32; v++) {
+    for (let a = 0; a < 5; a++) {
+      for (let b = a + 1; b < 5; b++) {
+        if (v & (1 << a) || v & (1 << b)) continue
+        out.push([v, v | (1 << a), v | (1 << a) | (1 << b)], [v, v | (1 << a) | (1 << b), v | (1 << b)])
+      }
+    }
+  }
+  return out
+})()
 const pCorners = (t: number, p: number) => {
   const outer = cubeCorners(5, t, pSpin(), P_R * pScale(p))
   return [...outer, ...outer.map((q) => ({ x: q.x * 0.5, y: q.y * 0.5, z: q.z * 0.5 }))]
@@ -581,11 +592,10 @@ const polis: Scene = {
     return [q.x, q.y]
   },
   draw(ctx, t, p, accent) {
-    ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
-    drawHyper(ctx, { d: 5, extrude: 0, collapse: 0, t, spin: pSpin(), cx: 0, cy: 0, r: P_R * pScale(p), color: accent, alpha: 0.5 })
-    ctx.restore()
     const pts = pCorners(t, p)
+    wire(ctx, pts.slice(0, 32), P_CUBE.edges, accent, 0.5, 1.2)
+    wire(ctx, pts.slice(32), P_CUBE.edges, accent, 0.22, 0.8)
+    faces(pts, P_SQUARES, accent, 0.012)
     network(ctx, pts, pGraph, p, rgba(accent, 0.45), 0.6)
     pts.forEach((q, i) => {
       const a = 0.4 + 0.6 * clamp((q.z + 1) / 2)
@@ -625,7 +635,7 @@ const polis: Scene = {
 const B_R = 68
 const B_FLOOR = (() => {
   const t = penrose(4)
-  return { verts: t.pts.map(([x, y]) => [x * 1.32, 0.62, y * 1.32] as V3), edges: t.edges }
+  return { verts: t.pts.map(([x, y]) => [x * 1.32, 0.62, y * 1.32] as V3), edges: t.edges, fat: t.fat, thin: t.thin }
 })()
 const bWorlds = (() => {
   const r = rng(61)
@@ -640,14 +650,20 @@ const B_FLOORS = 6
 const B_TOWER = (() => {
   const verts: V3[] = []
   const edges: [number, number][] = []
+  const tris: [number, number, number][] = []
   for (let f = 0; f < B_FLOORS; f++) {
     for (let k = 0; k < 6; k++) {
+      const a = f * 6 + k
+      const b = f * 6 + ((k + 1) % 6)
       verts.push([Math.cos((k / 6) * TAU) * 0.24, 0.26 - f * 0.15, Math.sin((k / 6) * TAU) * 0.24])
-      edges.push([f * 6 + k, f * 6 + ((k + 1) % 6)])
-      if (f) edges.push([f * 6 + k, (f - 1) * 6 + k])
+      edges.push([a, b])
+      if (f) {
+        edges.push([a, a - 6])
+        tris.push([a, b, a - 6], [b, b - 6, a - 6])
+      }
     }
   }
-  return { verts, edges }
+  return { verts, edges, tris }
 })()
 
 const brood: Scene = {
@@ -659,10 +675,10 @@ const brood: Scene = {
   },
   draw(ctx, t, p, accent) {
     const v = bView(t)
-    ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
-    drawWire(ctx, B_FLOOR.verts.map((q) => project(q, v, B_R)), B_FLOOR.edges, accent, 0.4, 0.8)
-    ctx.restore()
+    const floor = B_FLOOR.verts.map((q) => project(q, v, B_R))
+    faces(floor, B_FLOOR.fat, accent, 0.07)
+    faces(floor, B_FLOOR.thin, '#ffffff', 0.04)
+    wire(ctx, floor, B_FLOOR.edges, accent, 0.4, 0.8)
     const pts = bWorlds.map((w) => project(w.pos, v, B_R))
     network(ctx, pts, bGraph, p, rgba(accent, 0.34), 0.5)
     // every universe runs down; they dim together, and it frightens them
@@ -691,9 +707,11 @@ const brood: Scene = {
       const k = born(p) * (1 - d)
       if (k > 0.01) {
         glow(ctx, 0, -6, 40 * k, accent, 0.4)
+        const tower = B_TOWER.verts.map((q) => project([q[0] * k, q[1] * k, q[2] * k], v, B_R * 1.25))
+        faces(tower, B_TOWER.tris, accent, 0.1)
+        wire(ctx, tower, B_TOWER.edges, '#f6e6ff', 0.95, 1.1)
         ctx.save()
         ctx.globalCompositeOperation = 'lighter'
-        drawWire(ctx, B_TOWER.verts.map((q) => project([q[0] * k, q[1] * k, q[2] * k], v, B_R * 1.25)), B_TOWER.edges, '#f6e6ff', 0.95, 1.1)
         // the stair
         ctx.beginPath()
         for (let s = 0; s <= 60; s++) {
@@ -754,10 +772,7 @@ const caucus: Scene = {
     const v = eView(t)
     const flat = eFlat(p)
     const all = E_ROOTS.map((_, i) => ePoint(i, t, flat, v))
-    ctx.save()
-    ctx.globalCompositeOperation = 'lighter'
-    drawWire(ctx, all, E_EDGES, accent, 0.2 * (1 - 0.7 * flat), 0.6)
-    ctx.restore()
+    wire(ctx, all, E_EDGES, accent, 0.11 * (1 - 0.7 * flat), 0.6)
     for (let i = 0; i < all.length; i++) if (i % 4) mote(ctx, all[i], 0.7, '#fff3c8', 0.7 * (1 - flat))
     const pts = E_MEMBERS.map((i) => all[i])
     network(ctx, pts, eGraph, p, rgba(accent, 0.36), 0.5)

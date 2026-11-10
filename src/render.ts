@@ -5,6 +5,8 @@ import { stage as sceneStage, type Scene } from './scenes.ts'
 import { formatLogIQ, genLabel } from './format.ts'
 import { JuliaSky, hexToRgb, juliaFor, type Complex } from './fractal.ts'
 import { accentFor, noteFor } from './rotate.ts'
+import { GLLayer } from './gl.ts'
+import { setPainter } from './paint.ts'
 
 export interface Rect {
   x: number
@@ -75,9 +77,17 @@ export class Renderer {
   spinVel: Spin = { yaw: 0, pitch: 0 }
   tilt: [number, number] = [0, 0]
   private lastTime = 0
+  // the WebGL layer under the 2D canvas, or null where the browser cannot give us one
+  gl: GLLayer | null = null
 
-  constructor(canvas: HTMLCanvasElement, scenes: Scene[], layers: Layer[]) {
+  constructor(canvas: HTMLCanvasElement, scenes: Scene[], layers: Layer[], glCanvas?: HTMLCanvasElement | null) {
     this.canvas = canvas
+    if (glCanvas) {
+      const layer = new GLLayer(glCanvas)
+      if (layer.ok) this.gl = layer
+      else glCanvas.hidden = true
+    }
+    setPainter(this.gl)
     this.scenes = scenes
     this.layers = layers
     this.ctx = canvas.getContext('2d')!
@@ -91,6 +101,7 @@ export class Renderer {
     this.H = window.innerHeight
     this.canvas.width = Math.round(this.W * this.dpr)
     this.canvas.height = Math.round(this.H * this.dpr)
+    this.gl?.resize(this.W, this.H, window.devicePixelRatio || 1)
   }
 
   setStage(r: Rect, snap = false) {
@@ -133,6 +144,14 @@ export class Renderer {
     sceneStage.yaw = this.spin.yaw + this.tilt[0] * 0.35
     sceneStage.pitch = this.spin.pitch + this.tilt[1] * 0.3
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    const gl = this.gl
+    if (gl) {
+      ctx.clearRect(0, 0, this.W, this.H)
+      gl.pace(dt)
+      gl.begin()
+    }
+    const glow: [number, number] = [st.x + st.w / 2, st.y + st.h / 2]
+    const pal = (i: number) => this.layers[i].palette
     const n = this.scenes.length
     const cur = s.index
     const next = (cur + 1) % n
@@ -141,8 +160,11 @@ export class Renderer {
     const p = progress(s, dur)
     const accent = this.accent(cur, loop)
     if (s.phase !== 'zoom') {
-      this.gradient(cur, accent, 1)
-      this.julia(juliaFor(cur, loop), accent, time, reduced, 1)
+      if (gl) gl.sky({ top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(cur).top, bottom2: pal(cur).bottom, blend: 0, tint: accent, c: juliaFor(cur, loop), center: [0, 0], span: 1, onMap: 0, time, drift: reduced ? 0 : 1, glow })
+      else {
+        this.gradient(cur, accent, 1)
+        this.julia(juliaFor(cur, loop), accent, time, reduced, 1)
+      }
       this.starfield(time, 0, reduced)
       this.scripture(cur, loop, time, s.phase === 'idle' ? -1 : p, 1)
       this.scene(cur, time, p, [0, 0], 1, 1, accent)
@@ -150,31 +172,43 @@ export class Renderer {
       this.ripplesDraw(now)
       this.hud(cur, s.phase === 'idle' ? 0 : p, accent, 1)
       this.ouroboros(cur, cur + seg(p, 0, 1) * 0.86, loop, accent, 1)
+      gl?.end()
       return
     }
     const raw = clamp(s.t / dur.zoom)
     const u = easeInOut(raw)
     const accentNext = this.accent(next, nextLoop)
-    this.gradient(cur, accent, 1)
-    this.gradient(next, accentNext, u)
+    const c0 = juliaFor(cur, loop)
+    const c1 = juliaFor(next, nextLoop)
+    const half = u < 0.5
+    const sky = { top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(next).top, bottom2: pal(next).bottom, blend: u, tint: half ? accent : accentNext, time, glow }
+    if (!gl) {
+      this.gradient(cur, accent, 1)
+      this.gradient(next, accentNext, u)
+    }
     this.scripture(cur, loop, time, 1, 1 - u)
     this.scripture(next, nextLoop, time, -1, u)
     if (reduced) {
       // no travelling: the old sky and scene fade out as the new ones fade in
-      this.julia(juliaFor(u < 0.5 ? cur : next, u < 0.5 ? loop : nextLoop), u < 0.5 ? accent : accentNext, time, true, 1)
+      if (gl) gl.sky({ ...sky, c: half ? c0 : c1, center: [0, 0], span: 1, onMap: 0, drift: 0 })
+      else this.julia(half ? c0 : c1, half ? accent : accentNext, time, true, 1)
       this.starfield(time, 0, true)
       this.scene(cur, time, 1, [0, 0], 1, 1 - u, accent)
       this.scene(next, time, 0, [0, 0], 1, u, accentNext)
-      this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, u < 0.5 ? accent : accentNext, 1)
+      this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, half ? accent : accentNext, 1)
+      gl?.end()
       return
     }
     // The sky leaves the old plane's Julia set for the Mandelbrot set, which is the map of
     // all of them, crosses it from the old constant to the new, and drops into the new sky.
-    const c0 = juliaFor(cur, loop)
-    const c1 = juliaFor(next, nextLoop)
     const onMap = seg(raw, 0.08, 0.3) * (1 - seg(raw, 0.7, 0.92))
-    this.julia(raw < 0.5 ? c0 : c1, raw < 0.5 ? accent : accentNext, time, false, 1 - onMap, (this.skyFrame & 1) === 0)
-    this.atlas([lerp(c0[0], c1[0], u), lerp(c0[1], c1[1], u)], u < 0.5 ? accent : accentNext, 0.45 + 1.9 * Math.sin(Math.PI * raw), time, onMap, (this.skyFrame & 1) === 1)
+    const center: Complex = [lerp(c0[0], c1[0], u), lerp(c0[1], c1[1], u)]
+    const span = 0.45 + 1.9 * Math.sin(Math.PI * raw)
+    if (gl) gl.sky({ ...sky, c: raw < 0.5 ? c0 : c1, center, span, onMap, drift: 1 })
+    else {
+      this.julia(raw < 0.5 ? c0 : c1, raw < 0.5 ? accent : accentNext, time, false, 1 - onMap, (this.skyFrame & 1) === 0)
+      this.atlas(center, half ? accent : accentNext, span, time, onMap, (this.skyFrame & 1) === 1)
+    }
     this.starfield(time, Math.sin(Math.PI * raw), reduced)
     // Pull back: the plane being left shrinks to 1/ZOOM and turns out to be one member of
     // the plane above, which was there all along, ZOOM times too big to see.
@@ -183,7 +217,8 @@ export class Renderer {
     this.scene(cur, time, 1, cam.inner.c, cam.inner.z, 1, accent)
     this.fold(accent, raw)
     this.ripplesDraw(now)
-    this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, u < 0.5 ? accent : accentNext, 1)
+    this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, half ? accent : accentNext, 1)
+    gl?.end()
   }
 
   private scene(i: number, time: number, p: number, c: [number, number], z: number, a: number, accent: string) {
@@ -195,6 +230,7 @@ export class Renderer {
     ctx.save()
     ctx.globalAlpha = a
     ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * (cx - c[0] * k), dpr * (cy - c[1] * k))
+    this.gl?.xf(k, cx - c[0] * k, cy - c[1] * k, a)
     this.scenes[i].draw(ctx, time, p, accent)
     ctx.restore()
   }

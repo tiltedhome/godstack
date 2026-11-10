@@ -3,7 +3,11 @@ import { fileURLToPath } from 'node:url'
 import { BOOK, CANON_NOTE, LAYERS, chapter, roman, versesFor } from '../src/lore.ts'
 import { LESSONS, MINUTES, NOTES_EARLY, SAYINGS } from '../src/minutes.ts'
 
-const PAGE = new URL('../dist/index.html', import.meta.url).href
+// Headless Chrome has no GPU and runs WebGL in software, which is slow enough to make the
+// timing-sensitive tests flaky. So the suite drives the 2D renderer (?gl=off), which shares
+// every line of engine, scene and UI code, and the WebGL layer has its own tests at the end.
+const GL_PAGE = new URL('../dist/index.html', import.meta.url).href
+const PAGE = GL_PAGE + '?gl=off'
 // names, verbs and verses come from the canon, so storyline edits don't break the tests
 const NAMES = LAYERS.map((L) => L.name)
 
@@ -11,6 +15,17 @@ type Hooks = { state: { index: number; octave: number; phase: string }; setSpeed
 const hooks = (page: Page) => page.evaluateHandle(() => (window as unknown as { godstack: Hooks }).godstack)
 
 let errors: string[]
+
+// How many different colours are on screen: on the 2D canvas, and on the WebGL layer under it.
+function distinctColours() {
+  const c = document.getElementById('stage') as HTMLCanvasElement
+  const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data
+  const seen = new Set<number>()
+  for (let k = 0; k < d.length; k += 4 * 997) seen.add((d[k] << 16) | (d[k + 1] << 8) | d[k + 2])
+  const g = (window as unknown as { godstack: { webgl: boolean; glStats(): { lines: number; colours: number } | null } }).godstack
+  const stats = g.glStats()
+  return { webgl: g.webgl, gl: stats?.colours ?? 0, lines: stats?.lines ?? 0, total: seen.size + (stats?.colours ?? 0) }
+}
 
 test.beforeEach(async ({ page }) => {
   errors = []
@@ -59,14 +74,9 @@ test('every scene paints mid-accident without errors', async ({ page }, info) =>
     await expect(page.locator('#name')).toHaveText(NAMES[i])
     await expect(page.locator('#caption')).not.toBeEmpty()
     await page.waitForTimeout(150)
-    const distinct = await page.evaluate(() => {
-      const c = document.getElementById('stage') as HTMLCanvasElement
-      const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data
-      const seen = new Set<number>()
-      for (let k = 0; k < d.length; k += 4 * 997) seen.add((d[k] << 16) | (d[k + 1] << 8) | d[k + 2])
-      return seen.size
-    })
-    expect(distinct, `scene ${i} looks blank`).toBeGreaterThan(40)
+    const distinct = await page.evaluate(distinctColours)
+    expect(distinct.webgl).toBe(false)
+    expect(distinct.total, `scene ${i} looks blank`).toBeGreaterThan(40)
     await page.screenshot({ path: fileURLToPath(new URL(`../test-results/screens/${info.project.name}-${i}.png`, import.meta.url)) })
   }
 })
@@ -190,6 +200,7 @@ test('deep links skip the intro', async ({ page }) => {
   await page.goto(PAGE + '#' + LAYERS[2].id)
   await expect(page.locator('#intro')).toBeHidden()
   await expect(page.locator('#name')).toHaveText(NAMES[2])
+  await expect(page.locator('#gl')).toBeHidden()
 })
 
 test('a remembered sound preference resumes on the first tap', async ({ page }) => {
@@ -290,4 +301,41 @@ test('the pull-back between planes paints without errors, at every seam', async 
     }
   }
   await expect(page.locator('#caption')).toContainText('Made, together')
+})
+
+test.describe('the WebGL layer', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('about:blank')
+    await page.goto(GL_PAGE + '#' + LAYERS[0].id)
+    await expect(page.locator('#intro')).toBeHidden()
+  })
+
+  test('runs wherever the browser has WebGL', async ({ page }) => {
+    const has = await page.evaluate(() => !!document.createElement('canvas').getContext('webgl2'))
+    const on = await page.evaluate(() => (window as unknown as { godstack: { webgl: boolean } }).godstack.webgl)
+    expect(on).toBe(has)
+    await expect(page.locator('#gl')).toBeVisible({ visible: has })
+  })
+
+  test('draws the sky and every plane’s geometry, and the pull-back between them', async ({ page }, info) => {
+    const g = await hooks(page)
+    await g.evaluate((g) => {
+      g.setAutoplay(false)
+      g.setSpeed(0)
+    })
+    test.skip(!(await page.evaluate(() => (window as unknown as { godstack: { webgl: boolean } }).godstack.webgl)), 'no WebGL in this browser')
+    for (let i = 0; i < NAMES.length; i++) {
+      await g.evaluate((g, i) => g.set({ index: i, phase: 'act', t: 4 }), i)
+      await expect(page.locator('#name')).toHaveText(NAMES[i])
+      await page.waitForTimeout(150)
+      const distinct = await page.evaluate(distinctColours)
+      expect(distinct.gl, `scene ${i}: nothing on the WebGL layer`).toBeGreaterThan(40)
+      expect(distinct.lines, `scene ${i}: no geometry on the WebGL layer`).toBeGreaterThan(50)
+      await page.screenshot({ path: fileURLToPath(new URL(`../test-results/screens/${info.project.name}-gl-${i}.png`, import.meta.url)) })
+    }
+    await g.evaluate((g) => g.set({ index: 2, octave: 2, phase: 'zoom', t: 0.9 }))
+    await page.waitForTimeout(150)
+    // mid pull-back both planes are on screen, so there is more geometry, not less
+    expect((await page.evaluate(distinctColours)).lines).toBeGreaterThan(200)
+  })
 })

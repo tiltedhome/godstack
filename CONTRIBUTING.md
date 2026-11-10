@@ -50,9 +50,9 @@ The tone is Douglas Adams with footnotes: absurd, affectionate, and **true**. Ev
 
 ### Code
 
-- TypeScript, Canvas 2D, no runtime dependencies. New dependencies need a very good reason.
+- TypeScript, Canvas 2D for the characters and type, three.js for the sky and geometry. That is the only runtime dependency; another one needs a very good reason.
 - Scenes are drawn in a 215-unit coordinate space centred on the stage; see the existing scenes in `src/scenes.ts`.
-- Keep it fast on a mid-range phone and keep the built `index.html` under 200 KB (this cut is about 137 KB).
+- Keep it fast on a mid-range phone and keep the page a single self-contained `index.html`. Anything drawn on the WebGL layer must also work, or be safely absent, on the 2D fallback (`?gl=off`).
 - Respect `prefers-reduced-motion`, keyboard navigation and screen readers.
 
 ### Workflows
