@@ -79,7 +79,7 @@ function renderCard() {
   const plane = PLANES[L.id]
   const prev = LAYERS[(state.index + N - 1) % N]
   $('octave').textContent = `Loop ${loop}`
-  $('dim').textContent = `Harmonic ${plane.harmonic} · ${plane.dims}D`
+  $('dim').textContent = `Harmonic ${plane.harmonic} of ${N}`
   $('gen').textContent = `Plane ${genLabel(L.gen)}`
   // the thesis, every plane: whoever made these was one plane down, and wanted something else
   $('plane').textContent = `Made by ${prev.one}, one ${state.index === 0 ? 'loop back' : 'plane down'}. Building, in turn, out of ${L.why.toLowerCase()}.`

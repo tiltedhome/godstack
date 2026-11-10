@@ -85,12 +85,18 @@ function fromHsl(h: number, s: number, l: number): string {
   return '#' + [r, g, b].map((v) => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('')
 }
 
-// Each loop turns every plane's accent a little way round the colour wheel: the golden angle
-// divided by eleven, enough to notice and not enough to stop a plane looking like itself.
-// Loop 1 is the canon's palette exactly.
-export const HUE_STEP = 137.508 / 11
+// Each loop turns every plane's accent a little way round the colour wheel, never more than
+// HUE_RANGE degrees either side of the canon's, so a plane always looks like itself. The
+// offsets step by the golden ratio, which never lands on the same one twice. Loop 1 is the
+// canon's palette exactly.
+export const HUE_RANGE = 30
+export function hueShift(loop: number): number {
+  if (loop <= 1) return 0
+  const f = ((loop - 1) * 0.6180339887) % 1
+  return (f - 0.5) * 2 * HUE_RANGE
+}
 export function accentFor(hex: string, loop: number): string {
   if (loop <= 1) return hex
   const [h, s, l] = toHsl(hex)
-  return fromHsl((h + (loop - 1) * HUE_STEP) % 360, s, l)
+  return fromHsl((h + hueShift(loop) + 360) % 360, s, l)
 }

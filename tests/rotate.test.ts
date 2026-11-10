@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { LESSONS, MINUTES, NOTES_EARLY, NOTES_LATE, PLANES, SAYINGS } from '../src/minutes.ts'
 import { CANON_NOTE, LAYERS, versesFor } from '../src/lore.ts'
-import { HUE_STEP, LEARNED, accentFor, headStart, lessonFor, minuteFor, noteFor, sayingFor, setSalt } from '../src/rotate.ts'
+import { HUE_RANGE, LEARNED, accentFor, headStart, hueShift, lessonFor, minuteFor, noteFor, sayingFor, setSalt } from '../src/rotate.ts'
 import { juliaFor, JULIA_C } from '../src/fractal.ts'
 
 describe('the margins', () => {
@@ -81,11 +81,16 @@ describe('every pass round the loop is a little different', () => {
       expect(seen.size).toBe(6)
       for (const c of seen) expect(c).toMatch(/^#[0-9a-f]{6}$/)
     }
-    // pure red, one step round: the hue moves by HUE_STEP and nothing else changes
+    // never far from the canon's hue, and never the same offset twice
+    const shifts = Array.from({ length: 40 }, (_, k) => hueShift(k + 2))
+    for (const d of shifts) expect(Math.abs(d)).toBeLessThanOrEqual(HUE_RANGE)
+    expect(new Set(shifts.map((d) => d.toFixed(3))).size).toBe(40)
+    // pure red on loop 2: the hue moves by exactly that loop's shift and nothing else changes
     const c = parseInt(accentFor('#ff0000', 2).slice(1), 16)
+    expect(hueShift(2)).toBeGreaterThan(0)
     expect(c >> 16).toBe(255)
     expect(c & 255).toBe(0)
-    expect((c >> 8) & 255).toBe(Math.round((HUE_STEP / 60) * 255))
+    expect((c >> 8) & 255).toBe(Math.round((hueShift(2) / 60) * 255))
   })
 
   it('nudges each sky’s constant, staying next to the canon’s', () => {

@@ -52,7 +52,7 @@ The tone is Douglas Adams with footnotes: absurd, affectionate, and **true**. Ev
 
 - TypeScript, Canvas 2D, no runtime dependencies. New dependencies need a very good reason.
 - Scenes are drawn in a 215-unit coordinate space centred on the stage; see the existing scenes in `src/scenes.ts`.
-- Keep it fast on a mid-range phone and keep the built `index.html` under 100 KB.
+- Keep it fast on a mid-range phone and keep the built `index.html` under 200 KB (this cut is about 137 KB).
 - Respect `prefers-reduced-motion`, keyboard navigation and screen readers.
 
 ### Workflows

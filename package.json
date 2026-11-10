@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "An animated field guide to creators who keep accidentally making something smarter than themselves",
+  "description": "Scale Model: an animated field guide to why crowds build minds bigger than themselves, on seven planes and one string",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
