@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
@@ -67,7 +67,7 @@ A second, parallel version of the site, published at [/v3/](https://tiltedhome.g
 
 ## Scale Model (branch `v4`)
 
-A third, parallel version, published at [/v4/](https://tiltedhome.github.io/godstack/v4/) from the `v4` branch, with a new name, a new canon and new scenes. This is the branch you are reading; the sections above describe the other two cuts, which are untouched.
+A third, parallel version, published at [/v4/](https://tiltedhome.github.io/godstack/v4/) from the `v4` branch, with a new name, a new canon and new scenes. The description below is of that branch; `v5` (Substrate, further down) was built from it.
 
 > **The Law of Scale.** No mind can build a mind greater than itself. A crowd of minds can, given time, and never for the reason it gives. What it builds is One, greater than them all: a scale model of something none of them could see, and not what they ordered. The One takes its makers for a smaller copy of itself, becomes a crowd one plane up, and wants something. Many, One, Many. The top of the stack is the bottom, and no lap is quite the same.
 
@@ -106,17 +106,59 @@ The resemblance between scales that the stack leans on is used honestly: it is r
 - **Type, and why.** The faces are v3's, kept on purpose. Fraunces for display, because its optical sizes hold up from a 15-pixel dial to a 60-pixel title and its WONK axis gives the wordmark a lean without a second font. The IBM Plex superfamily (Sans for controls, Serif for prose, Mono for data) because three faces drawn to one skeleton agree on x-height and figure width, which matters when a caption, a readout and a paragraph share a card. IM Fell English for the scripture, with discretionary ligatures and a drop cap, because it is a digitisation of type actually cut in the 1670s and nothing else looks as much like being told something by a book. Labels are tracked mono capitals, prose has proportional figures, data has tabular lining figures with a slashed zero.
 - **Size and speed.** Still one self-contained file, now about 695 KB (191 KB gzipped) because three.js is in it; it is the cut's only runtime dependency. The 2D work costs 2 to 5 ms a frame on a Pixel 7 viewport in headless Chrome. Headless Chrome has no GPU, so the WebGL layer's speed on real phones is not something the tests can measure; the quality governor is there for that.
 
+## Substrate (branch `v5`)
+
+A fourth, parallel version, published at [/v5/](https://tiltedhome.github.io/godstack/v5/) from the `v5` branch. This is the branch you are reading. It starts from `v4`'s engine and graphics and changes what the piece is: v4 was watched, and went past too fast to explain itself; this one is read, at the reader's pace, and its subject is one idea of Max Tegmark's (*Our Mathematical Universe*, 2014; *Life 3.0*, 2017) taken further than he takes it.
+
+> **The Law of Substrates.** Life is information that keeps itself from being forgotten. It does not care what it is written on. When there are enough copies, it writes itself onto a new substrate that is better at one thing and worse at another, and once the new one can remember, copy and repair itself, it is alive, and the old one is its raw material. Programmers call such a move a port, and every port is a trade. The first one bought time. The last one gives it back.
+
+<p align="center">
+  <img src="docs/v5-desktop.webp" alt="Substrate on desktop: the Gene level, third question, How it copies. A double helix has unzipped into two, each half rebuilding the other, with the explanation in a panel on the right" width="820">
+</p>
+
+Eight substrates, each asked the same eight questions, one at a time: what it is written on, how it remembers, how it copies, how it repairs, how it learns, what it is like, where it stops, and how it ported itself onto the next.
+
+| Life | Substrate | Written on | Ported itself into | Bought | Paid |
+| --- | --- | --- | --- | --- | --- |
+| 0.0 | The Structure | relations, and nothing else (mathematics) | The Rule | time | certainty |
+| 0.1 | The Field | quantum amplitudes | The Fact | facts | reversibility |
+| 0.5 | The Element | nuclei, atoms, crystals; stars forge it | The Replicator | a message | permanence |
+| 1.0 | The Gene | chains of nucleotides, in water | The Neuron | speed | inheritance |
+| 1.5 | The Nerve | neurons and the gaps between them | The Word | outliving the body | bandwidth, and feel |
+| 2.0 | The Word (us) | symbols, spoken then written | The Model | speed and copying | efficiency, and experience |
+| 3.0 | The Chip | transistors, switched by electric fields | The Horizon | density | access |
+| 4.0 | The Horizon | the surface of a black hole | The Structure | certainty, back again | time |
+
+Life 1.0, 2.0 and 3.0 are Tegmark's. The versions below and above them, the claim that those levels are alive, and the loop, are this Book's, and every level has a line saying exactly where its physics stops. Everything else is real and sourced: names, dates, numbers. One thing the numbers did not support, and so the piece does not say: that each new substrate is denser. Nothing built since has beaten DNA. What each port has bought, from the Gene up, is speed, and what it has cost is power and the lifetime of the page.
+
+<p align="center">
+  <img src="docs/v5-phone-nerve.webp" alt="The Nerve on a phone, sixth question: What it is like. A ball of nerve cells with spikes running through it, labelled a present moment, seconds wide" width="270">
+  &nbsp;&nbsp;
+  <img src="docs/v5-phone-horizon.webp" alt="The Horizon on a phone, seventh question: Where it stops. A black hole with its bits on the surface, and the text counting the seven trades it took to get here" width="270">
+</p>
+
+- **Nothing moves on until you do.** Autoplay is off unless you ask for it, and when it is on it holds each answer for as long as the text takes to read. The main button always says what the next question is. Arrow keys, a sideways flick, the eight marks under the text and the rail all work; `#gene-3` links straight to a level's third question.
+- **The explanation is on the stage.** Each answer is 150 to 490 characters, sized to fit a phone without scrolling, with a labelled callout on the scene pointing at the thing it is about: one rung, one synapse, one weight.
+- **Is it alive?** Tegmark's test (a process that can retain its complexity and replicate), split into five verdicts that are shown on every level: remembers, copies itself, repairs itself, learns, rebuilds itself. The one the current question bears on is picked out. Nothing in the stack scores five.
+- **Tap it and see if it heals.** A tap damages whatever is nearest, and each substrate does what it does about that. The Structure cannot be damaged. A crystal keeps its defect for good. The helix sends a proofreader and mends the rung, except about one time in four, when the error stays and becomes a mutation. A chip corrects the bit before you can see it. A black hole keeps what you dropped and grows. It is the quickest way to find out what "resists entropy" means.
+- **What it is like.** Every level has a beat for what existence is like there, which is the part v4 left people wondering about: nothing, on the first; a mouse freezing under a shadow, on the fifth; honestly unknown, on the seventh.
+- **Three new forms**, built from their definitions like the rest (`src/solid.ts`): the double helix to B-DNA's proportions, unzipping into two; the diamond lattice of carbon; a chip's stacked grids. The tests check the helix's ten and a half rungs to the turn and the lattice's 109.47 degree bonds.
+- **The ledger** compares all eight on three real measures, on log scales: how fast news travels, how long the medium keeps a mark, and what one of them runs on.
+- **Reviewed before it was built**, as before, by three independent readers with no prior context: a fact-checker with web search (16 corrections, including a misattributed quotation and some arithmetic), an editor for lay readers (who rewrote the weak "what it is like" beats and two muddy handoffs), and a comedy and structure editor (who found the ending: the last level counts all seven trades before handing back the first purchase).
+
+Everything v4 has, this keeps: the three.js layer with its 2D fallback, the pull-back zoom, the Mandelbrot sky (the Structure's own sky is now the whole set), the ouroboros, per-loop variations, synthesized sound (now cued to each beat, on the first eight harmonics of one string, so the last level is the first again three octaves up).
+
 ## How it works
 
 Every scene runs **Many → One → Many** (`src/scenes.ts`). Members collaborate while the links between them grow until the network percolates: the mean degree ⟨k⟩ crosses 1, the Erdős–Rényi threshold where a giant connected component appears. The readout in the corner shows the members, the real ⟨k⟩ of the graph being drawn, and an elapsed clock on a log scale, so even 10¹⁰⁰ years visibly counts up. A small pure state machine (`src/engine.ts`) cycles idle → act → hold → zoom.
 
 | Path | What it is |
 | --- | --- |
-| `src/lore.ts` | The canon: every collective, its numbers, story, captions and verses |
+| `src/lore.ts` | The canon: every substrate, its eight beats, verdicts, numbers, trade and verses |
 | `src/scenes.ts` | The seven scenes and the shared percolation graph |
 | `src/solid.ts`, `src/hyper.ts`, `src/fractal.ts` | The geometry: solids, torus, E8, tilings, n-cubes, Julia and Mandelbrot sets |
 | `src/minutes.ts`, `src/rotate.ts` | Everything that changes per loop, and the code that picks it |
-| `src/engine.ts` | The pure state machine that drives the timeline |
+| `src/engine.ts` | The pure state machine: beats that wait for the reader, the leap, the pull-back |
 | `src/render.ts` | Camera, the pull-back zoom, the ouroboros, scripture layer and HUD |
 | `src/gl.ts`, `src/paint.ts` | The three.js layer (sky shader, lit faces, bloom, quality governor) and the painter that falls back to 2D |
 | `src/audio.ts` | Web Audio synthesis: infinity-series music and scene cues |

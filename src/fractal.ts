@@ -12,13 +12,14 @@ export type Complex = [number, number]
 // close, like the map does there (Tan Lei proved a precise version in 1990). So the zoom
 // between planes can honestly travel across the map from one constant to the next.
 export const JULIA_C: Complex[] = [
-  [-0.79, 0.15], // overtones: dendrites, like a plucked string photographed badly
-  [0.285, 0.01], // orrery: nested ovals, wheels in wheels
-  [-0.4, 0.6], // cluster: fat lobes, a ball of lobes
-  [-0.7017, 0.3842], // humans: spirals within spirals
-  [-0.835, -0.2321], // polis: a tiling of copies
-  [0.355, 0.355], // brood: pinwheels budding pinwheels
-  [-0.7269, 0.1889], // caucus: a filigree about to become one line
+  [-0.7269, 0.1889], // structure: only used where there is no WebGL; its real sky is the whole map
+  [0.355, 0.355], // field: pinwheels, every way at once
+  [0.285, 0.01], // element: nested ovals, shells within shells
+  [-0.7017, 0.3842], // gene: paired spirals, winding into each other
+  [-0.79, 0.15], // nerve: dendrites
+  [-0.4, 0.6], // word: fat lobes, a crowd of them
+  [-0.835, -0.2321], // chip: a tiling of copies
+  [-0.12, 0.74], // horizon: three lobes round a void
 ]
 
 // Each loop nudges every constant a little way round a small circle, so the same plane has a

@@ -1,10 +1,9 @@
 import { clamp, easeInOut, easeOut, lerp, rgba, rng, seg, type Ctx } from './draw.ts'
-import { progress, type Durations, type EngineState } from './engine.ts'
-import { BOOK, chapter, roman, versesFor, type Layer } from './lore.ts'
-import { stage as sceneStage, type Scene } from './scenes.ts'
-import { formatLogIQ, genLabel } from './format.ts'
+import { LAST, NBEATS, frame as engineFrame, type Durations, type EngineState, type Frame } from './engine.ts'
+import { BEATS, TRAITS, TRAIT_BEAT, TRAIT_LABELS, type Layer, type Verdict } from './lore.ts'
+import { stage as sceneStage, tags, type Scene } from './scenes.ts'
 import { JuliaSky, hexToRgb, juliaFor, type Complex } from './fractal.ts'
-import { accentFor, noteFor } from './rotate.ts'
+import { accentFor } from './rotate.ts'
 import { GLLayer } from './gl.ts'
 import { setPainter } from './paint.ts'
 
@@ -15,11 +14,12 @@ export interface Rect {
   h: number
 }
 
-// How much smaller each plane sits inside the next one up.
+// How much smaller each level sits inside the next one up.
 export const ZOOM = 18
+// Scenes are drawn in units; the stage's short side is this many of them.
+export const UNIT = 195
 // A clock reading where every creature has its eyes open.
 const FROZEN_TIME = 1
-const FELL = '"IM Fell English", Georgia, "Times New Roman", serif'
 const DISPLAY = '"Fraunces", "Iowan Old Style", Georgia, serif'
 const MONO = '"IBM Plex Mono", ui-monospace, monospace'
 const TAU = Math.PI * 2
@@ -41,12 +41,6 @@ export function pullBack(sock: [number, number], u: number) {
   }
 }
 
-interface VerseLine {
-  text: string
-  verse: number
-  num?: string
-}
-
 interface Ripple {
   x: number
   y: number
@@ -63,7 +57,6 @@ export class Renderer {
   private stage: Rect = { x: 0, y: 0, w: 1, h: 1 }
   private target: Rect = { x: 0, y: 0, w: 1, h: 1 }
   private stars: { x: number; y: number; r: number; ph: number }[]
-  private verseCache = new Map<string, VerseLine[]>()
   private canvas: HTMLCanvasElement
   private scenes: Scene[]
   private layers: Layer[]
@@ -112,7 +105,7 @@ export class Renderer {
   // Screen pixels to a scene's own units (its short side is 200, origin at the stage center).
   toScene(px: number, py: number): [number, number] {
     const { stage } = this
-    const k = Math.min(stage.w, stage.h) / 215
+    const k = Math.min(stage.w, stage.h) / UNIT
     return [(px - (stage.x + stage.w / 2)) / k, (py - (stage.y + stage.h / 2)) / k]
   }
 
@@ -127,8 +120,8 @@ export class Renderer {
 
   frame(s: EngineState, now: number, dur: Durations, reduced: boolean) {
     const { ctx, dpr } = this
-    // With reduced motion the idle wobbles, spins and blinks hold still; the story
-    // still advances because scenes are driven by progress, not the clock.
+    // With reduced motion the idle wobbles, spins and blinks hold still; the story still
+    // advances because scenes are driven by the beat, not the clock.
     const time = reduced ? FROZEN_TIME : now
     const dt = this.lastTime ? Math.min(0.1, now - this.lastTime) : 0
     this.lastTime = now
@@ -157,81 +150,97 @@ export class Renderer {
     const next = (cur + 1) % n
     const loop = s.octave
     const nextLoop = next === 0 ? loop + 1 : loop
-    const p = progress(s, dur)
+    const f = engineFrame(s, dur)
     const accent = this.accent(cur, loop)
+    tags.length = 0
     if (s.phase !== 'zoom') {
-      if (gl) gl.sky({ top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(cur).top, bottom2: pal(cur).bottom, blend: 0, tint: accent, c: juliaFor(cur, loop), center: [0, 0], span: 1, onMap: 0, time, drift: reduced ? 0 : 1, glow })
+      const home = this.home(cur, loop)
+      if (gl) gl.sky({ top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(cur).top, bottom2: pal(cur).bottom, blend: 0, tint: accent, c: home.c, center: home.center, span: home.span, onMap: home.map, time, drift: reduced ? 0 : 1, glow })
       else {
         this.gradient(cur, accent, 1)
-        this.julia(juliaFor(cur, loop), accent, time, reduced, 1)
+        if (home.map) this.atlas(home.center, accent, home.span, reduced ? 0 : time, 1, !reduced || this.skyKey !== 'map')
+        else this.julia(home.c, accent, time, reduced, 1)
+        if (home.map) this.skyKey = 'map'
       }
       this.starfield(time, 0, reduced)
-      this.scripture(cur, loop, time, s.phase === 'idle' ? -1 : p, 1)
-      this.scene(cur, time, p, [0, 0], 1, 1, accent)
-      this.detail(cur, loop, time, 1 - seg(p, 0.04, 0.16))
+      this.scene(cur, time, f, [0, 0], 1, 1, accent)
+      // the level below stays in view, as a detail, while this one is introduced
+      this.detail(cur, loop, time, s.beat === 0 ? 1 : s.beat === 1 ? 1 - f.u : 0)
+      this.drawTags()
       this.ripplesDraw(now)
-      this.hud(cur, s.phase === 'idle' ? 0 : p, accent, 1)
-      this.ouroboros(cur, cur + seg(p, 0, 1) * 0.86, loop, accent, 1)
+      this.hud(cur, f, accent)
+      this.ouroboros(cur, cur + ((s.beat + f.u) / NBEATS) * 0.9, loop, accent, 1)
       gl?.end()
       return
     }
     const raw = clamp(s.t / dur.zoom)
     const u = easeInOut(raw)
     const accentNext = this.accent(next, nextLoop)
-    const c0 = juliaFor(cur, loop)
-    const c1 = juliaFor(next, nextLoop)
+    const h0 = this.home(cur, loop)
+    const h1 = this.home(next, nextLoop)
     const half = u < 0.5
     const sky = { top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(next).top, bottom2: pal(next).bottom, blend: u, tint: half ? accent : accentNext, time, glow }
     if (!gl) {
       this.gradient(cur, accent, 1)
       this.gradient(next, accentNext, u)
     }
-    this.scripture(cur, loop, time, 1, 1 - u)
-    this.scripture(next, nextLoop, time, -1, u)
+    // the next level, as it will be when we arrive: its first beat, not yet eased in
+    const arriving: Frame = { beat: 0, from: 0, u: 0, link: 0, leap: 0 }
     if (reduced) {
       // no travelling: the old sky and scene fade out as the new ones fade in
-      if (gl) gl.sky({ ...sky, c: half ? c0 : c1, center: [0, 0], span: 1, onMap: 0, drift: 0 })
-      else this.julia(half ? c0 : c1, half ? accent : accentNext, time, true, 1)
+      const h = half ? h0 : h1
+      if (gl) gl.sky({ ...sky, c: h.c, center: h.center, span: h.span, onMap: h.map, drift: 0 })
+      else if (h.map) this.atlas(h.center, half ? accent : accentNext, h.span, 0, 1, true)
+      else this.julia(h.c, half ? accent : accentNext, time, true, 1)
       this.starfield(time, 0, true)
-      this.scene(cur, time, 1, [0, 0], 1, 1 - u, accent)
-      this.scene(next, time, 0, [0, 0], 1, u, accentNext)
-      this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, half ? accent : accentNext, 1)
+      this.scene(cur, time, f, [0, 0], 1, 1 - u, accent)
+      this.scene(next, time, arriving, [0, 0], 1, u, accentNext)
+      this.ouroboros(cur, cur + 0.9 + 0.1 * u, loop, half ? accent : accentNext, 1)
       gl?.end()
       return
     }
-    // The sky leaves the old plane's Julia set for the Mandelbrot set, which is the map of
+    // The sky leaves the old level's Julia set for the Mandelbrot set, which is the map of
     // all of them, crosses it from the old constant to the new, and drops into the new sky.
-    const onMap = seg(raw, 0.08, 0.3) * (1 - seg(raw, 0.7, 0.92))
-    const center: Complex = [lerp(c0[0], c1[0], u), lerp(c0[1], c1[1], u)]
-    const span = 0.45 + 1.9 * Math.sin(Math.PI * raw)
-    if (gl) gl.sky({ ...sky, c: raw < 0.5 ? c0 : c1, center, span, onMap, drift: 1 })
+    // (The Structure's own sky is the whole map, so it starts or ends there.)
+    const onMap = Math.max(seg(raw, 0.08, 0.3) * (1 - seg(raw, 0.7, 0.92)), h0.map * (1 - seg(raw, 0.7, 0.92)), h1.map * seg(raw, 0.08, 0.3))
+    const center: Complex = [lerp(h0.center[0], h1.center[0], u), lerp(h0.center[1], h1.center[1], u)]
+    const span = lerp(h0.span, h1.span, u) + 1.5 * Math.sin(Math.PI * raw) * (1 - 0.5 * (h0.map + h1.map))
+    if (gl) gl.sky({ ...sky, c: raw < 0.5 ? h0.c : h1.c, center, span, onMap, drift: 1 })
     else {
-      this.julia(raw < 0.5 ? c0 : c1, raw < 0.5 ? accent : accentNext, time, false, 1 - onMap, (this.skyFrame & 1) === 0)
+      this.julia(raw < 0.5 ? h0.c : h1.c, raw < 0.5 ? accent : accentNext, time, false, 1 - onMap, (this.skyFrame & 1) === 0)
       this.atlas(center, half ? accent : accentNext, span, time, onMap, (this.skyFrame & 1) === 1)
     }
     this.starfield(time, Math.sin(Math.PI * raw), reduced)
-    // Pull back: the plane being left shrinks to 1/ZOOM and turns out to be one member of
-    // the plane above, which was there all along, ZOOM times too big to see.
+    // Pull back: the level being left shrinks to 1/ZOOM and turns out to be one unit of
+    // the level above, which was there all along, ZOOM times too big to see.
     const cam = pullBack(this.scenes[next].socket(time), u)
-    this.scene(next, time, 0, cam.outer.c, cam.outer.z, easeInOut(seg(raw, 0.38, 0.86)), accentNext)
-    this.scene(cur, time, 1, cam.inner.c, cam.inner.z, 1, accent)
+    this.scene(next, time, arriving, cam.outer.c, cam.outer.z, easeInOut(seg(raw, 0.38, 0.86)), accentNext)
+    this.scene(cur, time, f, cam.inner.c, cam.inner.z, 1, accent)
+    tags.length = 0
     this.fold(accent, raw)
     this.ripplesDraw(now)
-    this.ouroboros(cur, cur + 0.86 + 0.14 * u, loop, half ? accent : accentNext, 1)
+    this.ouroboros(cur, cur + 0.9 + 0.1 * u, loop, half ? accent : accentNext, 1)
     gl?.end()
   }
 
-  private scene(i: number, time: number, p: number, c: [number, number], z: number, a: number, accent: string) {
+  // Each level's own sky. The Structure's is the Mandelbrot set itself, whole: one line of
+  // definition and no end of detail. Every other level's is the Julia set for its constant.
+  private home(i: number, loop: number): { c: Complex; center: Complex; span: number; map: number } {
+    const c = juliaFor(i, loop)
+    return i === 0 ? { c, center: [-0.62, 0], span: 2.9, map: 1 } : { c, center: c, span: 0.45, map: 0 }
+  }
+
+  private scene(i: number, time: number, f: Frame, c: [number, number], z: number, a: number, accent: string) {
     if (a <= 0.002) return
     const { ctx, dpr, stage } = this
-    const k = (Math.min(stage.w, stage.h) / 215) * z
+    const k = (Math.min(stage.w, stage.h) / UNIT) * z
     const cx = stage.x + stage.w / 2
     const cy = stage.y + stage.h / 2
     ctx.save()
     ctx.globalAlpha = a
     ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * (cx - c[0] * k), dpr * (cy - c[1] * k))
     this.gl?.xf(k, cx - c[0] * k, cy - c[1] * k, a)
-    this.scenes[i].draw(ctx, time, p, accent)
+    this.scenes[i].draw(ctx, time, f, accent)
     ctx.restore()
   }
 
@@ -247,11 +256,13 @@ export class Renderer {
     if (prevLoop < 1) return
     const { ctx, stage } = this
     const sock = this.scenes[i].socket(time)
-    this.scene(prev, time, 1, [-sock[0] * ZOOM, -sock[1] * ZOOM], 1 / ZOOM, a, this.accent(prev, prevLoop))
-    const k = Math.min(stage.w, stage.h) / 215
+    const kept = tags.length
+    this.scene(prev, time, { beat: LAST, from: LAST, u: 1, link: 1, leap: 1 }, [-sock[0] * ZOOM, -sock[1] * ZOOM], 1 / ZOOM, a, this.accent(prev, prevLoop))
+    tags.length = kept
+    const k = Math.min(stage.w, stage.h) / UNIT
     const x = stage.x + stage.w / 2 + sock[0] * k
     const y = stage.y + stage.h / 2 + sock[1] * k
-    const r = (215 / ZOOM) * k * 0.62
+    const r = (UNIT / ZOOM) * k * 0.62
     ctx.save()
     ctx.globalAlpha = a * 0.75
     ctx.strokeStyle = this.accent(i, loop)
@@ -263,7 +274,7 @@ export class Renderer {
     ctx.setLineDash([])
     ctx.font = `500 9px ${MONO}`
     ctx.fillStyle = this.accent(i, loop)
-    const label = `${this.layers[prev].one.toUpperCase()}  ×1/${ZOOM}`
+    const label = `${this.layers[prev].one.toUpperCase()}, MADE BY ${this.layers[prev].short.toUpperCase()}`
     const left = x > stage.x + stage.w / 2
     ctx.textAlign = left ? 'right' : 'left'
     ctx.textBaseline = 'middle'
@@ -334,7 +345,7 @@ export class Renderer {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.font = `italic 500 15px ${DISPLAY}`
-    ctx.fillText(genLabel(this.layers[i].gen), cx, cy - 2)
+    ctx.fillText(this.layers[i].version, cx, cy - 2)
     ctx.font = `500 7px ${MONO}`
     ctx.fillStyle = 'rgba(255,255,255,.55)'
     ctx.fillText(`LOOP ${loop}`, cx, cy + 9)
@@ -370,14 +381,14 @@ export class Renderer {
   // Taps leave a ripple: three rings, each cut into more pieces than the last.
   private ripplesDraw(now: number) {
     const { ctx } = this
-    this.ripples = this.ripples.filter((r) => now - r.t0 < 1)
+    this.ripples = this.ripples.filter((r) => now - r.t0 < 2.4)
     for (const r of this.ripples) {
       const age = now - r.t0
       ctx.save()
-      ctx.globalAlpha = (1 - age) * 0.8
+      ctx.globalAlpha = Math.max(0, 1 - age) * 0.8
       ctx.strokeStyle = r.color
       ctx.lineWidth = 1.2
-      for (let k = 0; k < 3; k++) {
+      for (let k = 0; k < 3 && age < 1; k++) {
         const rad = (age * 120 + 6) * (1 + k * 0.45)
         ctx.setLineDash(k === 0 ? [] : [rad * (0.5 / (k * 3)), rad * (0.5 / (k * 3))])
         ctx.beginPath()
@@ -386,109 +397,93 @@ export class Renderer {
       }
       ctx.setLineDash([])
       if (r.word) {
-        ctx.globalAlpha = Math.min(1, (1 - age) * 1.6)
-        ctx.fillStyle = r.color
-        ctx.font = `500 11px ${MONO}`
+        // what the tap did on this substrate, said plainly and left up long enough to read
+        ctx.globalAlpha = Math.min(1, (2.4 - age) * 2)
+        ctx.font = `500 12px ${MONO}`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(r.word.toUpperCase(), r.x, r.y - 22 - age * 16)
+        const w = ctx.measureText(r.word).width + 18
+        const x = clamp(r.x, 8 + w / 2, this.W - 8 - w / 2)
+        const y = r.y - 30 - Math.min(1, age) * 10
+        ctx.fillStyle = 'rgba(10,8,16,.86)'
+        ctx.beginPath()
+        ctx.roundRect(x - w / 2, y - 11, w, 22, 11)
+        ctx.fill()
+        ctx.fillStyle = r.color
+        ctx.fillText(r.word, x, y + 0.5)
       }
       ctx.restore()
     }
   }
 
-  /* -------------------------------------------------------------- scripture */
+  /* ------------------------------------------------------------------ labels */
 
-  // Faint verses from the Book of Scales behind each scene. The verse the
-  // animation is acting out glows a little brighter; none of it competes with the creatures.
-  private scripture(i: number, octave: number, time: number, p: number, a: number) {
-    if (a <= 0.01) return
+  // The callouts a scene asked for: a ring round the thing, a line, and a label, at a size
+  // that can be read on a phone whatever the scene's own scale.
+  private drawTags() {
     const { ctx, stage } = this
-    const size = Math.round(Math.min(23, Math.max(15, stage.w / 22)))
-    const lh = size * 1.34
-    const maxW = Math.min(stage.w * 0.86, size * 30)
-    const ch = chapter(i, octave)
-    const lines = this.wrapVerses(i, octave, ch, size, maxW)
-    const head = size * 2.2
-    const total = head + lines.length * lh
-    const x0 = stage.x + (stage.w - maxW) / 2
-    let y = stage.y + (stage.h - total) / 2 + Math.sin(time * 0.06) * size * 0.5
-    const live = p < 0 ? -1 : Math.min(2, Math.floor(p * 3))
-    const accent = this.accent(i, octave)
+    const k = Math.min(stage.w, stage.h) / UNIT
+    const cx = stage.x + stage.w / 2
+    const cy = stage.y + stage.h / 2
+    const size = stage.w < 520 ? 11.5 : 13
     ctx.save()
-    ctx.textBaseline = 'alphabetic'
-    ctx.textAlign = 'left'
-    ctx.fillStyle = accent
-    ctx.globalAlpha = 0.11 * a
-    ctx.font = `${Math.round(size * 0.62)}px ${FELL}`
-    ctx.fillText(`${BOOK.toUpperCase()}  ·  CHAPTER ${roman(ch)}`, x0, y + size)
-    y += head
-    for (const line of lines) {
-      ctx.globalAlpha = (line.verse === live ? 0.17 : 0.07) * a
-      let x = x0
-      if (line.num) {
-        ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
-        ctx.fillText(line.num, x, y - size * 0.32)
-        x += ctx.measureText(line.num + ' ').width
+    ctx.font = `500 ${size}px ${MONO}`
+    ctx.textBaseline = 'middle'
+    ctx.textAlign = 'center'
+    for (const tag of tags) {
+      if (!tag.text) continue
+      const x = cx + tag.x * k
+      const y = cy + tag.y * k
+      const w = ctx.measureText(tag.text).width + size * 1.5
+      const h = size * 2
+      const above = y - stage.y > h * 2.2
+      const bx = clamp(x, stage.x + 8 + w / 2, stage.x + stage.w - 8 - w / 2)
+      // keep clear of the checklist in the corner, which on a phone reaches most of the way across
+      const top = stage.y + (stage.w < 520 && stage.h >= 210 ? 106 : 78) + h / 2
+      const by = tag.ring ? clamp(y + (above ? -1 : 1) * (h * 0.5 + 16), top, stage.y + stage.h - 46) : clamp(y, top, stage.y + stage.h - 46)
+      ctx.globalAlpha = tag.a
+      if (tag.ring) {
+        ctx.strokeStyle = 'rgba(255,255,255,.95)'
+        ctx.lineWidth = 1.2
+        ctx.beginPath()
+        ctx.arc(x, y, 7, 0, TAU)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(x, y + (by < y ? -7 : 7))
+        ctx.lineTo(bx, by + (by < y ? h / 2 : -h / 2))
+        ctx.stroke()
       }
-      ctx.font = `${size}px ${FELL}`
-      ctx.fillText(line.text, x, y)
-      y += lh
+      ctx.fillStyle = 'rgba(250,247,240,.96)'
+      ctx.beginPath()
+      ctx.roundRect(bx - w / 2, by - h / 2, w, h, h / 2)
+      ctx.fill()
+      ctx.fillStyle = '#17131f'
+      ctx.fillText(tag.text, bx, by + 0.5)
     }
     ctx.restore()
   }
 
-  // A quiet readout of the algorithm: how many members, how connected, how long.
-  private hud(i: number, p: number, accent: string, a: number) {
+  // Is it alive? Tegmark's test, item by item, with the one the current beat is making the
+  // case for picked out.
+  private hud(i: number, f: Frame, accent: string) {
     const { ctx, stage } = this
     const L = this.layers[i]
-    // the real mean degree of the network drawn on screen: 2 × active edges / nodes
-    const k = this.scenes[i].graph.meanDegree(p)
-    // the clock runs exponentially, so 10¹⁰⁰ years counts up as visibly as 70
-    const done = seg(p, 0, 0.66)
-    const years = done <= 0 ? '0' : formatLogIQ(Math.log10(Math.max(1, L.tookYears)) * done)
-    const lines = [L.members, `⟨k⟩ ${k.toFixed(2)}${k >= 1 ? '  giant component' : ''}`, `t ${years} yr`]
+    const mark: Record<Verdict, string> = { yes: '●', partly: '◐', no: '○', moot: '–' }
     ctx.save()
-    ctx.globalAlpha = 0.5 * a
-    ctx.fillStyle = accent
     ctx.font = `500 10.5px ${MONO}`
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
-    lines.forEach((ln, n) => ctx.fillText(ln, stage.x + 16, stage.y + 6 + n * 14))
-    ctx.restore()
-  }
-
-  private wrapVerses(i: number, octave: number, ch: number, size: number, maxW: number): VerseLine[] {
-    const key = `${i}|${octave}|${size}|${Math.round(maxW)}`
-    const hit = this.verseCache.get(key)
-    if (hit) return hit
-    const { ctx } = this
-    const out: VerseLine[] = []
-    versesFor(i, octave, noteFor(octave)).forEach((verse, v) => {
-      const num = `${ch}:${v + 1}`
-      ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
-      let room = maxW - ctx.measureText(num + ' ').width
-      ctx.font = `${size}px ${FELL}`
-      let line = ''
-      let first = true
-      for (const word of verse.split(' ')) {
-        const next = line ? `${line} ${word}` : word
-        if (line && ctx.measureText(next).width > room) {
-          out.push({ text: line, verse: v, num: first ? num : undefined })
-          first = false
-          room = maxW
-          line = word
-        } else line = next
-      }
-      out.push({ text: line, verse: v, num: first ? num : undefined })
+    ctx.fillStyle = accent
+    ctx.globalAlpha = 0.55
+    ctx.fillText(`LIFE ${L.version}  ·  IS IT ALIVE?`, stage.x + 16, stage.y + 6)
+    // on a very short stage there is no room for the list without covering the scene
+    if (stage.h >= 210) TRAITS.forEach((key, n) => {
+      const on = BEATS[f.beat] === TRAIT_BEAT[key]
+      ctx.globalAlpha = on ? 1 : 0.5
+      ctx.fillStyle = on ? '#ffffff' : accent
+      ctx.fillText(`${mark[L.traits[key][0]]} ${TRAIT_LABELS[key].toLowerCase()}`, stage.x + 16, stage.y + 22 + n * 14)
     })
-    this.verseCache.set(key, out)
-    return out
-  }
-
-  // Line widths depend on the web font, so re-wrap once it arrives.
-  fontsChanged() {
-    this.verseCache.clear()
+    ctx.restore()
   }
 
   /* ------------------------------------------------------------------- sky */

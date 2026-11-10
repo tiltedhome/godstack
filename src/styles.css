@@ -941,7 +941,7 @@ td.who {
 @media (min-width: 760px) and (min-aspect-ratio: 1/1) {
   .rail {
     right: auto;
-    width: min(620px, calc(100% - 440px));
+    width: min(680px, calc(100% - 480px));
   }
 
   .rail .n {
@@ -996,5 +996,290 @@ td.who {
 
   .beat {
     animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------- the reading panel */
+
+/* The card is a page to be read, one question at a time. The level's name sits in the
+   eyebrow; the question is a small label; the answer's title is the display line; and the
+   answer itself is set in the serif at a size meant for reading, not glancing. */
+.level {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+#count {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.question {
+  margin: 4px 0 0;
+  font: 500 11px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.beat-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(21px, 5.6vw, 28px);
+  font-variation-settings: 'opsz' 48, 'SOFT' 40, 'WONK' 1;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.beat-text {
+  margin: 2px 0 0;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--text);
+  max-width: 62ch;
+  text-wrap: pretty;
+  font-variant-numeric: proportional-nums;
+  /* room for the longest answer, so the stage does not jump as the reader pages through */
+  min-height: 15.5em;
+}
+
+/* one mark per question: read ones filled, the current one wide */
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 2px 0 0 -3px;
+}
+
+.dots button {
+  position: relative;
+  width: 20px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  transition: width 0.25s;
+}
+
+.dots button::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(242, 237, 227, 0.2);
+  transition: background 0.25s;
+}
+
+.dots button.done::after {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.dots button[aria-current='step'] {
+  width: 40px;
+}
+
+.dots button[aria-current='step']::after {
+  background: var(--accent);
+}
+
+.act {
+  font-size: 17px;
+}
+
+/* is it alive? five verdicts, with the one the current question bears on picked out */
+.alive,
+.release {
+  margin-top: 14px;
+}
+
+.alive .label,
+.release .label,
+.honest .label {
+  display: block;
+  font: 500 10px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.traits,
+.release ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--t-1);
+  color: var(--muted);
+}
+
+.traits li {
+  padding: 3px 0 3px 22px;
+  position: relative;
+  border-left: 2px solid transparent;
+}
+
+.traits .mark {
+  position: absolute;
+  left: 6px;
+  color: var(--accent);
+  font-family: var(--mono);
+}
+
+.traits b {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.traits li.on {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.traits li.no .mark,
+.traits li.moot .mark {
+  color: var(--muted);
+}
+
+.release li {
+  padding: 2px 0 2px 18px;
+  position: relative;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-feature-settings: 'zero';
+}
+
+.release li::before {
+  position: absolute;
+  left: 2px;
+}
+
+.release li.added::before {
+  content: '+';
+  color: #9ff0b0;
+}
+
+.release li.issue::before {
+  content: '!';
+  color: #ff9a8a;
+}
+
+.honest {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  font-size: var(--t-1);
+  color: var(--muted);
+}
+
+/* the ledger's three charts, and the key to the alive column */
+.chart .bar {
+  fill: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.chart .bar.you {
+  fill: #7fd4ff;
+}
+
+.chart .none {
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.chart .ctitle {
+  fill: var(--text);
+  font: 500 12px var(--mono);
+  letter-spacing: 0.04em;
+}
+
+.chart .tick {
+  font-size: 11px;
+  font-feature-settings: 'zero';
+}
+
+.chart .tick.dim {
+  opacity: 0.6;
+  font-size: 9.5px;
+}
+
+.key {
+  margin: 18px 0 0;
+  font: 500 11px var(--mono);
+  color: var(--muted);
+}
+
+@media (min-width: 760px) and (min-aspect-ratio: 1/1) {
+  .card {
+    width: 420px;
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .beat-text {
+    font-size: 16px;
+    min-height: 0;
+  }
+
+  .beat-title {
+    font-size: 27px;
+  }
+}
+
+@media (max-height: 720px) {
+  .beat-text {
+    font-size: 14.5px;
+    min-height: 14em;
+  }
+}
+
+/* On a phone the scene always keeps at least a third of the screen. If an answer is longer
+   than the room left, the text scrolls and the button to move on stays where the thumb is. */
+.card {
+  max-height: 66%;
+}
+
+.actions {
+  position: sticky;
+  bottom: calc(-14px - env(safe-area-inset-bottom, 0px));
+  z-index: 1;
+  padding: 6px 0 calc(14px + env(safe-area-inset-bottom, 0px));
+  margin: 0 0 calc(-14px - env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to bottom, rgba(7, 6, 13, 0), rgba(7, 6, 13, 0.97) 10px);
+}
+
+/* with the rest of the level open the card is a page to scroll, and the button scrolls with it */
+.card-inner:has(details[open]) .actions {
+  position: static;
+}
+
+.card:has(details[open]) {
+  max-height: 80%;
+}
+
+.facts > div:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 760px) and (min-aspect-ratio: 1/1) {
+  .card,
+  .card:has(details[open]) {
+    max-height: none;
+  }
+
+  .actions {
+    position: static;
+    background: none;
+    padding: 0;
+    margin: 4px 0 0;
   }
 }

@@ -286,6 +286,76 @@ export function penrose(depth: number): { pts: [number, number][]; edges: [numbe
   return { pts, edges, fat, thin }
 }
 
+// The double helix, to B-DNA's proportions: about ten and a half rungs to the turn, each rung
+// a third of the helix's radius above the last, and the two strands not opposite each other
+// (which is what makes one groove wide and the other narrow). Each rung pairs a base on one
+// strand with its complement on the other: A with T, C with G.
+export const BASES = ['A', 'C', 'G', 'T'] as const
+export const complement = (b: number) => 3 - b
+export function helix(n: number, seed = 7): { a: V3[]; b: V3[]; bases: number[] } {
+  const a: V3[] = []
+  const b: V3[] = []
+  const bases: number[] = []
+  let r = seed
+  for (let i = 0; i < n; i++) {
+    const th = (i * 2 * Math.PI) / 10.5
+    const y = (i - (n - 1) / 2) * 0.34
+    a.push([Math.cos(th), y, Math.sin(th)])
+    b.push([Math.cos(th + 2.44), y, Math.sin(th + 2.44)])
+    // a fixed, irregular sequence: Schrödinger's aperiodic crystal has to be aperiodic
+    r = (r * 1103515245 + 12345) & 0x7fffffff
+    bases.push((r >> 16) & 3)
+  }
+  return { a, b, bases }
+}
+
+// The diamond lattice of carbon: face-centred cubic sites, plus the same again shifted a
+// quarter of the way along the cube's diagonal. Every atom is bonded to the four nearest,
+// which sit at the corners of a tetrahedron. Returns the atoms within a cube of side 2.
+export function diamond(): Omit<Wire, 'tris'> {
+  const verts: V3[] = []
+  const fcc = [[0, 0, 0], [0, 0.5, 0.5], [0.5, 0, 0.5], [0.5, 0.5, 0]]
+  for (let i = -1; i <= 1; i++) {
+    for (let j = -1; j <= 1; j++) {
+      for (let k = -1; k <= 1; k++) {
+        for (const f of fcc) {
+          for (const shift of [0, 0.25]) {
+            const v: V3 = [i + f[0] + shift, j + f[1] + shift, k + f[2] + shift]
+            if (v.every((x) => x >= -1 && x <= 1)) verts.push(v)
+          }
+        }
+      }
+    }
+  }
+  // drop the few corner atoms whose partners fall outside the cube
+  const bonded = new Set(nearestEdges(verts).flat())
+  const kept = verts.filter((_, i) => bonded.has(i))
+  return { verts: kept, edges: nearestEdges(kept) }
+}
+
+// A chip, as far as geometry goes: square grids of wiring stacked in layers, joined here and
+// there by vertical posts (vias). `plates` are the layers themselves, as two triangles each.
+export function gridStack(n: number, layers: number): Wire & { plates: Tri[] } {
+  const verts: V3[] = []
+  const edges: [number, number][] = []
+  const plates: Tri[] = []
+  const at = (l: number, i: number, j: number) => l * n * n + i * n + j
+  for (let l = 0; l < layers; l++) {
+    const y = layers === 1 ? 0 : 0.42 - (l / (layers - 1)) * 0.84
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        verts.push([-1 + (2 * i) / (n - 1), y, -1 + (2 * j) / (n - 1)])
+        if (i + 1 < n) edges.push([at(l, i, j), at(l, i + 1, j)])
+        if (j + 1 < n) edges.push([at(l, i, j), at(l, i, j + 1)])
+        // a via wherever the two indices agree in parity, down to the layer below
+        if (l + 1 < layers && (i + j + l) % 3 === 0) edges.push([at(l, i, j), at(l + 1, i, j)])
+      }
+    }
+    plates.push([at(l, 0, 0), at(l, n - 1, 0), at(l, n - 1, n - 1)], [at(l, 0, 0), at(l, n - 1, n - 1), at(l, 0, n - 1)])
+  }
+  return { verts, edges, tris: plates, plates }
+}
+
 /* ------------------------------------------------------------------ the camera */
 
 export interface View {

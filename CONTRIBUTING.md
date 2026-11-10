@@ -44,9 +44,9 @@ npm run dev
 The tone is Douglas Adams with footnotes: absurd, affectionate, and **true**. Every claim about real science, history or people should be accurate and, ideally, checkable; jokes are allowed to exaggerate the implications, not the facts.
 
 - No em dashes in the prose. A test enforces this.
-- Captions are at most 52 characters. A test enforces this too.
+- Each beat's text is at most 490 characters, its title 44 and its on-stage tag 36, so that it fits a phone without scrolling. Tests enforce all three.
 - After editing `src/lore.ts`, run `npm run lore` to regenerate `LORE.md`, and commit both.
-- Each One must be smarter than the collective that made it. Yes, there's a test.
+- Every substrate answers the same eight questions, in the same order, and says in `honest` where its physics stops. Every port has to buy something and pay something. Yes, there are tests.
 
 ### Code
 

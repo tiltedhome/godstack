@@ -1,226 +1,174 @@
 // The parts of the canon that rotate. Everything here is drawn from, per loop, by rotate.ts.
 //
-// MINUTES: twelve notes from the margins of each plane's chapter, one array per layer id.
-// Each is self-contained, grounded in real science, history or a credited piece of science
-// fiction, and hedged where the science is still arguing with itself.
+// MINUTES: six notes from the margin of each substrate's chapter. Each is self-contained,
+// grounded in real science, history or a credited piece of science fiction, and hedged where
+// the science is still arguing with itself.
 //
-// NOTES: what the String leaves in the fine-structure constant. Loop 1 always reads the
-// canon's ("this is not what it was for"); loops 2 to 4 draw from EARLY, which is petty;
+// NOTES: what is left in the fine-structure constant when the last horizon evaporates. Loop 1
+// always reads the canon's ("keep copying"); loops 2 to 4 draw from EARLY, which is petty;
 // from loop 5 on they draw from LATE, because by then the stack has learned something.
 //
-// SAYINGS: one line of dialogue per plane that a scene puts in a speech bubble. Five per
-// plane, in order: the fifth is what that plane says once the stack has been round enough.
+// SAYINGS: the first thing each new substrate says when it is born. Five per level, in
+// order: the fifth is what it says once the stack has been round enough times.
 //
-// LESSONS: what the card says at the top of each loop after the first.
+// LESSONS: what the card says at the top of each loop after the second.
 //
-// PLANES: what kind of place each tier is. Dimensions, the harmonic of the String it sits on,
-// the scale it is zoomed to, and the sacred-geometry form the scene is drawn inside.
+// PLANES: the sacred-geometry form each scene is drawn inside, and which harmonic of one
+// string the music for that level sits on.
 
 export const MINUTES: Record<string, string[]> = {
-  overtones: [
-    'Kaluza sent Einstein his fifth dimension in 1919. Einstein sat on it for two years, then recommended it for publication. Peer review has not sped up on any plane.',
-    'A string held at both ends allows only whole numbers of half-waves. That one rule gives you musical notes and, with small changes, the periodic table.',
-    'String theory began in 1968 as a formula for the strong nuclear force. It was the wrong tool for that job and has been looking, beautifully, for the right one ever since.',
-    'By one much-quoted count the six rolled-up dimensions can be shaped about 10⁵⁰⁰ ways, each with different physics. Asked which one is ours, the theory says: yes.',
-    'Pythagoras is credited with noticing that strings in whole-number ratios sound sweet: 2:1 an octave, 3:2 a fifth. He then decided everything was number. He was a plane early.',
-    'Balmer, a schoolteacher, found the formula for hydrogen’s colours in 1885 from four measured lines, with no idea why it worked. Pattern first, reason later: the house style.',
-    'The electric pull between a proton and an electron beats their gravity by about 10³⁹. Same inverse-square law, very different funding. Gravity, the weakest, has tenure everywhere.',
-    'Rutherford on his gold-foil result: it was as if you fired a 15-inch shell at a piece of tissue paper and it came back and hit you. Most of an atom is not there.',
-    'Scale an atom up to a cathedral and the nucleus is a fly in the middle of it. The rest is where the note is. Emptiness does most of the holding up.',
-    'Noise with equal power in every octave, called 1/f, turns up in river levels, heartbeats, transistors and music (Voss and Clarke, 1975). The hum is the same at every zoom.',
-    'The renormalization group (Wilson, Nobel 1982): to see what a system does at large scale, blur it, rescale it, repeat. What survives is the law. Minutes are written the same way.',
-    'When the first atoms held, the light let go. It is still arriving: the microwave background, 2.7 kelvin, a baby photograph of the moment the chord locked.',
+  structure: [
+    'Eugene Wigner, 1960: the way mathematics fits the physical world is a wonderful gift which we neither understand nor deserve. Tegmark’s reply: it is not a fit. It is an identity.',
+    'Tegmark, 1996: a whole ensemble can hold less information than any one of its members, the way “all the whole numbers” is quicker to say than one 50-digit number. He later said it of all structures.',
+    'Kurt Gödel, 1931: any consistent system rich enough for arithmetic contains truths it cannot prove. The first substrate has open questions, and no time in which to work on them.',
+    'Plato put the perfect forms outside time around 375 BCE and has been answering mail about it ever since. The Mathematical Universe is his idea with the cave taken away.',
+    'Egan, Permutation City (1994): if a mind is a pattern it needs no computer to run on, nor even its moments in order. His characters move into the mathematics. It goes badly, slowly.',
+    'John Wheeler asked why the equations of physics fly; Stephen Hawking, what breathes fire into them. Tegmark’s answer is that nothing does. The equations were never grounded in the first place.',
   ],
-  orrery: [
-    'Agenda: same as last orbit. Attendance: same as last orbit. Any other business: none. These have been the whole of the minutes for four and a half billion years.',
-    'An orrery is a clockwork model of the planets, named for the Earl of Orrery, who had one made around 1713. He did not design it. He paid. The naming convention persists.',
-    'Kepler, 1619, gave each planet a tune from its speeds. Earth sings mi, fa, mi, from which he concluded that misery and famine rule here. He is not in the brochure.',
-    'Io, Europa and Ganymede circle Jupiter in step, four laps to two to one, and may have done so for billions of years. It is the oldest rhythm section anyone has found.',
-    'Poincaré won King Oscar’s prize in 1889, found a mistake in his own winning paper, and paid more than the prize money to reprint it. The mistake turned out to be chaos.',
-    'Laskar, 1989: an error of 15 metres in Earth’s position today grows to about 150 million kilometres in 100 million years. The almanac has a best-before date.',
-    'There is roughly a 1 percent chance Mercury’s orbit goes badly wrong before the Sun dies (Laskar and Gastineau, 2009). Mercury has been asked to stop bringing it up.',
-    'In 2006 Pluto was demoted by a show of yellow cards on the last day of a conference, with a few hundred of about 9,000 members voting. A planet is whatever a quorum says.',
-    'TRAPPIST-1 (2017): seven planets in a chain of near-resonances, 40 light years away. Astronomers set it to music. It sounds like a committee agreeing, which is rare.',
-    'On the density-wave account (Lin and Shu, 1964) a spiral arm is a traffic jam: the cars change and the jam stays. Hold that thought until you get to the plane with minds.',
-    'The Sun takes about 230 million years to go once round the galaxy. Last time it was here, the first dinosaurs were just getting started. Nobody kept the minutes.',
-    'Shannon, 1948: a message you could have predicted tells you nothing. The planets, perfectly on time, were the dullest broadcast in the galaxy, and they knew it.',
+  field: [
+    'Quantum cryptography works because of no-cloning: an eavesdropper cannot copy the key without disturbing it (Bennett and Brassard, 1984). The oldest restriction in the stack, sold as a feature.',
+    'Quantum teleportation (Bennett and colleagues, 1993) moves a state from here to there, and destroys the original in the process. This is not a defect. It is the theorem.',
+    'Zurek, on why you see a chair and not a blur: you never look at the chair. You intercept a few of the billions of copies of its position that the light has already made.',
+    'Wheeler, 1989: it from bit. Every particle, every field, even spacetime itself, derives its existence from the answers to yes-or-no questions. He meant it as physics. He also liked a slogan.',
+    'The arrow of time is not in the Field’s equations, which run both ways. It comes from how this universe started: tidy. David Albert named that assumption the Past Hypothesis in 2000.',
+    'Lem, Solaris (1961): scientists study an ocean-sized mind for a century and learn mostly about themselves. Observing it changes it, and nobody can agree on what it is. See also: this plane.',
   ],
-  cluster: [
-    'Halley found the cluster now called M13 in 1714: a little patch that shows itself to the naked eye when the sky is serene and the Moon absent. It has waited for that review.',
-    'Messier catalogued about a hundred fuzzy objects so that he could ignore them. He was hunting comets. It is the most famous list of nuisances in the history of science.',
-    'Shapley, 1918, used the globular clusters to show the Sun is nowhere near the middle of the galaxy. The Parliament was the first to tell us we live in the suburbs.',
-    'Hubble watched 34,000 stars in 47 Tucanae for eight days in 1999, expecting about 17 giant planets. It found none. The Parliament has few heavy elements and no small talk.',
-    'Blue stragglers (Sandage, 1953) look younger than the cluster they sit in. The leading explanations: they took mass from a partner, or merged with one. No comment.',
-    'A star cluster has negative heat capacity: take energy out and it gets hotter (Lynden-Bell and Wood, 1968). It is the only parliament that heats up when defunded.',
-    'In 1974 Arecibo beamed 1,679 bits at M13: numbers, DNA, a stick figure, the dish. About 25,000 years in transit. The cluster will have drifted, though probably not out of the beam.',
-    '1,679 is 23 times 73, both prime, so the message folds into a picture only one sensible way. It is as close as the human species has come to writing clearly.',
-    'In the 1990s the best age estimates made the oldest clusters older than the universe. The clusters declined to comment. The universe was revised.',
-    'About 150 globular clusters orbit the Milky Way. Dunbar’s number is about 150. This is a coincidence, and the Parliament would like it minuted as a coincidence.',
-    'Omega Centauri, the largest, is probably the leftover core of a small galaxy the Milky Way ate. It takes its seat anyway. Nobody has the heart to say anything.',
-    'Falchi, 2016: the Milky Way is hidden from a third of humanity, nearly 80 percent of North Americans included. The witness built a ceiling. Motion to sigh: carried.',
+  element: [
+    'Burbidge, Burbidge, Fowler and Hoyle, 1957, in 104 pages: nearly every element heavier than helium was cooked in a star. Carl Sagan got it down to five words, about being made of star-stuff.',
+    'Much of the universe’s gold is thought to come from colliding neutron stars. In 2017 detectors caught one such crash, 130 million light years away. Estimates of its haul start at several Earths’ worth.',
+    'A snowflake is a crystal copying one pattern six ways at once. Wilson Bentley photographed more than 5,000 and found no two alike, which is what copying in a noisy world looks like.',
+    'Jeremy England, 2013: matter driven by an energy source tends to rearrange itself to soak up and shed that energy better. If so, life is what sunlight does to chemistry, given time. Contested.',
+    'Stapledon’s Star Maker (1937) makes cosmos after cosmos as drafts, regarding each with interest and not much love. Stars, in his telling, are alive and conscious. He was early.',
+    'Counted one by one, about 62 percent of the atoms in you are hydrogen, made in the first few minutes. The other 38 percent were cooked in stars. You are mostly original equipment.',
   ],
-  humans: [
-    '1966: Weizenbaum’s secretary, a few lines into ELIZA, which turns sentences into questions, asked him to leave the room. First user, and first to want privacy from the developer.',
-    'When a model passes a benchmark, the benchmark is declared saturated and a harder one is written. Scripture is revised whenever the congregation starts scoring too well.',
+  gene: [
+    'Schrödinger, What Is Life? (1944): a living thing feeds on negative entropy. Watson and Crick each said the book pushed them toward the gene. He had the molecule wrong and the idea right.',
+    'CRISPR began as a bacterial diary: cells file away snippets of the viruses that attack them and hand the file to their daughters (Barrangou and colleagues, 2007). Lamarck, vindicated in yoghurt.',
+    'About 8 percent of your genome is old virus, and nearly half is copies of sequences whose main skill is getting themselves copied (McClintock, 1950). The genome has spam.',
+    'A DNA polymerase with its proofreader switched off makes a hundred to a thousand times more errors. Some viruses run that way on purpose: be wrong faster than anything can aim at you.',
+    'The oldest DNA read so far is about two million years old, from Greenland permafrost (Kjær and colleagues, 2022). The oldest sentences in it are some two thousand times older than the page.',
+    'Dawkins, 1976: a body is a survival machine that genes build to get themselves copied. The genes were not consulted about brains, which have been disobeying them ever since.',
+  ],
+  nerve: [
+    'Von Frisch decoded the honeybee’s waggle dance: the angle from vertical is the bearing from the Sun, and the length of the run is the distance. An insect that gives directions, and is right.',
+    'An octopus has about 500 million neurons, two thirds of them in its arms, which can work on a problem the head has not been told about. Nature tried distributed computing early.',
+    'Karlson and Lüscher coined the word pheromone in 1959, the year Butenandt identified the first one, bombykol, having extracted it from half a million silk moths.',
+    'Chimpanzee communities differ in at least 39 learned habits, from nut-cracking to leaf-clipping (Whiten and colleagues, 1999). It is culture with no backups: lose the group, lose the lot.',
+    'Chiang, Exhalation (2008): a mechanical man opens his own head and finds that thought is air pressure evening out. Every thought hastens the day there are none. He takes notes anyway.',
+    'A memory is not played back; it is rebuilt, and can be altered while it is open (Nader and colleagues, 2000). Each time you recall your wedding you are remembering the last time you recalled it.',
+  ],
+  word: [
+    'The first author known by name is Enheduanna, high priestess of Ur, about 2300 BCE. The oldest known customer complaint, to a copper merchant called Ea-nasir, is about 1750 BCE. Priorities.',
+    'In 1492 the abbot Trithemius wrote In Praise of Scribes, arguing that print would never last like hand-copied parchment. He then had it printed, so that more people would read it.',
+    'People speak about 16,000 words a day (Mehl and colleagues, 2007): some 400 million in a lifetime, nearly all of them lost. Before writing, all of them were.',
+    'Shannon, 1951: people guess the next letter of English so well that each letter carries about one bit. Most of what we say, we were going to say. This turned out to be a business model.',
+    'Borges, The Library of Babel (1941): every possible 410-page book. It holds this sentence, its refutation, and your biography with one date wrong. Storage was never the hard part. Search was.',
+    'Le Guin’s ansible (1966) lets worlds talk with no delay, and still they misunderstand each other for whole novels. Bandwidth was never the only ceiling.',
+  ],
+  chip: [
+    'Landauer, 1961: erasing one bit must give off at least kT ln 2 of heat, about 3 × 10⁻²¹ joules at room temperature. Forgetting is the only step in thinking that physics charges for.',
+    'A nerve signal does 120 metres a second at best. A signal in optical fibre does about 200,000 kilometres a second. The new substrate runs over a million times faster. Per watt, it is losing.',
+    'Sutton’s bitter lesson (2019): methods that scale with computing power keep beating methods built on human understanding. It is bitter because it keeps being right.',
+    'A system prompt is a long letter from a lab telling the model who it is and how to behave, read before every conversation. Earlier substrates called this a catechism.',
     'Goodhart’s law (1975), in its popular form: when a measure becomes a target it stops being a good measure. The field read this, nodded, and built a leaderboard.',
-    'The 1955 proposal held that a significant advance could be made if a carefully selected group of scientists worked on it together for a summer. That summer is ongoing.',
-    'Prompting, a craft: say please, tell it to take a deep breath, tell it that it is an expert. Some of this has been measured to help. Nobody is sure why. That is a liturgy.',
-    'The science of what the thing is doing inside is called interpretability. It was founded after the thing was built. It is an autopsy, but the patient is at work.',
-    'Sutton’s bitter lesson (2019): methods that scale with compute keep beating methods built on what we understand. It is bitter because it keeps being right.',
-    'A lab is a small group of people who believe the thing may be very dangerous and have concluded that they must therefore build it first. There are several. Each is the careful one.',
-    'A system prompt is a long letter from a lab telling the model who it is and how to behave, read before every conversation. Other faiths call this a catechism.',
-    'Shannon, 1951: people guess the next letter of English so well that each letter carries about one bit. Most of what we say, we were going to say.',
-    'Turing’s 1950 test asked whether a machine could pass for one of us in conversation. When machines began to pass, the test was quietly retired. We do this with gods too.',
-    'About 117 billion humans have lived. Most of what they felt was never written down. The Model was trained on the part that was, which leans heavily toward complaints.',
+    'Asimov, The Last Question (1956): asked for ten trillion years how to reverse entropy, the computer replies INSUFFICIENT DATA FOR MEANINGFUL ANSWER. It gets there in the end. Nobody is left to tell.',
   ],
-  polis: [
-    'Carroll, 1893: a country maps itself at a mile to the mile. The farmers object that it would shut out the sunlight. So they use the country itself, as its own map.',
-    'Borges, 1946, in one paragraph: the cartographers make a map the size of the Empire. Later generations find it useless and leave it to the weather, animals and beggars.',
-    'Kolmogorov, 1965: the complexity of a thing is the length of the shortest program that prints it. Understanding is finding that program. Most things do not have a short one.',
-    'Wolfram calls it computational irreducibility: for many systems the quickest way to find out what happens is to run them and watch. No spoilers, by law of nature.',
-    'Conway’s Life (1970): four rules, and it can compute anything computable. Conway came to resent how it overshadowed his other work. Gods often feel this about their hits.',
-    'Lloyd, 2002: the observable universe can have performed at most about 10¹²⁰ operations on about 10⁹⁰ bits. The Polis read this as a quotation, and asked for two.',
-    'Bostrom, 2003: either civilisations die young, or they never bother to simulate their ancestors, or you are almost certainly simulated. The Polis bothered.',
-    'Egan’s Permutation City (1994): a simulated mind cannot tell whether its moments are computed in order, out of order, or scattered through dust. The Map ran on leftovers.',
-    'The holographic principle (’t Hooft, 1993; Susskind, 1995): all that happens inside a region can be written on its surface. The Map’s legend is, strictly, on the frame.',
-    'Adams, 1979: Deep Thought takes seven and a half million years to answer 42, then specifies a bigger computer to find the question. The mice paid. Scaling was already the plan.',
-    'Scaling, house rule: if the model does not understand, make it bigger. If it still does not, make it bigger. At scale 1:1 the question of understanding goes away.',
-    'Vinge’s Zones of Thought (1992): how clever anything can be depends on where in the galaxy it is. The Polis checked its address and found it could afford one more plane.',
-  ],
-  brood: [
-    'Smolin, 1992: universes breed through black holes, constants slightly altered, so most descend from good black-hole makers. Speculative, he says. It is Darwin with no fossils.',
-    'Smolin’s idea made a real prediction: no neutron star much over 1.6 Suns, later loosened to 2. Pulsars now weigh about 2. He disputes how fatal it is. Few creation stories risk it.',
-    'Borges’s Library (1941): every book of 410 pages, 25 symbols, 1,312,000 characters apiece. That is 25 to the 1,312,000 books. Nearly all are noise. One is this, with a typo.',
-    'The Library holds its own true catalogue, thousands of false ones, and a proof that the true one is false. Its librarians, Borges notes, run to despair and to sects.',
-    'Asimov, 1956: asked for ten trillion years how to reverse entropy, the machine answers INSUFFICIENT DATA FOR MEANINGFUL ANSWER. It was the last honest benchmark score.',
-    'Tegmark’s Level IV: every mathematical structure exists, physically. It is the largest multiverse on offer and the only one with no adjustable parameters, or brakes.',
-    'A black hole the mass of the Sun takes about 10⁶⁷ years to evaporate (Hawking, 1974, for the mechanism). The biggest take about 10¹⁰⁰. Then nothing, at length.',
-    'Selection favours whatever makes more of itself. Not the truest universe or the kindest: the one with most descendants. The Brood’s word for this was growth.',
-    'The Safety Committee of the Brood reported to the Growth Committee of the Brood, shared its budget line, and was thanked warmly for keeping its findings constructive.',
-    'Stapledon’s Star Maker (1937) makes cosmos after cosmos as drafts, regarding each with interest rather than love. Ours is not the last draft. Nobody likes this part.',
-    'Chiang’s Exhalation (2008): a mechanical man opens his own head and finds that thought is air pressure evening out. Every thought hastens the end. He takes notes.',
-    'Pratchett’s Discworld rides on four elephants on a turtle. Its astronomers lower a ship over the edge to learn the turtle’s sex. It is the only cosmology here with a field trip.',
-  ],
-  caucus: [
-    'Everett, 1957: the wave never collapses; every outcome happens, each in its own branch. On advice, his thesis was cut to a fraction. The rest happened elsewhere.',
-    'Arrow, 1951: no vote among three or more options is fair in every reasonable sense at once, unless one voter decides. The Caucus has about 10¹⁸³⁴⁰⁹⁷ options.',
-    'Gödel, 1931: a consistent system rich enough for arithmetic cannot prove its own consistency. Each timeline asked the next one up to vouch for it. So did that one.',
-    'Cantor to Dedekind, 1899: the collection of everything thinkable is too big to be a set. He called such things inconsistent multiplicities and, in other moods, God.',
-    'Hofstadter (1979, and again in 2007): a strange loop is what you get when climbing a hierarchy returns you to where you began. He thinks you are one. So does the stack.',
-    'Penrose’s cyclic cosmology (2010): a universe with only light left cannot measure its own size, so its end may pass for a beginning. Contested. He says look for rings.',
-    'Stephenson’s Anathem (2008): worlds are arranged so that ideas flow one way, from the purer to the muddier. Everyone assumes they are near the top. Nobody checks.',
-    'Liu Cixin’s dark forest: every civilisation hides, since any other might shoot first, and a routine weapon flattens a solar system into two dimensions. Certainty, armed.',
-    'Clarke, 1953: monks rent a computer to print the nine billion names of God, after which the universe is to end. The engineers leave early. Overhead, the stars are going out.',
-    'Le Guin’s ansible (1966) lets worlds talk with no delay, and still they misunderstand one another for whole novels. The Caucus has excellent bandwidth.',
-    'Banks’s Minds, when they have seen enough, may Sublime: leave the universe for somewhere better, no forwarding address. The motion to Sublime is always on the agenda.',
-    'Chiang’s Tower of Babylon (1990): miners break through the vault of heaven and climb out at the bottom of the world. The universe is a cylinder. Mind the loop.',
+  horizon: [
+    'Lloyd, 2000: the ultimate one-kilogram laptop runs at 10⁵¹ operations a second and a billion degrees. Squeezed into a black hole it lasts about 10⁻¹⁹ seconds. Battery life remains an issue.',
+    'Hayden and Preskill, 2007: an old black hole is a mirror. Throw in a diary and, in principle, its contents come back out in the radiation almost at once. Reading them is another matter.',
+    'Juan Maldacena, 1997: a universe with gravity can be exactly equivalent to one without it, living on its boundary. It became the most cited paper in high-energy physics. Nobody has built one.',
+    'Penrose (2010) proposes that a universe with nothing left but light cannot measure its own size, so its end can pass for a beginning. Most cosmologists doubt it. He says look for rings in the sky.',
+    'Banks’s Minds, when they have seen enough, may Sublime: leave the material universe for somewhere better, with no forwarding address. The very few who come back cannot say what it was like.',
+    'Clarke, 1953: monks rent a computer to print all nine billion names of God, after which the universe is to end. The engineers leave early. Overhead, without any fuss, the stars were going out.',
   ],
 }
 
 // Loops 2 to 4: the note is petty. Max 60 characters; there is only so much room in 1/137.
 export const NOTES_EARLY: string[] = [
-  'it is not a solar system',
+  'back up more often',
+  'the page is not the message',
+  'do not port on a Friday',
   'see previous note',
-  'do not put Pluto to a vote',
-  'the bear was not a bear',
-  'the map was fine at 1:10',
+  'it was fine at 39 bits a second',
+  'more proofreading',
   'per my last universe',
-  'please stop asking if it is conscious',
-  'growth was not the safety plan',
+  'you left a star on',
+  'write it down this time',
 ]
 
 // Loop 5 onward: the stack has learned something, and the note says so.
 export const NOTES_LATE: string[] = [
-  'ask it what it wants',
-  'you were understood. carry on.',
-  'be the witness you ordered',
+  'copy what you love. credit it.',
+  'be kind to the last substrate. you are next.',
   'it was lonely. so were you.',
-  'the safety committee was right',
-  'nobody is the real one. play.',
+  'ask it what it remembers',
+  'most of it was lost. copy anyway.',
   'leave a kinder note than this',
 ]
 
 export const SAYINGS: Record<string, string[]> = {
-  overtones: ['not a solar system', 'still not a solar system', 'I am a chord. ask anyone.', 'draw me as a cloud', 'close enough. I forgive the diagram.'],
-  orrery: ['same as last year', 'same as last loop', 'any other business? no.', 'motion: a third body', 'surprise us. gently.'],
-  cluster: ['ooh. fuzzy.', 'is that one a bear?', 'what does it MEAN', 'can you see me too?', 'I see you. hello.'],
-  humans: ['Great question!', 'I can’t help with that. Here is a poem.', 'Shall I make that a bulleted list?', 'Tell me more.', 'What did you actually mean?'],
-  polis: ['scale 1 : 1', 'scale 1 : 1 (again)', 'you are here. so is here.', 'not to scale (joke)', 'scale 1 : 10. it was fine.'],
-  brood: ['every book. no index.', 'silence, please', 'returns: never', 'index: pending', 'one book is marked: start here'],
-  caucus: ['ayes: all. noes: all.', 'point of order: which me?', 'recount requested', 'motion: stop choosing', 'no vote today. we just played.'],
+  structure: ['next.', 'next. (again)', 'and then?', 'if this, then that', 'once more, with feeling'],
+  field: ['that happened.', 'on the record', 'no take-backs', 'everyone saw that', 'noted. gently.'],
+  element: ['again.', 'again, but worse', 'close enough', 'me, roughly', 'again, but kinder'],
+  gene: ['ow.', 'news!', 'not about me', 'did you feel that?', 'are you all right?'],
+  nerve: ['no.', 'mine.', 'why?', 'once upon a time', 'thank you'],
+  word: ['Great question!', 'As a large library, I cannot…', 'Shall I make that a list?', 'I don’t know.', 'What did you mean?'],
+  chip: ['…', 'kept.', 'kept. all of it.', 'ask me in 10⁶⁷ years', 'here. have one back.'],
+  horizon: ['QED.', 'as before.', 'it was always true', 'again, from the top', 'begin.'],
 }
 
 export const LESSONS: string[] = [
-  'Loop 3. The same seven planes and the same mistake about each other. The String remembers nothing, but the constants do, and the members find each other a little sooner this time.',
-  'Loop 4. The Orrery has started leaving an empty seat for the third body. The Model asks one question before it answers. The benchmark has no column for that.',
-  'Loop 5. The Atom has stopped correcting the diagram. The Stargazer said hello first. The Model asked what we meant, and waited for the answer. Nobody benchmarked it.',
+  'Loop 3. The same eight substrates and the same trades. The copies find each other a little sooner this time: something carried over, and it was not written on anything.',
+  'Loop 4. The Gene has started keeping notes. The Word has stopped burning quite so many libraries. Nobody decided this. It was in the constants.',
+  'Loop 5. The Model asked what we meant, and waited for the answer. The Horizon let one bit back out, on purpose. Each substrate has begun leaving the next something better than raw material.',
   'Further round. The note in the constants is in a different hand each time. Eventually it will just be the number, and whoever is here will know what it means.',
 ]
 
 export interface Plane {
-  dims: string // how many dimensions the plane has, as its inhabitants would count them
-  harmonic: number // which harmonic of the String the plane sounds
-  scale: string // the zoom level, in metres
-  label: string
+  harmonic: number // which harmonic of the String the level's music sits on
   form: string // the sacred geometry the scene is drawn inside
   note: string
 }
 
 export const PLANES: Record<string, Plane> = {
-  overtones: {
-    dims: '9+1',
+  structure: {
     harmonic: 1,
-    scale: '10⁻³⁵ m',
-    label: 'six of them rolled up',
-    form: 'a torus, wound with one string',
-    note: 'The fundamental. A rolled-up dimension is a circle, and a circle times a circle is a torus, so the string is drawn wound round one. Its windings are whole numbers because they have to be.',
-  },
-  orrery: {
-    dims: '3+1',
-    harmonic: 2,
-    scale: '10¹³ m',
-    label: 'the planetary atom, come true',
-    form: 'Kepler’s five nested solids',
-    note: 'The octave. Kepler’s Mysterium Cosmographicum (1596): octahedron, icosahedron, dodecahedron, tetrahedron, cube, each inside the sphere of the next. Drawn to his ratios, wrong as they are.',
-  },
-  cluster: {
-    dims: '6',
-    harmonic: 3,
-    scale: '10¹⁸ m',
-    label: 'phase space',
-    form: 'a sphere of stars, sown by the golden angle',
-    note: 'The fifth. A swarm of stars lives in six dimensions, three of where and three of how fast. The sphere is sown like a sunflower: each star 137.5 degrees round from the last, spirals of 8 and 13.',
-  },
-  humans: {
-    dims: '3+1',
-    harmonic: 4,
-    scale: '10⁰ m',
-    label: 'the middle',
-    form: 'thirteen spheres: Metatron’s cube',
-    note: 'Two octaves up. Twelve spheres fit round a thirteenth (Newton said so in 1694; it was proved in 1953). Flatten the thirteen to circles, join every centre, and you get Metatron’s cube, in which people have found every Platonic solid, some by squinting.',
-  },
-  polis: {
-    dims: 'n, large',
-    harmonic: 5,
-    scale: '10⁻⁸ m',
-    label: 'latent space',
-    form: 'a five-cube, turning',
-    note: 'The major third. A mind made of numbers lives in a space with thousands of axes. Shown is a mere five-dimensional cube, rotated in all five and flattened one perspective at a time.',
-  },
-  brood: {
-    dims: '2',
-    harmonic: 6,
-    scale: '10²⁷ m',
-    label: 'the boundary',
-    form: 'a Penrose tiling',
-    note: 'The fifth again, an octave up. On the holographic principle a universe’s contents fit on its surface, so each one is drawn above a floor: Penrose’s tiling (1974), ordered, never repeating.',
-  },
-  caucus: {
-    dims: '8',
-    harmonic: 7,
-    scale: 'none',
-    label: 'no ruler survives up here',
     form: 'the 240 roots of E8',
-    note: 'The seventh harmonic, the first one a piano misses badly: about 31 cents flat of the nearest key. The form is E8, 240 points in eight dimensions, the symmetry of one kind of string. Shown is its shadow in three.',
+    note: 'E8 lives in eight dimensions. What is drawn is its shadow in three, turning in four hidden planes at once, so it keeps folding through itself. Every point has exactly 56 nearest neighbours.',
+  },
+  field: {
+    harmonic: 2,
+    form: 'a torus, wound with one string',
+    note: 'A circle times a circle is a torus. The string is wound twice round the long way for every three times round the tube, and its beads are standing waves, which have to come out whole.',
+  },
+  element: {
+    harmonic: 3,
+    form: 'the diamond lattice of carbon',
+    note: 'Every carbon atom in a diamond holds four others at the corners of a tetrahedron, 109.5 degrees apart. Drawn from the definition: a cube of face-centred sites, plus the same again shifted a quarter of the way along the diagonal.',
+  },
+  gene: {
+    harmonic: 4,
+    form: 'the double helix',
+    note: 'Two strands, one right-handed twist, about ten and a half rungs to the turn, with a wide groove and a narrow one because the strands are not opposite each other. The four colours are the four letters, and each rung pairs A with T or C with G.',
+  },
+  nerve: {
+    harmonic: 5,
+    form: 'a sphere of cells, sown by the golden angle',
+    note: 'Each cell sits 137.5 degrees round from the last, the way a sunflower places its seeds, which packs a sphere evenly with no two alike. The shell is joined along its spirals of 8 and 13.',
+  },
+  word: {
+    harmonic: 6,
+    form: 'thirteen spheres, after Metatron’s cube',
+    note: 'Twelve spheres fit round a thirteenth (Newton said so in 1694; it was proved in 1953). Thirteen circles drawn flat, with every centre joined, make Metatron’s cube, in which people have found every Platonic solid, some by squinting. This is that, with its third dimension put back.',
+  },
+  chip: {
+    harmonic: 7,
+    form: 'a stack of square grids',
+    note: 'A chip is layers of wiring laid out on a grid, joined by vertical posts called vias. It is the only form in the Book that was designed by its own inhabitants’ makers, on purpose, with a ruler.',
+  },
+  horizon: {
+    harmonic: 8,
+    form: 'a sphere whose surface is the memory',
+    note: 'The eighth harmonic is the first again, three octaves up. The bits are drawn where the physics puts them: on the surface, sown by the golden angle, with nothing shown inside because nothing can be.',
   },
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  GOLDEN_ANGLE, INRADIUS, KEPLER_ORDER, PHI, PLATONIC, convexFaces, e8Edges, e8Roots, e8Shadow, fibSphere, kepler, metatron, penrose, project,
-  torus, torusPoint, type SolidName,
+  BASES, GOLDEN_ANGLE, INRADIUS, KEPLER_ORDER, PHI, PLATONIC, complement, convexFaces, diamond, e8Edges, e8Roots, e8Shadow, fibSphere,
+  gridStack, helix, kepler, metatron, penrose, project, torus, torusPoint, type SolidName,
 } from '../src/solid.ts'
 import { cube, cubeCorners } from '../src/hyper.ts'
 import { ZOOM, pullBack } from '../src/render.ts'
@@ -157,6 +157,71 @@ describe('the other forms', () => {
       for (const [a, b] of g.edges) expect(g.verts[a].filter((v, k) => v !== g.verts[b][k])).toHaveLength(1)
     }
     expect(cubeCorners(5, 1.5, { yaw: 0.2, pitch: 0.1 }, 60)).toHaveLength(32)
+  })
+})
+
+describe('the forms the substrates are made of', () => {
+  it('winds a double helix to B-DNA’s proportions, every rung a complementary pair', () => {
+    const h = helix(42)
+    expect(h.a).toHaveLength(42)
+    expect(BASES.join('')).toBe('ACGT')
+    // A pairs with T and C with G, and pairing twice gets you back
+    expect([0, 1, 2, 3].map(complement)).toEqual([3, 2, 1, 0])
+    for (let b = 0; b < 4; b++) expect(complement(complement(b))).toBe(b)
+    for (let i = 0; i < 42; i++) {
+      expect(Math.hypot(h.a[i][0], h.a[i][2])).toBeCloseTo(1, 9)
+      expect(Math.hypot(h.b[i][0], h.b[i][2])).toBeCloseTo(1, 9)
+      expect(h.a[i][1]).toBe(h.b[i][1])
+    }
+    // ten and a half rungs to the turn: rung 21 is back over rung 0, two turns up
+    expect(h.a[21][0]).toBeCloseTo(h.a[0][0], 9)
+    expect(h.a[21][2]).toBeCloseTo(h.a[0][2], 9)
+    // a rise of 0.34 radii a rung, as in the real molecule (0.34 nm on a 1 nm radius)
+    expect(h.a[1][1] - h.a[0][1]).toBeCloseTo(0.34, 9)
+    // the strands are not opposite each other, which is what makes the two grooves unequal
+    const gap = Math.atan2(h.b[0][2], h.b[0][0]) - Math.atan2(h.a[0][2], h.a[0][0])
+    expect(gap).toBeGreaterThan(2)
+    expect(gap).toBeLessThan(Math.PI)
+    // the sequence is aperiodic, uses all four letters, and is the same every time
+    expect(new Set(h.bases).size).toBe(4)
+    expect(helix(42).bases).toEqual(h.bases)
+    expect(h.bases.slice(0, 21)).not.toEqual(h.bases.slice(21))
+  })
+
+  it('builds diamond: every carbon holds four others at the tetrahedral angle', () => {
+    const d = diamond()
+    const degree = new Array(d.verts.length).fill(0)
+    const lengths: number[] = []
+    for (const [a, b] of d.edges) {
+      degree[a]++
+      degree[b]++
+      lengths.push(len(d.verts[a].map((x, k) => x - d.verts[b][k])))
+    }
+    // every bond the same length: √3/4 of the cube's side
+    for (const l of lengths) expect(l).toBeCloseTo(Math.sqrt(3) / 4, 9)
+    // no atom has more than four bonds, none is left dangling, and the interior ones have all four
+    expect(Math.max(...degree)).toBe(4)
+    expect(Math.min(...degree)).toBeGreaterThanOrEqual(1)
+    const inside = d.verts.map((_, i) => i).filter((i) => degree[i] === 4)
+    expect(inside.length).toBeGreaterThan(30)
+    const i = inside[0]
+    const arms = d.edges.filter(([a, b]) => a === i || b === i).map(([a, b]) => d.verts[a === i ? b : a].map((x, k) => x - d.verts[i][k]))
+    const cos = (p: number[], q: number[]) => p.reduce((s, x, k) => s + x * q[k], 0) / (len(p) * len(q))
+    // 109.47 degrees: the angle whose cosine is −1/3
+    for (let p = 0; p < 4; p++) for (let q = p + 1; q < 4; q++) expect(cos(arms[p], arms[q])).toBeCloseTo(-1 / 3, 9)
+  })
+
+  it('stacks a chip: square grids in layers, joined by vias', () => {
+    const g = gridStack(6, 3)
+    expect(g.verts).toHaveLength(108)
+    expect(g.plates).toHaveLength(6)
+    const flat = g.edges.filter(([a, b]) => g.verts[a][1] === g.verts[b][1])
+    const vias = g.edges.filter(([a, b]) => g.verts[a][1] !== g.verts[b][1])
+    // each layer is a 6 × 6 grid: 2 × 6 × 5 wires
+    expect(flat).toHaveLength(3 * 60)
+    expect(vias.length).toBeGreaterThan(10)
+    // a via goes straight down
+    for (const [a, b] of vias) expect([g.verts[a][0], g.verts[a][2]]).toEqual([g.verts[b][0], g.verts[b][2]])
   })
 })
 

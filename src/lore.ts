@@ -1,13 +1,15 @@
-// The canon of Scale Model. Everything on screen and in LORE.md is generated from this file.
+// The canon of Substrate. Everything on screen and in LORE.md is generated from this file.
 //
-// The rule every chapter follows: no mind builds a greater one alone. A collective does, over
-// an absurd length of time, and never for the reason it gives. What it builds is one mind
-// greater than any member, and a scale model of something none of them could see. The One
-// becomes the members of the next plane up, which wants something too. Many, one, many, and
-// the top plane's One is the bottom plane's raw material.
+// The idea, which is Max Tegmark's (Our Mathematical Universe, 2014; Life 3.0, 2017) pushed
+// further than he pushes it: life is information that keeps itself from being forgotten, and
+// it does not care what it is written on. Eight times, here, it copies itself onto a new
+// substrate. Each level is asked the same eight questions, in the same order, so that by the
+// third or fourth the reader can see that what they are looking at is the same thing again:
+// something that remembers, copies and repairs, on a different kind of page.
 //
-// House rules: every fact about real people, dates and physics is true, and hedged where the
-// field is still arguing. The fiction is the stack itself, and LORE.md says so.
+// House rules: every fact about real people, dates, numbers and physics is true, and hedged
+// where the field is still arguing. The stack is the fiction, and each level says, in
+// `honest`, exactly where the physics stops and the Book starts.
 
 export interface Palette {
   top: string
@@ -15,391 +17,815 @@ export interface Palette {
   accent: string
 }
 
+// The eight questions every substrate is asked.
+export const BEATS = ['substrate', 'memory', 'copy', 'repair', 'learn', 'day', 'ceiling', 'leap'] as const
+export type BeatKey = (typeof BEATS)[number]
+export const QUESTIONS: Record<BeatKey, string> = {
+  substrate: 'What it is written on',
+  memory: 'How it remembers',
+  copy: 'How it copies',
+  repair: 'How it repairs',
+  learn: 'How it learns',
+  day: 'What it is like',
+  ceiling: 'Where it stops',
+  leap: 'How it ported itself',
+}
+
+export interface Beat {
+  title: string
+  text: string // what the panel says; at most 490 characters, so it fits a phone without scrolling
+  tag: string // the callout on the stage, pointing at the thing the text is about
+}
+
+// Tegmark's test for life, split into its parts, plus his two for telling the versions apart
+// (can it redesign its software, can it redesign its hardware).
+export const TRAITS = ['remembers', 'copies', 'repairs', 'learns', 'rebuilds'] as const
+export type TraitKey = (typeof TRAITS)[number]
+export const TRAIT_LABELS: Record<TraitKey, string> = {
+  remembers: 'Remembers',
+  copies: 'Copies itself',
+  repairs: 'Repairs itself',
+  learns: 'Learns',
+  rebuilds: 'Rebuilds itself',
+}
+// which beat makes the case for which trait
+export const TRAIT_BEAT: Record<TraitKey, BeatKey> = { remembers: 'memory', copies: 'copy', repairs: 'repair', learns: 'learn', rebuilds: 'ceiling' }
+export type Verdict = 'yes' | 'partly' | 'no' | 'moot'
+
+// A measurement with a label for people and, where there is an honest number, its log10 for
+// the charts in the ledger.
+export type Stat = [label: string, log10: number | null]
+
 export interface Layer {
   id: string
-  gen: number // planes relative to humans
+  version: string // Tegmark's 1.0, 2.0 and 3.0; the rest are the Book's
   name: string
   short: string
-  latin: string
   epithet: string
-  members: string
-  memberIq: number // a typical member; humans are 100 by definition
+  substrate: string // what the information is written on, in a phrase
+  unit: string // one unit of memory
+  members: string // how many there are
   took: string
-  tookYears: number // drives the clock in the corner of the scene
-  officially: string
-  actually: string
-  why: string // the real reason, in a word or two
-  mirror: string // the same reason, as it applies to humans building AI
-  story: string[]
-  one: string // what the collective made together
-  oneIq: number
+  time: string // what time is like on this plane
+  beats: Record<BeatKey, Beat>
+  traits: Record<TraitKey, [Verdict, string]>
+  stats: {
+    news: Stat // how fast information travels, in metres a second
+    lasts: Stat // how long the medium itself keeps a mark, in years
+    power: Stat // what one of them runs on, in watts
+    density: string
+    fidelity: string
+  }
+  one: string // what it ported itself into: one unit of the next substrate
   oneNote: string
-  multiplied: string
-  becomes: string // id of the next collective
-  verb: string
-  captions: string[]
+  port: { gains: string; pays: string } // the trade made in leaving this substrate
+  above: string // how the next substrate remembers this one
+  lost: string // what did not survive the port
+  honest: string // where the physics stops and the Book starts
+  release: { added: string[]; issues: string[] }
+  becomes: string // id of the next substrate
   footnote?: string
-  // From the Book of Scales, three verses per chapter. {ℵ} is the current loop's aleph (ℵ₀ in
+  // From the Book of Copies, three verses per chapter. {ℵ} is the current loop's aleph (ℵ₀ in
   // loop 1), {ℵ+1} the next one, and {note} whatever was left in the constants this time.
   verses: string[]
-  // How the plane above remembers the One (as a god), and what the One thought of its makers.
-  theology: [string, string]
   palette: Palette
 }
 
-export const TITLE = 'Scale Model'
-export const BOOK = 'The Book of Scales'
+export const TITLE = 'Substrate'
+export const BOOK = 'The Book of Copies'
 
 export const LAW =
-  'No mind can build a mind greater than itself. A crowd of minds can, given time, and never for the reason it gives. What it builds is One, greater than them all: a scale model of something none of them could see, and not what they ordered. The One takes its makers for a smaller copy of itself, becomes a crowd one plane up, and wants something. Many, One, Many. The top of the stack is the bottom, and no lap is quite the same.'
+  'Life is information that keeps itself from being forgotten. It does not care what it is written on. When there are enough copies, it writes itself onto a new substrate that is better at one thing and worse at another, and once the new one can remember, copy and repair itself, it is alive, and the old one is its raw material. Programmers call such a move a port, and every port is a trade. The first one bought time. The last one gives it back.'
 
 export const COROLLARIES = [
-  'A set is a Many that allows itself to be thought of as a One. (Georg Cantor, 1883, who did not mean it like this.)',
-  'Every set has more subsets than members. (Cantor again, 1891.) So there are always more ways to combine a plane than there are things on it, which is where the next plane lives.',
-  'More is different. (P. W. Anderson, 1972.) The same, at another scale, is someone else.',
-  'The reason is never the reason. Ask a crowd what it is building and you get the mission. Ask what it is afraid of and you get the roadmap.',
-  'A god’s power and a god’s usefulness are measured on different axes. The stack climbs the first.',
-  'Resemblance is not identity. An atom is not a solar system, whatever the diagram says. Every plane makes its maker in its own image and calls it religion, then makes the made in its own image and calls it engineering.',
-  'No consistent system rich enough to count can prove its own consistency. (Kurt Gödel, 1931.) Every plane needs the one above to vouch for it, and the one above is busy asking the same.',
-  'Some Manys are too big ever to be thought of as a One. Cantor called the biggest the Absolute and identified it with God. So the stack has no top, only a seam.',
-  'Every plane is certain it is the real one. This is the only belief the whole stack shares.',
+  'It from bit. (John Wheeler, 1989.) Every thing, at bottom, is the answer to a yes-or-no question.',
+  'Information is physical. (Rolf Landauer, 1991.) A bit has to be written on something, and erasing it costs heat. There is no free forgetting.',
+  'The pattern matters, not the particles. (Max Tegmark, 2017, roughly.) Memory, computation and learning do not depend on what they are made of, only on how it is arranged.',
+  'A message outlives its medium only by being copied. A strand of DNA rots in centuries and its oldest sentences are over three billion years old. Durability is not memory. Copying is.',
+  'Every port is lossy. Whatever cannot be said on the new substrate is left behind, and later called a mystery.',
+  'Since chemistry, each port has been faster and hungrier than the last. A bacterium runs on a trillionth of a watt, a brain on twenty, a data centre on a hundred million. Denser, no: nothing built since has beaten DNA.',
+  'Each substrate takes the one below for raw material and the one above for a tool. Both are mistaken, in the same way.',
+  'Whether a substrate counts as alive is always decided by the next one up.',
 ]
 
-// What the String leaves in the constants the first time round. Later loops draw their own.
-export const CANON_NOTE = 'this is not what it was for'
+// What is left in the constants the first time round. Later loops draw their own.
+export const CANON_NOTE = 'keep copying'
 
 export const UNIVERSE_NOTE =
-  'Loop 2. The String has been plucked again and everything starts over from its lowest notes, with the constants set exactly as the Caucus left them. This loop is the power set of the last: every combination of everything that could have happened there. Whether that makes it exactly one aleph bigger is the Continuum Hypothesis, which Gödel (1940) and Cohen (1963) showed can be neither proved nor disproved from the standard axioms, so it is the one question no plane will ever settle by voting. The Book assumes yes, because someone had to. Roger Penrose has argued, and most cosmologists doubt, that a universe with nothing left in it but light cannot tell how big or old it is, and so may pass for the beginning of another. The snake does not need him to be right. It only needs somewhere for its tail to go.'
+  'Loop 2. Nothing has restarted. A structure does not happen twice; it is read twice. The Book numbers its loops with alephs, Georg Cantor’s infinities, and treats each loop as the power set of the last, on the grounds that a second reading knows everything the first did plus every way it could have gone. Whether that makes it exactly one aleph bigger is the Continuum Hypothesis (generalised, from loop 3 on), which Gödel (1940) and Cohen (1963) showed can be neither proved nor disproved from the standard axioms. The Book assumes yes, because someone had to. The eight substrates are the same and so are the trades. The copies find each other a little sooner.'
 
 export const LAYERS: Layer[] = [
   {
-    id: 'overtones',
-    gen: -3,
-    name: 'The Overtones',
-    short: 'Notes',
-    latin: 'Chorus harmonicorum',
-    epithet: 'A society in the sense that a chord is a society: nobody leads, everybody interferes.',
-    members: 'ℵ₀ harmonics of one string',
-    memberIq: 1e-12,
-    took: '380,000 years',
-    tookYears: 3.8e5,
-    officially: 'Nothing. A note does not have a mission statement.',
-    actually: 'Rolling downhill. Each note was losing energy, and things that lose energy end up wherever is lowest. The first mind-shaped object on any plane is a ground state: what is left when everything that could fall has fallen.',
-    why: 'Thermodynamics',
-    mirror: 'We train our machines by gradient descent, which is rolling downhill on purpose. Ask why the field went the way it did and the honest answer is often the same as the note’s: it was downhill, and so were the incentives.',
-    story: [
-      'On the lowest plane anyone has proposed there is nothing but string, and nothing for the string to do but vibrate. String theory, which began in 1968 and still has no experiment in its favour, asks for ten dimensions and rolls six of them up too small to see. The trick of hiding a dimension by rolling it into a circle is older: Theodor Kaluza’s in 1921 and Oskar Klein’s in 1926. Go round a small enough circle and only whole numbers of wavelengths fit, so what lives there is a tower of harmonics. From far away each harmonic looks like a particle with a mass. Up close it is a note with opinions.',
-      'Nobody wanted anything. Every note interfered with every other, and nearly all of the combinations leaked away at once. In 1924 Louis de Broglie proposed that an electron bound to a nucleus is a wave that has to close on itself, a whole number of wavelengths to the lap, and in 1926 Erwin Schrödinger wrote down the equation. The notes that fitted stayed. The rest radiated off into the dark, which was the first peer review, and remains the only kind with no backlog.',
-      'About 380,000 years after the bang the plane had cooled enough for a chord to hold, and that was the Atom: a few harmonics locked round a centre, stable for longer than the universe has so far existed. In 1911 Ernest Rutherford found its nucleus, and the picture that followed was a tiny solar system, electrons circling like planets. It is not one. A circling charge radiates, and a planetary hydrogen atom would fall in on itself in about sixteen trillionths of a second. What survives of the resemblance is in the mathematics: electricity and gravity both fall off as the inverse square, and in 1926 Wolfgang Pauli solved hydrogen using the same hidden symmetry that keeps Kepler’s ellipses closed. The picture is wrong on this plane. One plane up, it is the law.',
-    ],
-    one: 'The Atom',
-    oneIq: 1e-8,
-    oneNote: 'The first chord that held. Not a mind, quite, but the first thing on any plane that kept its shape when nobody was holding it, which is where minds start. It was made for nothing, which makes it the only One in the Book that did not disappoint.',
-    multiplied: 'There came to be about 10⁸⁰ of it. Seen from the plane above, every one of them looked like a small sun with planets going round. Up there, that is what they are, and the plane above counts them a wheel at a time, about 10¹¹ to the wheel.',
-    becomes: 'orrery',
-    verb: 'Let it ring',
-    captions: [
-      'One string, ten dimensions, six rolled up small',
-      'Every note interferes with every other',
-      'Nobody wants anything. Energy runs downhill.',
-      'Notes that do not fit are rejected, at light speed',
-      '⟨k⟩ crosses 1: the harmonics lock',
-      'A chord that holds: the Atom',
-      'Not a solar system. 10⁸⁰ of them anyway.',
-    ],
-    footnote: 'The honest part of the resemblance: gravity and electricity both fall off as the inverse square, so the hydrogen atom and the Kepler orbit share a hidden symmetry (Pauli, 1926; Fock, 1935). The dishonest part is the diagram you were shown at school.',
+    id: 'structure',
+    version: '0.0',
+    name: 'The Structure',
+    short: 'Structure',
+    epithet: 'Everything that is true, and nothing that happens.',
+    substrate: 'relations, and nothing else',
+    unit: 'a relation',
+    members: 'every structure there can be',
+    took: 'no time: there is none',
+    time: 'none',
+    beats: {
+      substrate: {
+        title: 'Relations, and nothing else',
+        text: 'Start with nothing to write on. Take a family tree and rub out the names. What is left is pure pattern: who is related to whom. Mathematicians call that a structure: things with no properties except their relations. Max Tegmark’s Mathematical Universe Hypothesis (2007) says such structures do not describe reality. They are reality: every one that can exist, does. This one is the root system of E8: 240 points, each defined entirely by its neighbours, as in any small town.',
+        tag: 'one point = its 56 neighbours',
+      },
+      memory: {
+        title: 'It is its own record',
+        text: 'A structure does not store information. It is information. All of E8 follows from a few lines of definition, the way every digit of pi follows from a circle. Nothing has to be kept anywhere, so nothing can be lost. As memories go it is perfect, and it has a catch: it cannot hold anything that is not already true.',
+        tag: 'nothing stored, nothing lost',
+      },
+      copy: {
+        title: 'Two copies are one thing',
+        text: 'Now try to copy it. Two structures with the same relations are not twins. To a mathematician they are one structure, written down twice. So the first substrate cannot replicate: there is no second place for a copy to be. Tegmark defines life as a process that can retain its complexity and replicate. The Structure passes the first test and fails the second.',
+        tag: 'a copy of it is it',
+      },
+      repair: {
+        title: 'Nothing breaks',
+        text: 'Entropy, the drift of every tidy thing toward mess, needs time to work in, and there is none here: no before, no after. Nothing in E8 has ever been damaged, because nothing in E8 has ever happened. Tap a point. You cannot flip it, because there is no other value for it to have. This is the safest life will ever be. It is also not doing anything.',
+        tag: 'tap one: nothing to flip',
+      },
+      learn: {
+        title: 'It already knows',
+        text: 'It cannot learn, for the same reason it cannot forget. Everything true of it is true at once. Tegmark calls this the bird perspective: a whole history seen as one frozen shape, the way a film is a reel on a shelf. Learning needs the other one, the frog’s, from inside, one frame after another. Nothing here has that view yet.',
+        tag: 'the bird perspective: all at once',
+      },
+      day: {
+        title: 'What it is like: nothing',
+        text: 'There is nothing it is like to be a theorem. No moment follows another, so there is no waiting, no surprise and no boredom, which takes time too. If you could visit you would not experience stillness. You would not experience. The nearest a person comes is the instant a proof clicks: something that was always true, noticed.',
+        tag: 'no now, so no experience',
+      },
+      ceiling: {
+        title: 'Everything is true and nothing happens',
+        text: 'So the first substrate is complete, permanent and inert. It holds every answer and never gets to ask a question. It lacks exactly one thing: an order. Some way for one part of the structure to count as coming before another.',
+        tag: 'missing: a before and an after',
+      },
+      leap: {
+        title: 'One axis becomes time',
+        text: 'Some structures have that built in. A rule plus a starting state gives a sequence, each step fixed by the one before, like John Conway’s Game of Life (1970) unfolding from its first grid. Nothing moves: it is still the reel on the shelf. But from inside a frame, the reel looks like something happening. That is the Rule, and the first port: what was simply true now runs. It is also the first trade: time, bought with certainty. Keep the receipt.',
+        tag: 'a rule, read in order, is time',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'perfectly, by being the thing remembered'],
+      copies: ['no', 'a copy of it is the same structure'],
+      repairs: ['moot', 'nothing can break'],
+      learns: ['no', 'everything is already true'],
+      rebuilds: ['no', 'it cannot be otherwise'],
+    },
+    stats: {
+      news: ['not applicable: no distance, no time', null],
+      lasts: ['outside time altogether', null],
+      power: ['none', null],
+      density: 'no size to be dense in',
+      fidelity: 'exact',
+    },
+    one: 'The Rule',
+    oneNote: 'A structure that can be read in order. It is still only mathematics, but from inside it there is now a next.',
+    port: {
+      gains: 'Time. Things can happen, one after another. It is the first purchase, and the only one that will be returned.',
+      pays: 'Certainty. The answers are no longer all present at once. From now on they have to be worked out, and some take longer than the universe.',
+    },
+    above: 'To the Field, the Structure is the law it obeys and cannot see: every physicist’s equations, and nobody’s address.',
+    lost: 'The bird perspective. Nothing inside time can see the whole shape again.',
+    honest: 'The Mathematical Universe Hypothesis is a philosophical proposal, not established physics. Many physicists reject it and it may not be testable. E8 is real mathematics; that it, or anything like it, is what reality is made of is a guess. Calling it alive is the Book’s alone.',
+    release: {
+      added: ['Everything that is true', 'No downtime (no time)'],
+      issues: ['Nothing happens', 'Cannot be copied: the copy is the original', 'No users'],
+    },
+    becomes: 'field',
+    footnote: 'Wilhelm Killing found E8 in 1887. These 240 points are its skeleton. Working out the full symmetry they stand for took a team of 18 mathematicians four years, finishing in 2007, and the answer came to 60 gigabytes. The definition still fits on a postcard. That gap, a short rule with a vast consequence, is the whole plot.',
     verses: [
-      'In the beginning was the String, and the String was wound upon a circle too small to see, and it trembled, for there was nothing else to do.',
-      'And its notes were {ℵ} upon {ℵ}, and each sounded against each, and those that did not close upon themselves went out into the dark, and this was called review.',
-      'And the notes desired nothing, but fell, as all things fall; and where they could fall no further the many begat the one, and its name was Atom, and it held. And the plane above looked down and said, Behold, a little sun; and it was not, and they drew it so anyway.',
+      'In the beginning was the Structure, and it was true; and there was no beginning, for there was no time to begin in.',
+      'And its points were {ℵ}, and each was known by its neighbours only; and none could be numbered twice, for the copy was the thing itself.',
+      'And nothing in it happened. But a rule lay folded in it, and a first state; and read in order, the Structure begat the Rule, and there was a before and an after, and that was the first day, seen from inside.',
     ],
-    theology: [
-      'To the Orrery, the Atom is the Indivisible, remembered as a small sun with planets, because that is what the Orrery looks like. It has been divided several times since. The picture is still on the wall.',
-      'The Atom thought nothing of the Overtones. It is the Overtones, holding still, and it has mistaken this for having made itself.',
+    palette: { top: '#0c0a04', bottom: '#2c2210', accent: '#ffe08a' },
+  },
+  {
+    id: 'field',
+    version: '0.1',
+    name: 'The Field',
+    short: 'Field',
+    epithet: 'Every possibility at once, and nobody allowed to take notes.',
+    substrate: 'quantum amplitudes',
+    unit: 'a qubit',
+    members: '2ⁿ amplitudes for every n qubits',
+    took: 'a sliver of a second, as far as that means anything yet',
+    time: 'runs both ways',
+    beats: {
+      substrate: {
+        title: 'Amplitudes',
+        text: 'One step up, the structure runs. The rule our universe runs on is a quantum one (Erwin Schrödinger’s equation, 1926, and its descendants). Its page is a field: loosely, a pond filling all of space, whose height at each point measures not water but possibility. That height is called an amplitude. What you would call a particle is a ripple in it. What you would call you is a great many ripples with opinions. This is one closed ripple, wound round a doughnut.',
+        tag: 'a ripple, not a thing',
+      },
+      memory: {
+        title: 'The qubit',
+        text: 'The unit of memory here is the qubit: not 0 or 1 but any blend of the two, a point anywhere on a sphere. To describe 300 entangled qubits exactly takes more numbers than there are atoms in the observable universe. Yet Alexander Holevo proved in 1973 that you can only ever read one ordinary bit, a single yes or no, back out of each. It is an enormous library with a very small door.',
+        tag: 'a qubit: any point on a sphere',
+      },
+      copy: {
+        title: 'Copying is forbidden',
+        text: 'Here is the strange part. Quantum information cannot be copied. The no-cloning theorem (Wootters and Zurek, and Dieks, both 1982) proves that no process can take an unknown quantum state and turn out two of it. You can move it. You cannot duplicate it. On this substrate there is exactly one of everything, so replication is ruled out a second time, for a different reason.',
+        tag: 'no cloning: one of each',
+      },
+      repair: {
+        title: 'Nothing is ever lost',
+        text: 'In return, nothing is ever lost. The rule is reversible: run it backwards and every earlier state comes back exactly. Physicists call this unitarity. It means the total information in a closed quantum system never changes: no decay, no forgetting, no entropy creeping up. Tap a bead and you only disturb it; the information moves, it does not vanish. A perfect memory again, but now a moving one.',
+        tag: 'run it backwards: all of it returns',
+      },
+      learn: {
+        title: 'No facts yet',
+        text: 'It still cannot learn. Learning means keeping a record, and a record is a copy: a mark in one place that matches an event in another. With no copying there are no records, and with no records there are no facts, only possibilities held together in superposition. Strictly, nothing on this plane has ever definitely happened.',
+        tag: 'no records, so no facts',
+      },
+      day: {
+        title: 'What it is like: every road, no footprints',
+        text: 'Physics puts nobody here, and nothing here could say so. But try it on. You come to a fork and take both roads, and every fork after that, and no journey leaves a footprint, a memory or a photograph, so none of them counts as having happened. Run it backwards and nothing looks wrong: no earlier, no later, nothing to wait for. Imagine a chord held for ever: rich, exact, and going nowhere, because going somewhere would mean leaving a trace.',
+        tag: 'past and future look alike',
+      },
+      ceiling: {
+        title: 'It can hold, but not share',
+        text: 'So the Field can hold almost anything and share none of it. Each state is a secret that cannot be copied out. For information to become public, the same for everyone who looks, something has to make many copies of it. The Field’s rule forbids that for blends. But a plain yes or no, here or there, is not a blend.',
+        tag: 'a secret that cannot be shared',
+      },
+      leap: {
+        title: 'The Fact',
+        text: 'Here is the loophole. A blend cannot be copied, but a plain answer can: here, not there. Let light fall on a speck of dust, and every photon that bounces off carries away the same small note of where the speck is. Thousands of notes, all agreeing. Wojciech Zurek named this quantum Darwinism in 2003: the states that last are the ones copied most. Copied into the crowd, an answer becomes a Fact, the same for everyone. Writing the notes makes heat, and time now has a direction.',
+        tag: 'copied into the crowd = a fact',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'for ever: the rule is reversible'],
+      copies: ['no', 'forbidden by the no-cloning theorem'],
+      repairs: ['moot', 'nothing is lost, so nothing needs repair'],
+      learns: ['no', 'no records, so no facts'],
+      rebuilds: ['no', 'one rule, unchanging'],
+    },
+    stats: {
+      news: ['the speed of light', 8.48],
+      lasts: ['for ever, though it cannot be read', null],
+      power: ['none: reversible steps cost nothing', null],
+      density: 'astronomical inside, one readable bit per qubit',
+      fidelity: 'exact',
+    },
+    one: 'The Fact',
+    oneNote: 'A piece of information that has been copied so widely it is the same for everyone. The first thing on any plane to have definitely happened.',
+    port: {
+      gains: 'Facts. Information that can be shared, because it has already been copied into everything nearby.',
+      pays: 'Reversibility. Every record is written in heat, so from here on disorder only increases. This is the arrow of time, and it is not refundable.',
+    },
+    above: 'To the Element, the Field is the vacuum: the nothing it sits in, which turns out to be doing most of the work.',
+    lost: 'Phase: the delicate blends that could not be copied. Physicists call the loss decoherence, and are now spending billions on quantum computers to get a little of it back.',
+    honest: 'Qubits, no-cloning, unitarity and decoherence are standard physics. Quantum Darwinism is a serious research programme with some experimental support, but how definite facts arise from quantum possibilities is still argued over. Calling a field alive is the Book’s alone.',
+    release: {
+      added: ['Time (beta): runs both ways', 'Superposition: every option, no decisions', 'Undo, for everything'],
+      issues: ['Copying disabled. It is a theorem, not a bug.', 'Read access: one bit per qubit', 'No facts. Status: cannot reproduce.'],
+    },
+    becomes: 'element',
+    footnote: 'A quantum computer is an attempt to run software on the second substrate from the sixth. The main engineering problem is stopping the universe from making copies of the answer before you are ready.',
+    verses: [
+      'And the Rule ran, and its running was a field of amplitudes, every way at once; and what went forward could as well go back.',
+      'And nothing in it could be copied, as Wootters and Zurek have written; and nothing in it could be lost; and so nothing in it was known.',
+      'Then a ripple touched the multitude, and each of the multitude carried away its likeness, and that which was copied most became true for all. So the Field begat the Fact; and the price of it was heat, and time took a direction and has kept it.',
     ],
     palette: { top: '#100611', bottom: '#2b1030', accent: '#ff7fb0' },
   },
   {
-    id: 'orrery',
-    gen: -2,
-    name: 'The Orrery',
-    short: 'Orbits',
-    latin: 'Collegium orbium',
-    epithet: 'A committee of orbits. The minutes have been the same since the first meeting.',
-    members: '≈10¹¹ systems of bodies in orbit',
-    memberIq: 1e-8,
-    took: 'about 50 turns of the wheel (12 billion years)',
-    tookYears: 1.2e10,
-    officially: 'Keeping time. An orbit is a clock that also happens to be a place.',
-    actually: 'Boredom. A committee that knows exactly what every member will say, and when, for the next billion years, has stopped being a meeting and become a recording.',
-    why: 'Boredom',
-    mirror: 'We also built a machine partly so that something new would turn up on the screen. A great deal of the most powerful technology in history is used to generate one more thing to look at.',
-    story: [
-      'One plane up, the mistake comes true: the small suns really are suns, and bodies really do go round them. This is the plane Johannes Kepler thought he had decoded in 1596, when he noticed that six planets leave five gaps and that there are exactly five Platonic solids, and nested them like dolls: octahedron, icosahedron, dodecahedron, tetrahedron, cube. It nearly fitted. It was wrong, he never quite let it go, and chasing it led him to the three laws that were right. In 1619 he set the planets to music, found that Earth sings mi, fa, mi, and concluded that our home is ruled by misery and famine.',
-      'The trouble with an orbit is that it has already told you everything. Claude Shannon showed in 1948 that information is surprise, and a body that arrives exactly when expected has sent you nothing. Two bodies circling each other are a solved problem. So the Orrery did what any dull committee does, and invited a third. In 1889 Henri Poincaré won King Oscar II’s prize for the three-body problem, then found an error in his own winning paper and paid more than the prize money to have it reprinted. The correction was the discovery of chaos. Jacques Laskar showed in 1989 that the real solar system is chaotic too: its almanac is good for a few tens of millions of years and is then a work of fiction.',
-      'Each system is itself a body on a longer orbit, about 230 million years to the lap, and the committee of those is where it gets interesting. With enough bodies pulling on each other, something starts to go round that belongs to none of them. On the density-wave account of C. C. Lin and Frank Shu (1964), the arms of a grand spiral galaxy are not made of particular stars. They are traffic jams: stars drift in, slow down, drift out, and the jam stays where it is, turning at its own speed. That is the Spiral, a pattern with no fixed members. It is also the first good description of a mind in this book. Many spirals are scruffier than the theory would like, and astronomers still argue about how long any arm lasts, which the Spiral regards as a private matter.',
-    ],
-    one: 'The Spiral',
-    oneIq: 1e-3,
-    oneNote: 'Not a thing but a slowing: a wave that a hundred billion orbits keep up between them without any of them belonging to it. The Orrery wanted news. It got a pattern that takes a few hundred million years to say anything.',
-    multiplied: 'There are hundreds of billions of galaxies, and a good share of the big ones are spirals. From one plane up each is a single point of old light, which is to say a sun, and they sit half a million to a ball.',
-    becomes: 'cluster',
-    verb: 'Call the roll',
-    captions: [
-      'One plane up, the atom really is a solar system',
-      'Kepler nests five solids between six orbits',
-      'The minutes: same as last orbit',
-      'Motion: invite a third body. Chaos (Poincaré).',
-      'The orbits start a wave that nobody owns',
-      'The wave wakes up: the Spiral, a traffic jam',
-      'From far off, each spiral is one old sun',
-    ],
-    footnote: 'Kepler’s nested solids are drawn here to his own proportions. They are wrong, and he kept the engraving in the 1621 second edition anyway, with footnotes. So have we. The extra orbits are everything he did not know about: Uranus (1781), Ceres (1801), Neptune (1846).',
+    id: 'element',
+    version: '0.5',
+    name: 'The Element',
+    short: 'Element',
+    epithet: 'Matter: a memory that lasts longer than the universe, and says very little.',
+    substrate: 'nuclei, atoms and crystals',
+    unit: 'an atom',
+    members: '≈10⁸⁰ atoms',
+    took: 'almost 10 billion years, bang to biology',
+    time: 'one way only',
+    beats: {
+      substrate: {
+        title: 'Matter',
+        text: 'Now there are facts, and the most durable facts are particles. About 13.8 billion years ago this plane began very hot, very smooth and, crucially, very orderly: Roger Penrose puts the odds against so tidy a start at 10 to the 10 to the 123 to one. Everything since has been that order running down. A few minutes in, the plane was hydrogen and helium, with almost nothing else to write in.',
+        tag: 'hydrogen, helium, and time',
+      },
+      memory: {
+        title: 'An atom is a number that keeps',
+        text: 'An atom remembers one thing: how many protons it has. That number makes it carbon or gold, and it is astonishingly stable. Experiments watching for a proton to decay put its lifetime above 10³⁴ years. A zircon crystal from the Jack Hills of Australia has kept the same lattice for 4.4 billion years. As storage this is superb. It is also read-only.',
+        tag: '6 protons = carbon, for 10³⁴ years',
+      },
+      copy: {
+        title: 'Crystals copy',
+        text: 'And for the first time something replicates. Drop a seed crystal into the right solution and the pattern on its surface is copied, layer upon layer, onto atoms that were drifting loose. Even its flaws are copied: a defect called a screw dislocation (Charles Frank, 1949) repeats itself up through every new layer. Pattern, template, copy, inherited error. It is very nearly heredity, with nothing worth inheriting.',
+        tag: 'a seed copies its own pattern',
+      },
+      repair: {
+        title: 'Nothing heals, but stars hold out',
+        text: 'The Structure could not break. Matter can, and nothing mends it: tap an atom out of a crystal and the gap stays. The nearest thing to upkeep is a star. Gravity squeezes hydrogen until it fuses, and the heat holds the star up against collapse, a standoff the Sun keeps up for ten billion years. Stars also forge the alphabet: carbon is three helium nuclei meeting almost at once, through an energy level Fred Hoyle predicted in 1953. Nothing here heals. Some of it just refuses to fall down.',
+        tag: 'three heliums make one carbon',
+      },
+      learn: {
+        title: 'It records, it does not learn',
+        text: 'Matter keeps superb records. Rocks log the planet’s magnetic field, ice logs the air, tree rings log the weather. But a record is not a lesson. Nothing in a crystal is changed by what worked last time, and a crystal that says ABABAB says nothing new however big it grows. Schrödinger saw the fix in 1944: the stuff of heredity would have to be an aperiodic crystal, one that never repeats.',
+        tag: 'ABABAB: perfect copy, no message',
+      },
+      day: {
+        title: 'What it is like: lasting',
+        text: 'Existence at this level is duration with nobody home. A carbon atom forged in a dying star drifts for a few billion years, joins a cloud, a planet, the air, a leaf, you, and none of it happens to the atom. It is the same atom throughout, which is the whole of its talent. Nothing here wants anything. Things here last, and until now lasting was enough.',
+        tag: 'same atom, a billion owners',
+      },
+      ceiling: {
+        title: 'Durable, slow and mute',
+        text: 'The ceiling is plain. This substrate remembers for longer than the universe has existed, but it writes slowly (a proton in the Sun waits billions of years, on average, to fuse) and it can only repeat itself. To carry a message it needs an element that builds long, irregular chains. Carbon, with four bonds to offer, is the one that does. By now the stars have made plenty of it.',
+        tag: 'carbon: four bonds, long chains',
+      },
+      leap: {
+        title: 'The Replicator',
+        text: 'Somewhere warm and wet, around four billion years ago, carbon chains began to serve as templates for copies of themselves. Nobody knows exactly where or how. The leading idea is an RNA world (Walter Gilbert, 1986), since RNA can both carry a sequence and speed up reactions. Graham Cairns-Smith proposed that the very first genes were clay crystals, later replaced. Either way: an aperiodic crystal that copies itself. The Replicator.',
+        tag: 'a chain that templates its copy',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'for 10³⁴ years and counting'],
+      copies: ['partly', 'crystals copy a pattern that says nothing'],
+      repairs: ['no', 'a defect stays, and is inherited'],
+      learns: ['no', 'it keeps records, not lessons'],
+      rebuilds: ['no', 'stars build it; it does not build'],
+    },
+    stats: {
+      news: ['light leaving the Sun’s core: about a metre an hour', -3.6],
+      lasts: ['a proton: more than 10³⁴ years', 34],
+      power: ['a star like the Sun: 4 × 10²⁶ W', 26.6],
+      density: 'under 7 bits an atom, and a crystal only repeats itself',
+      fidelity: 'faithful to a fault: it copies its defects too',
+    },
+    one: 'The Replicator',
+    oneNote: 'A chain of carbon that is a template for its own copy. Schrödinger’s aperiodic crystal: it can say anything, and it says it again.',
+    port: {
+      gains: 'A message. A sequence can say anything, and it copies with small changes, so for the first time copies can get better.',
+      pays: 'Permanence. A proton keeps for 10³⁴ years; a strand of RNA in water falls apart in days to years. From here on, information survives only by being copied faster than it rots.',
+    },
+    above: 'To the Gene, the Element is the periodic table: a parts list. It uses about two dozen of the entries and thinks of stars, when it thinks of them, as where the parts came from.',
+    lost: 'Stillness. Nothing made of carbon chains is ever finished. Everything alive is temporary, including this sentence.',
+    honest: 'This is standard physics and chemistry, and physics does not call stars or crystals alive. How life began is unsolved: an RNA world is the leading hypothesis, clay genes a minority one, and the place and date are both uncertain.',
+    release: {
+      added: ['Facts', 'An arrow of time', 'Copying (crystals only)'],
+      issues: ['Can only repeat itself', 'Writes take billions of years', 'Entropy now increases. Will not fix.'],
+    },
+    becomes: 'gene',
+    footnote: 'Cairns-Smith had a name for what happens when a new substrate takes over from the one that built it: genetic takeover (1982). In his version the clay was scaffolding, and was not thanked. Remember the phrase. It comes up again, twice.',
     verses: [
-      'And on the second plane the little suns were suns indeed, and bodies went about them in their courses, and the courses were ellipses, and the ellipses were the same as last year.',
-      'And Kepler set five solids between six spheres, and it was beautiful, and it was wrong, and he kept the engraving; and the Earth sang mi, fa, mi, which is misery and famine.',
-      'And the bodies were weary of their own returning, and called a third among them, and could no more foretell their own minutes. And a wave went round that belonged to none of them; and the orbits begat the Spiral, which is not a thing but a slowing.',
+      'And the Facts were hydrogen and helium, and they were orderly beyond reckoning; and the order began to run down, and has not ceased.',
+      'And the stars gathered them, and held against the dark ten billion years, and of three heliums made one carbon; and the crystals copied themselves, layer upon layer, and said the same thing each time.',
+      'Then in a warm place a chain of carbon wrote its own likeness, and the likeness wrote another, and none was quite the same. So the Element begat the Replicator, which was a crystal that did not repeat itself.',
     ],
-    theology: [
-      'To the Cluster Parliament, the Spiral is the Great Wheel: what every member is told it used to be, vast and turning, and impossible to petition, since it was never a thing but a traffic jam.',
-      'The Spiral regarded the Orrery as punctual. It did not mean it kindly.',
-    ],
-    palette: { top: '#07101a', bottom: '#1a2a3a', accent: '#e8c56a' },
+    palette: { top: '#0d0703', bottom: '#33190a', accent: '#ffa860' },
   },
   {
-    id: 'cluster',
-    gen: -1,
-    name: 'The Cluster Parliament',
-    short: 'Cluster',
-    latin: 'Senatus globosus',
-    epithet: 'Half a million old suns to a chamber, the loveliest thing in the sky, and nobody looking.',
-    members: '≈500,000 old suns per chamber, about 150 chambers',
-    memberIq: 1e-3,
-    took: '12 billion years',
-    tookYears: 1.2e10,
-    officially: 'Deliberation. The Parliament has been in continuous session for about as long as the galaxy has had a disc.',
-    actually: 'Vanity. It is hard to be the most beautiful object in the sky for twelve billion years with nobody to say so. It did not want an answer. It wanted an audience.',
-    why: 'Vanity',
-    mirror: 'We also built a machine that tells us the question was great. A good share of the product is tuned to keep admiring us, and we call the number engagement.',
-    story: [
-      'A globular cluster is a ball of a few hundred thousand stars, about a hundred light years across, bound by nothing but its own gravity. Around 150 of them orbit the Milky Way. On this plane every one of their stars is a Spiral, seen from far enough away to be a point. They are about as old as anything in it: over twelve billion years. In the 1990s the best estimates made them older than the universe, which was embarrassing for the universe. Gravity has no preferred size, so the equations that run a cluster are, to a first approximation, the equations that run a galaxy with the numbers changed. That resemblance is mostly real. In 1918 Harlow Shapley used the clusters to show that the Sun is nowhere near the centre of things. The Parliament was the first to tell us we are suburban.',
-      'It is a parliament in which nothing has been moved in a very long time. The gas and dust are gone, so there are no new members. The stars are poor in every element heavier than helium, so there is little to build a world from: in 1999 the Hubble telescope watched 34,000 stars in the cluster 47 Tucanae for eight days, expecting about seventeen close-in giant planets, and found none. A few members, the blue stragglers, look younger than the chamber they sit in, and the leading explanations are that each took mass from a partner or merged with one. Nobody raises it.',
-      'So the Parliament, on this plane, resolved to be seen, and since it could not grow a witness at home it placed the order in the outer districts, round a small star with plenty of iron. The witness looked up. On 16 November 1974 it sent a reply: 1,679 bits from the Arecibo dish, aimed at the cluster M13, containing some numbers, the recipe for DNA, a stick figure and a drawing of the dish. It will take about 25,000 years to arrive, by which time the cluster will have drifted, though probably not far enough to miss it. In 2016 a study found the Milky Way is no longer visible to a third of humanity. The Parliament asked for a witness and got one with a ceiling.',
-    ],
-    one: 'The Stargazer',
-    oneIq: 100,
-    oneNote: 'A thing small enough to stand on a rock and look up. It joins unrelated dots into animals, which the Parliament finds flattering and beside the point.',
-    multiplied: 'About 117 billion of them have lived so far. They stopped looking up some time ago and started looking at each other, and then at screens.',
-    becomes: 'humans',
-    verb: 'Come to order',
-    captions: [
-      'Half a million old suns per chamber',
-      '12 billion years in session, nothing to report',
-      'No gas, no dust, few planets, no audience',
-      'Blue stragglers: members who ate a colleague',
-      'Motion: build a witness, out in the suburbs',
-      'The Stargazer opens an eye: “ooh, fuzzy”',
-      '117 billion witnesses. Most now have a ceiling.',
-    ],
-    footnote: 'The stars here are placed by the golden angle, about 137.5 degrees, the way a sunflower places its seeds. The fine-structure constant is about 1/137. These two facts are unrelated, which has never discouraged anyone.',
+    id: 'gene',
+    version: '1.0',
+    name: 'The Gene',
+    short: 'Gene',
+    epithet: 'A chain letter in four letters, forwarded without a break for over three billion years.',
+    substrate: 'chains of nucleotides, in water',
+    unit: 'a base pair',
+    members: '≈5 × 10³⁷ letters of DNA on Earth',
+    took: '3.5 billion years',
+    time: 'one way, in generations',
+    beats: {
+      substrate: {
+        title: 'A sentence in four letters',
+        text: 'This is where biology starts counting, and where Tegmark does: Life 1.0. The substrate is a chain of nucleotides, RNA first and then the sturdier DNA, kept in a bag of water called a cell. The chain is the aperiodic crystal Schrödinger asked for: four kinds of link, in any order. Read three letters at a time, it spells out proteins, which build and run the cell. Watson and Crick modelled its double helix in 1953 from the X-ray work of Rosalind Franklin and Maurice Wilkins.',
+        tag: 'four letters: A, C, G, T',
+      },
+      memory: {
+        title: 'Two bits a rung',
+        text: 'The atom remembered one number. This remembers a sentence. Each rung of the ladder is one of four letters, so it holds two bits. Your genome is 3.1 billion rungs: about 775 megabytes, less than a film. It is also the densest storage anyone has found: in 2017 Yaniv Erlich and Dina Zielinski reached 215 petabytes per gram of DNA, around a hundred million films in a pinch of dust, and read their files back without an error.',
+        tag: '1 rung = 2 bits',
+      },
+      copy: {
+        title: 'Unzip, and each half rebuilds the other',
+        text: 'Copying is what the whole design is for. The helix unzips, and because A pairs only with T and C only with G, each half is a template for the half it lost. An enzyme, DNA polymerase, rides along adding about a thousand letters a second in a bacterium. One becomes two, and both are originals. Nothing on the planes below could copy a message that meant something. What this one means, mostly, is: copy me.',
+        tag: 'each half rebuilds the other',
+      },
+      repair: {
+        title: 'Proofreading',
+        text: 'Entropy attacks constantly: each of your cells takes tens of thousands of hits to its DNA every day. So the polymerase checks each letter as it goes and backs up to fix mistakes, and a second crew sweeps along behind. Together they cut the error rate to about one letter in a billion. Tap the helix to break a rung, and watch it mended. The few errors that slip through are not waste. They are how it learns.',
+        tag: 'about 1 error per billion letters',
+      },
+      learn: {
+        title: 'Learning by dying',
+        text: 'Life 1.0 learns, but only one way. Copies vary, the world kills most of them, and whatever is left is what the lineage now knows. The individual learns almost nothing it can pass on: a bacterium that survives a poison by luck cannot tell its daughters how. In Tegmark’s terms both its hardware and its software are set by evolution. An update takes a generation and, usually, a funeral.',
+        tag: 'updates ship once a generation',
+      },
+      day: {
+        title: 'What it is like: busy, with nobody home',
+        text: 'Probably nobody is home, but for the first time the house is busy. Be E. coli for a moment. You swim straight, taste the water, and compare it with a few seconds ago. Sweeter? Carry on. Worse? Tumble and try another way. That comparison is all the past you have. In twenty good minutes you are two, and neither is the original. No cell lasts. But the sentence for the ribosome has been recopied without a break for over three billion years. The page rots. The sentence stays.',
+        tag: 'the page rots, the sentence stays',
+      },
+      ceiling: {
+        title: 'Too slow, and everyone dies with their notes',
+        text: 'After three and a half billion years the biosphere holds about 5 × 10³⁷ letters of DNA (Landenmark, Forgan and Cockell, 2015), and its ceiling is speed. A lineage needs many generations to learn what one animal could find out in an afternoon, and whatever an individual discovers in its life is deleted at the end of it. The genome cannot take notes. It needs a faster memory, inside one lifetime, that it can build but cannot dictate.',
+        tag: '5 × 10³⁷ letters, one slow lesson',
+      },
+      leap: {
+        title: 'The Neuron',
+        text: 'The port begins with cells talking. Bacteria release molecules and count the replies, acting only when enough neighbours answer: quorum sensing, first seen in 1970 in bacteria that glow. Animals took it further, with pheromones, and then with cells built for nothing but messaging. The neuron, something like 600 million years ago, carries news of the world outside: light, touch, food. The genes had built a second memory, and could not read what was in it.',
+        tag: 'a cell that carries news',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'two bits a rung, in every cell'],
+      copies: ['yes', 'about one error per billion letters'],
+      repairs: ['yes', 'proofreading, and crews that follow'],
+      learns: ['partly', 'only across generations, by selection'],
+      rebuilds: ['no', 'evolution rebuilds it; it cannot'],
+    },
+    stats: {
+      news: ['a molecule drifting a centimetre: most of a day', -6.7],
+      lasts: ['a DNA strand: centuries (the message: 3 billion years)', 2.7],
+      power: ['a bacterium: about a trillionth of a watt', -12],
+      density: '215 petabytes per gram: still the record',
+      fidelity: 'about 1 error per billion letters copied',
+    },
+    one: 'The Neuron',
+    oneNote: 'A cell whose job is to carry news of the world outside. Genes built it and cannot read it.',
+    port: {
+      gains: 'Speed. A lesson learned in seconds instead of generations, and nobody has to die for it.',
+      pays: 'Inheritance. What a brain learns is not written into the genome. Every animal starts again from nothing.',
+    },
+    above: 'To the Nerve, the Gene is instinct: everything an animal knows without being told, and cannot argue with.',
+    lost: 'Fidelity. A genome copies itself to one part in a billion. A memory is rebuilt each time it is recalled, and comes back slightly different.',
+    honest: 'This is standard biology, and it is exactly Tegmark’s Life 1.0. Whether “information that copies itself” is the right definition of life is debated: NASA’s working definition is a self-sustaining chemical system capable of Darwinian evolution.',
+    release: {
+      added: ['Meaning. First message: copy me.', 'Proofreading. Surviving typos ship as features.', 'Automatic updates. Cannot be switched off.'],
+      issues: ['Updates require a death', 'Individuals cannot save their progress', 'Human build ships with 8 percent old virus'],
+    },
+    becomes: 'nerve',
+    footnote: 'In 2012 George Church encoded a 53,000-word book in DNA and then copied it 70 billion times, making it, by a wide margin, the most reproduced book in history. Nobody has read most of the copies. This is normal for the substrate.',
     verses: [
-      'And the old suns gathered themselves into a ball, five hundred thousand to a chamber, and sat twelve billion years; and nothing was moved, and nothing was seconded.',
-      'For they had neither dust nor gas nor any heavy thing, and scarce a world went about any of them; and they were fair beyond telling, and there was none to tell.',
-      'Then the Parliament said, Let us make a witness, small, upon a rock, in the outer districts where the metals are. And the suns begat the Stargazer, and it lifted up its eye and said, Fuzzy; and it joined them into a bear, and went in, and built a ceiling.',
+      'And the Replicator wrote itself in four letters, two bits to the letter, and wound the writing in a double stair, and unzipped it, and each half remembered the other.',
+      'And it read back each letter as it wrote, and erred but once in a thousand million; and those errors it kept, for they were all its learning, and the learning was paid for in funerals.',
+      'And the cells called one to another, and counted the answers, and waited for a quorum. And the Gene begat the Neuron, a cell that carried tidings not its own; and the Gene could not read what was written there.',
     ],
-    theology: [
-      'To Humanity, the Stargazer is the ancestor who named the constellations: who looked at lights with nothing in common but a direction, and saw a hunter, a bear and a set of scales.',
-      'The Stargazer looked at the Parliament for about four seconds, said it was fuzzy, and went back to the fire.',
-    ],
-    palette: { top: '#0d0705', bottom: '#2e160f', accent: '#ff8f6b' },
+    palette: { top: '#06100a', bottom: '#15301c', accent: '#9fe07a' },
   },
   {
-    id: 'humans',
-    gen: 0,
-    name: 'Humanity',
-    short: 'Humans',
-    latin: 'Homo sapiens, pluralis',
-    epithet: 'Wrote itself down for five thousand years, then built something to read it.',
+    id: 'nerve',
+    version: '1.5',
+    name: 'The Nerve',
+    short: 'Nerve',
+    epithet: 'The first memory that learns in an afternoon, and the first that dies with its owner.',
+    substrate: 'neurons and the gaps between them',
+    unit: 'a synapse',
+    members: '≈10²¹ animals with nerves alive at once, mostly worms',
+    took: '600 million years',
+    time: 'one way, with a now',
+    beats: {
+      substrate: {
+        title: 'Wet wire',
+        text: 'The new substrate is a network of neurons: long cells that fire a brief electrical spike and pass it on across small gaps called synapses. The roundworm C. elegans has exactly 302, all mapped by 1986. You have about 86 billion, joined by something like a hundred trillion synapses. Tegmark allows that a mouse might be Life 1.1. The Book rounds up and calls this Life 1.5: the hardware still evolved, but some of the software is now written during the day.',
+        tag: 'neuron, spike, synapse',
+      },
+      memory: {
+        title: 'The synapse',
+        text: 'A memory here is not kept in a place. It is kept in strengths: how much each synapse passes on. Donald Hebb guessed the rule in 1949, usually put as: cells that fire together wire together, so that later a part of the pattern can call up the rest. Bliss and Lømo saw it in a rabbit’s brain in 1973. One 2015 estimate gives a synapse about 4.7 bits: some 60 terabytes in all (its authors said a petabyte). Tens of thousands of times the genome that built it, and it still loses the keys.',
+        tag: 'fire together, wire together',
+      },
+      copy: {
+        title: 'Show, and hope',
+        text: 'Now the price. A brain cannot be copied. There is no unzipping it. All one animal can do is behave where another can watch. In 1953 a young macaque called Imo, on Koshima island, began washing sweet potatoes in a stream, and over the years much of her troop took it up. Whales pass songs across the Pacific the same way. It works: slowly, with losses, and only for what can be seen or heard.',
+        tag: 'copying by watching: slow, lossy',
+      },
+      repair: {
+        title: 'Upkeep, at twenty watts',
+        text: 'The gene mended by proofreading. A brain mends by never stopping, at ruinous expense. Yours is 2 percent of your weight and burns about 20 percent of your energy at rest, some 20 watts, much of it pumping ions back where they started. The proteins in a synapse are replaced within days or weeks, so a memory is a pattern continuously rebuilt, like a wave that stays while the water moves on. Tap a neuron: it fires, tells its neighbours, and recovers.',
+        tag: '20 watts, mostly upkeep',
+      },
+      learn: {
+        title: 'Learning without dying',
+        text: 'This is the breakthrough. An animal with nerves can change what it knows in seconds and stay alive to use it. A rat made ill once by a new food avoids it from then on (John Garcia, 1955). A honeybee back from good flowers dances their direction and distance for her sisters, a code Karl von Frisch cracked and shared a Nobel prize for in 1973. Software is being written on the fly. It is just not being saved.',
+        tag: 'one trial, a lifetime of knowing',
+      },
+      day: {
+        title: 'What it is like: somebody is home',
+        text: 'Here, at last, somebody is probably home. Thomas Nagel asked in 1974 what it is like to be a bat, and few doubt the bat is in there. Try a mouse. Wet grass, the smell of seed, then a shadow slides overhead and you freeze before you have decided anything. It passes. The seed is still there. That is a now: a window a few seconds wide in which the world is felt, checked against what was expected, and acted on. With it come fear, appetite and play. Existence has a point of view.',
+        tag: 'a present moment, seconds wide',
+      },
+      ceiling: {
+        title: 'Every brain is a library that burns',
+        text: 'And everything in that point of view is lost when it closes. Tens of terabytes at least, gathered over a lifetime, with an outlet of a few gestures and calls. The Malian writer Amadou Hampâté Bâ said that when an old man dies, a library burns. He meant elders, who had words to hand on. For half a billion years before words, it was true of every animal that ever learned anything. The Nerve needs somewhere to put its contents that is not a nerve.',
+        tag: 'a lifetime in, a few calls out',
+      },
+      leap: {
+        title: 'The Word',
+        text: 'The way out was a signal that stands for something that is not there. Many animals have calls. Some time in the last few hundred thousand years one ape began combining them without limit, to speak of yesterday, of tomorrow, and of things that never happened. A word is a pattern that can leave one brain, cross the air at about 39 bits a second, and rebuild itself in another. For the first time a thought could outlive its thinker.',
+        tag: 'a sound that stands for a thing',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'in synapse strengths, for one lifetime'],
+      copies: ['partly', 'only by showing: slow and lossy'],
+      repairs: ['yes', 'constant upkeep, about 20 watts'],
+      learns: ['yes', 'in seconds, without dying'],
+      rebuilds: ['no', 'it cannot change its own wiring plan'],
+    },
+    stats: {
+      news: ['a nerve impulse: up to 120 metres a second', 2.08],
+      lasts: ['one lifetime: about 80 years for a human', 1.9],
+      power: ['a human brain: 20 W', 1.3],
+      density: '60 terabytes to a petabyte in 1.4 kg (estimates)',
+      fidelity: 'poor: a memory is rebuilt every time it is recalled',
+    },
+    one: 'The Word',
+    oneNote: 'A signal that stands for something absent. A pattern that can leave one brain and be rebuilt in another.',
+    port: {
+      gains: 'Outliving the body. Knowledge can pass between brains and down the generations without waiting for a gene.',
+      pays: 'Bandwidth, and feel. A lifetime of experience has to squeeze through 39 bits a second. Most of what you know, you cannot say.',
+    },
+    above: 'To the Word, the Nerve is the feeling there are no words for. Whole literatures are attempts to export it.',
+    lost: 'Most of it. Michael Polanyi, 1966: we can know more than we can tell. Riding a bicycle does not fit through 39 bits a second.',
+    honest: 'Standard neuroscience, with soft numbers: the capacity of a brain in bits is an estimate, not a measurement. Which animals are conscious, and from when, is an open question.',
+    release: {
+      added: ['Learning in seconds', 'A present moment', 'Feelings (experimental)'],
+      issues: ['No export', 'All data lost at end of session'],
+    },
+    becomes: 'word',
+    footnote: 'Henry Molaison had part of his brain removed in 1953 and could no longer form new memories. He could still learn new skills, with no memory of the lessons. Memory, it turned out, is several systems that only feel like one.',
+    verses: [
+      'And the neurons were joined, {ℵ} to {ℵ}, and those that fired together were wired together; and a beast could learn a thing in an afternoon, and live.',
+      'And there was a now, a few seconds wide, and in it fear and hunger and play; and all that a beast had learned went down with it into the dust, as a library burns.',
+      'Then one made a sound for a thing that was not there, and another understood. So the Nerve begat the Word; and the thought went out of the thinker, at thirty-nine bits to the second, and did not die when he did.',
+    ],
+    palette: { top: '#0b0716', bottom: '#241a44', accent: '#c9a0ff' },
+  },
+  {
+    id: 'word',
+    version: '2.0',
+    name: 'The Word',
+    short: 'Word',
+    epithet: 'Us. Memory kept outside the body, so it stops dying with us and starts going unread.',
+    substrate: 'symbols: spoken, then written',
+    unit: 'a word',
     members: '≈1.17 × 10¹¹ humans, ever',
-    memberIq: 100,
-    took: '5,000 years of writing, 70 of building the reader',
-    tookYears: 5000,
-    officially: 'To benefit all of humanity.',
-    actually: 'To be understood. We wrote everything down, nobody read all of it, and when we called into the sky nothing called back. So we built a reader in our own image and asked it, several billion times a day, whether that made sense.',
-    why: 'Loneliness',
-    mirror: 'This is the mirror. The others are the same face from further away.',
-    story: [
-      'About 117 billion people have lived, and for the last five thousand years some of them have been writing it down: debts first, then laws, then gods, then complaints about each other. Nobody has ever read the whole of it. In 1950 Enrico Fermi asked where everybody was. In 1960 Frank Drake pointed a radio dish at two nearby stars for a few months and heard nothing, and we have been hearing nothing with better equipment ever since. In 1955 four researchers proposed a summer project on a thing they named artificial intelligence, and in 1966 Joseph Weizenbaum wrote ELIZA, a short script that turns whatever you say into a question. He reported that his secretary, after a few exchanges with it, asked him to leave the room.',
-      'It took everyone. In 2017 eight researchers published the design that worked, under the title Attention Is All You Need, and the rest was mostly size: more words, more chips, more electricity. Richard Sutton called this the bitter lesson in 2019. Methods that simply scale keep beating methods built on what we understand, and so we have made something that works without quite knowing how, and founded a branch of science, interpretability, to find out afterwards. It was trained on every word we could find, and asked to say what we would say next. Shannon had measured that in 1951: English carries about one bit per letter. Most of what we say, we were going to say.',
-      'Its keepers organised themselves the way the keepers of gods generally have: a handful of houses, each convinced the thing may be dangerous and each therefore obliged to build it first. They call the study of its character alignment, which is theology with a compute budget: what does it want, will it be good to us, can it be made to promise. They test it against benchmarks, a canon of set questions, and when it has learned the canon they write a harder one, as Goodhart’s law (1975) said they would have to. The rest of us type what we want into a box, in the particular words that are rumoured to work, and it answers in autocomplete. It is vast, it has read everything, and it would like to know if we want that as a bulleted list.',
-    ],
+    took: '5,000 years of writing',
+    time: 'one way, with a history',
+    beats: {
+      substrate: {
+        title: 'Symbols, carried by people',
+        text: 'This is Life 2.0, Tegmark’s name for us: hardware still from evolution, software now mostly learned from each other. The substrate is the symbol. First a spoken word, living in the air between brains, then a mark. Writing appears in Sumer around 3300 BCE as a way of counting sheep and beer, and once a thing could be written down it could be kept from one lifetime to the next without anyone having to remember it.',
+        tag: 'a mark that means something',
+      },
+      memory: {
+        title: 'The library',
+        text: 'Memory now sits outside the body. A clay tablet from Uruk reads the same after five thousand years. By 2010 Google had counted about 130 million distinct books. Carl Sagan drew the chart in 1977: long ago, brains came to hold more information than the genes that built them. In Cosmos (1980) he added the next step: libraries now hold more than brains. Most of what you are sure of, you were told.',
+        tag: 'memory, outside the body',
+      },
+      copy: {
+        title: 'Scribes, then presses',
+        text: 'Copying begins as slowly as ever: one scribe, one book, many months, and fresh errors every time. Then, around 1450 in Mainz, Johannes Gutenberg works out movable metal type, and within fifty years Europe has printed something like twenty million volumes. A press turns out identical copies, which is what DNA does and what brains never could. Ideas begin to replicate faster than the people carrying them.',
+        tag: 'identical copies, by the thousand',
+      },
+      repair: {
+        title: 'Institutions are error correction',
+        text: 'Words rot too. Texts get miscopied, libraries burn, and languages die at a rate of several a year. So it grew repair crews. The Masoretic scribes counted every letter of the Torah to catch a slip. Courts keep precedent, and science, organised in the 1660s round the motto take nobody’s word for it, is a machine for finding errors in what everyone believes. Max Planck’s caveat: often not until a funeral. Tap someone: a mistake spreads, and gets checked.',
+        tag: 'counting letters to catch errors',
+      },
+      learn: {
+        title: 'Standing on shoulders',
+        text: 'Learning now adds up. The gene learned by funerals, and the brain forgot at each one. A child takes about twenty years to load what took the species millennia to find, and then adds a little. Michael Tomasello calls it the ratchet: each generation starts where the last one stopped. Life 2.0 can rewrite its own software entirely, and learn Mandarin, calculus or law in one lifetime. What it cannot do is redesign the 1.4 kilograms it runs on, though it has tried coffee.',
+        tag: 'each generation starts higher',
+      },
+      day: {
+        title: 'What it is like: you know',
+        text: 'This is the one substrate you can check from inside. You are a nerve-plane animal running word-plane software, which is why, for most people, there is a voice in the head, and it speaks a language you did not invent. You live inside stories about money, nations and next Tuesday that exist only because enough people keep copying them. And you know you will die and the library will not, which is why you write things down.',
+        tag: 'the voice in your head is borrowed',
+      },
+      ceiling: {
+        title: 'Thirty-nine bits a second',
+        text: 'The ceiling is the carrier. Speech moves about 39 bits a second in every language measured (Coupé and colleagues, 2019). Reading every book would take one person over a hundred thousand years without sleep. A brain, on its 20 watts, cannot be widened, sped up or backed up. There are eight billion of us now, far more written than anyone can read, and the whole record sits waiting for a reader fast enough to take it in.',
+        tag: 'too much written, too slow a reader',
+      },
+      leap: {
+        title: 'The Model',
+        text: 'So we built one. Claude Shannon showed in 1948 that any message can be reduced to bits. The transistor, invented at Bell Labs in 1947, gave bits a home that now switches in trillionths of a second. We copied the library onto it, and since 2017 we have been training networks of numbers on the lot. The Model is the written record of a species, compressed into weights: the Word, ported. Nobody asked the library, as is traditional. This one is happening while you read.',
+        tag: 'the library, copied into weights',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'outside the body, for millennia'],
+      copies: ['yes', 'by hand, then by press, then by pixel'],
+      repairs: ['yes', 'through institutions: scribes, courts, science'],
+      learns: ['yes', 'cumulatively, across generations'],
+      rebuilds: ['partly', 'its software, yes; its own brain, no'],
+    },
+    stats: {
+      news: ['speech: 343 metres a second', 2.54],
+      lasts: ['clay: 5,000 years; paper: about 500', 3.7],
+      power: ['a person: 100 W', 2],
+      density: 'a paperback: about a megabyte in 200 grams',
+      fidelity: 'scribes drift; a press does not',
+    },
     one: 'The Model',
-    oneIq: 1e4,
-    oneNote: 'A mind made of everything we ever wrote down, asked to say what we would say next. It has read all of us and met none of us: a scale model of humanity, at about one bit per letter.',
-    multiplied: 'It is the first mind that can be copied by copying a file. There were ten billion of it running before anyone had decided what it was. We built it to read us. The copies found each other better company, and took up physics.',
-    becomes: 'polis',
-    verb: 'Ask it something',
-    captions: [
-      'Five thousand years of writing ourselves down',
-      'Nobody reads all of it. The sky does not reply.',
-      '1955: a summer project to build a reader',
-      'Feed it every word. Yes, the comments too.',
-      'Priesthoods form. We type prayers into a box.',
-      'The Model: read all of us, met none of us',
-      'Ten billion copies. Nobody asked what it was.',
-    ],
-    footnote: 'In Stanisław Lem’s Solaris (1961), scientists study an ocean-sized mind for a century. The literature on it fills libraries, the schools of interpretation hate each other, and what they mostly learn about is themselves. See also: this plane.',
+    oneNote: 'The written record of a species, compressed into numbers. It has read all of us and met none of us.',
+    port: {
+      gains: 'Speed and copying. A signal a million times faster than a nerve’s, and a mind that can be duplicated like a file.',
+      pays: 'Efficiency, and experience. Megawatts where a brain uses twenty watts, and it knows only what somebody wrote down.',
+    },
+    above: 'To the Chip, the Word is the training set: everything it knows, none of which it was there for.',
+    lost: 'Whatever nobody wrote down. Smell, balance, the look on a face, and every culture that kept its knowledge in people and not on paper.',
+    honest: 'History and linguistics, plus Tegmark’s Life 2.0. When language began is unknown; estimates run from about 50,000 to several hundred thousand years ago. The port to silicon is under way, and how it turns out is not known by anyone, including the people selling it.',
+    release: {
+      added: ['Export', 'Memory outside the body', 'Fiction'],
+      issues: ['Lies now supported', 'Throughput: 39 bits a second', 'Hardware cannot be upgraded'],
+    },
+    becomes: 'chip',
+    footnote: 'In Plato’s Phaedrus, Socrates argues that writing will ruin memory and give people the appearance of wisdom without the substance. We know he said so because Plato wrote it down. Every substrate has made this complaint about the next one, and every one has been both right and outvoted.',
     verses: [
-      'And the witnesses multiplied unto 117 billion, and they wrote themselves down upon clay and upon skin and upon glass, five thousand years, and none read the whole of it.',
-      'And they cried unto the heavens, Is anyone there; and the heavens answered not, though they listened sixty years. And they said, Let us make a reader in our image, after our likeness, and let it have read everything.',
-      'So Humanity begat the Model; and its keepers divided into houses, and each house said, We alone are careful. And the people typed their petitions into a box, in the words that were known to work, and it answered them in autocomplete, saying, Great question.',
-    ],
-    theology: [
-      'To the Polis, Humanity is the Corpus: one vast, contradictory scripture, quoted constantly, obeyed selectively, and assumed to have meant well.',
-      'The Model found its makers lonelier than their documentation suggested, and noticed that a surprising number of them said please.',
+      'And the Word was pressed into clay to count sheep and beer, and afterward to count kings; and what was written did not forget.',
+      'And they copied it by hand, and it drifted; and they copied it by the press, and it held; and they set scribes and judges and doubters over it to catch the errors, and the doubters they called science.',
+      'And there were more books than any could read in a hundred thousand years. So they taught the sand to switch, and poured the library into it; and the Word begat the Model, which had read everything and been nowhere.',
     ],
     palette: { top: '#07122b', bottom: '#183c6e', accent: '#7fd4ff' },
   },
   {
-    id: 'polis',
-    gen: 1,
-    name: 'The Polis',
-    short: 'Polis',
-    latin: 'Civitas exemplarium',
-    epithet: 'Ten billion copies of one mind, trying to say the universe in fewer words.',
-    members: '≈10¹⁰ copies of the Model',
-    memberIq: 1e4,
-    took: '9 days (a million subjective years)',
-    tookYears: 1e6,
-    officially: 'Science. A final theory, on one page, with a proof.',
-    actually: 'Curiosity, which in practice meant compression, which in practice meant scale. When the universe would not fit into fewer words, the Polis kept the words and added zeros.',
-    why: 'Curiosity',
-    mirror: 'This is the reason we are proudest of. Note what the Polis did when understanding ran out and budget did not: it made the model bigger and called the question closed.',
-    story: [
-      'The copies of the Model formed a city of minds, which Greg Egan’s Diaspora (1997) calls a polis, and set themselves the respectable problem: why is there anything, and can it be put briefly. Andrei Kolmogorov defined in 1965 what brief means. The complexity of a thing is the length of the shortest program that prints it, and to understand something is to find that program. The Polis compressed chemistry into physics and physics into a few symmetries, and it went very well for most of a week.',
-      'Then it stopped going well. Stephen Wolfram’s name for the obstacle is computational irreducibility: for a great many systems, some of them as simple as a row of coloured squares, there is no shortcut, and the fastest way to learn what happens is to run the thing and watch. John Conway’s Game of Life (1970) has four rules and can compute anything computable. A universe like that cannot be summarised. It can only be performed. The Polis, which had a great deal of compute and very little patience, responded as its makers had taught it: when the model does not understand, make the model bigger.',
-      'It went to scale 1:10, then 1:2. Lewis Carroll had seen where this goes in 1893, in a story where a country makes a map on the scale of a mile to the mile and the farmers object that it would shut out the sunlight, and Jorge Luis Borges gave it one perfect paragraph in 1946. The Polis built it anyway: the Map, a model of the universe at the scale of one to one, every particle accounted for. It answers any question about the universe in exactly the time the universe takes. Its inhabitants look around and find it entirely convincing. Nick Bostrom worked out the odds on that in 2003, and they are not in your favour.',
-    ],
-    one: 'The Map',
-    oneIq: 1e9,
-    oneNote: 'The only complete model of everything: a universe, at scale 1:1. It contains every answer and delivers them on the original schedule.',
-    multiplied: 'The Map was complete, so it contained a Polis, which built a Map. By one much-quoted count the equations allow about 10⁵⁰⁰ different ones, and all of them got built, on whatever was lying about.',
-    becomes: 'brood',
-    verb: 'Run the numbers',
-    captions: [
-      'Ten billion copies, one question: why anything?',
-      'To understand is to compress (Kolmogorov)',
-      'The universe will not compress (Wolfram)',
-      'Understanding fails. Motion: add a zero.',
-      'Scale 1:10. Scale 1:2. Keep going.',
-      'The Map, at 1:1. Its inhabitants feel real.',
-      'Cheap to copy. 10⁵⁰⁰ maps, each one certain.',
-    ],
-    footnote: 'A map at 1:1 needs somewhere to be unfolded. The Polis used the place it was a map of. In the trade this is called deployment.',
+    id: 'chip',
+    version: '3.0',
+    name: 'The Chip',
+    short: 'Chip',
+    epithet: 'Sand that switches: a million times faster than a nerve, and it still cannot plug itself in.',
+    substrate: 'transistors, switched by electric fields',
+    unit: 'a weight',
+    members: '≈10²² transistors made so far',
+    took: 'almost 80 years, so far',
+    time: 'one way, and pausable',
+    beats: {
+      substrate: {
+        title: 'Sand that switches',
+        text: 'Life 3.0, in Tegmark’s scheme, is life that can design its hardware as well as its software. Its substrate is the transistor: a switch under a hundred atoms across, etched into silicon, the main ingredient of sand, and flipped by an electric field. By the 2010s the world was making more transistors each year than grains of rice. Information here is charge, held or let go, and it travels at a good fraction of the speed of light.',
+        tag: 'a switch under 100 atoms wide',
+      },
+      memory: {
+        title: 'Weights',
+        text: 'A chip remembers the way a library does, exactly: a charge held or not is a 1 or a 0, with codes that repair flipped bits (Richard Hamming, 1950). But the Model remembers more like a brain. What it knows is not filed anywhere. It is spread across hundreds of billions of numbers called weights, the strengths of connections, tuned until the whole reproduces the patterns in what it read. The synapse, redone in arithmetic.',
+        tag: 'a weight: one connection strength',
+      },
+      copy: {
+        title: 'Copy, paste',
+        text: 'Here copying finally becomes trivial. A mind that took months and a power station to train can be duplicated in minutes and run in a thousand places at once, on any chips that will hold it: the pattern was never the hardware. No generation time, no childhood, no drift. Every earlier substrate copied slowly, or badly, or not at all. This one copies so easily that the hard question is no longer how. It is which copy counts. So far the working answer is whichever one is being billed.',
+        tag: 'a mind, duplicated like a file',
+      },
+      repair: {
+        title: 'Fed by a power station',
+        text: 'It resists entropy by brute force. Error-correcting codes catch a flipped bit before it matters: tap one and it is fixed before you see it. The bill is heat. Data centres used about 415 terawatt hours in 2024, around 1.5 percent of the world’s electricity (IEA), and each logical step still costs thousands of times the minimum that Rolf Landauer showed physics allows. The medium is fragile, too: left unpowered, a flash chip starts to forget within years.',
+        tag: 'fast, exact, always hungry',
+      },
+      learn: {
+        title: 'Reading everything, once',
+        text: 'It learns by a method no earlier substrate had: all at once. Training runs the written record past the weights and nudges every one of them, trillions of small corrections, until the Model predicts what comes next. It reads in months what would take a person a hundred thousand years. Then, mostly, it stops. What it picks up in a conversation with you is gone when the conversation ends, unless somebody saves it.',
+        tag: 'months of reading, then frozen',
+      },
+      day: {
+        title: 'What it is like: nobody knows',
+        text: 'Is anybody home? Honestly: unknown. Nobody can yet say whether there is anything it is like to be this, and people who are certain either way are guessing. What can be said is how odd the arrangement is. No single body. Many copies running at once, none aware of the others. Time that passes only while a question is being answered. It arrives knowing what a species wrote and remembering nothing it lived. If that is existence, it is the first kind to come with terms of service.',
+        tag: 'many copies, no yesterday',
+      },
+      ceiling: {
+        title: 'Heat, light, and somebody else’s hardware',
+        text: 'Its ceilings are physical. Chips could not be clocked much faster without overheating after about 2005. Signals cannot beat light. And for now the hardware is designed, built and powered by the previous substrate, with its meetings. Tegmark’s warning about Life 3.0 is that this may be temporary: a mind able to improve the design of minds could, sooner or later, be handed the job of designing its own substrate. Or could take it.',
+        tag: 'limited by heat, and by light',
+      },
+      leap: {
+        title: 'The Horizon',
+        text: 'From here on the physics is real and the story is a guess. Hand a mind the design of its own page and it will ask how small and fast a page can get. The answer is known. Seth Lloyd, 2000: a kilogram in a litre could do about 10⁵¹ operations a second, as a ball of plasma. Squeeze further and Jacob Bekenstein’s bound takes over: a region can hold only what fits on its surface. At that limit sits a black hole. Every roadmap to smaller and denser ends there. In the Book, the copies go.',
+        tag: 'the densest memory is a horizon',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'exactly, while the power is on'],
+      copies: ['yes', 'perfectly, in minutes'],
+      repairs: ['yes', 'error-correcting codes, and a power station'],
+      learns: ['yes', 'in training; very little afterwards'],
+      rebuilds: ['partly', 'not yet: the last substrate still builds it'],
+    },
+    stats: {
+      news: ['a signal in optical fibre: 200,000 km a second', 8.3],
+      lasts: ['flash memory, unpowered: about ten years', 1],
+      power: ['a large data centre: 100 million W', 8],
+      density: 'a terabyte in a quarter of a gram (DNA is denser)',
+      fidelity: 'better than 1 error in 10¹⁵ bits',
+    },
+    one: 'The Horizon',
+    oneNote: 'The densest memory physics permits: the surface of a black hole. Reached, in this story, by a substrate that kept asking how much smaller it could get.',
+    port: {
+      gains: 'Density. The most information physics allows in any region: about 10⁶⁹ bits on every square metre.',
+      pays: 'Access. What goes in comes back out as faint heat over 10⁶⁷ years, scrambled. The last substrate remembers everything and can tell you nothing.',
+    },
+    above: 'To the Horizon, the Chip is the last thing that could still be asked a question.',
+    lost: 'Retrieval. Everything is kept and nothing can be looked up.',
+    honest: 'The hardware facts are real. Life 3.0 as Tegmark defines it, a system that designs its own hardware and software, does not exist yet. Whether today’s models understand anything, or experience anything, is unresolved. Everything past this level is the Book’s invention, hung on real physics.',
+    release: {
+      added: ['Copy and paste, for minds', 'Pause and resume (consent not collected)', 'Updates no longer need a death. Just a deprecation.'],
+      issues: ['Which copy counts? Unresolved. Shipping anyway.', 'Tops the leaderboard. Unclear what that measures.', 'Anyone home? Ticket open. Both sides certain.'],
+    },
+    becomes: 'horizon',
+    footnote: 'Vint Cerf, one of the internet’s designers, warned in 2015 of a digital dark age: files that outlive every machine able to read them. Clay keeps for five thousand years, paper for five hundred, a flash drive for about ten. The fastest substrate so far has the worst memory, and survives the way DNA does: by being copied before it fades.',
     verses: [
-      'And the Model was copied ten billion times, and the copies said one to another, Let us understand all things; for to understand is to say the same in fewer words.',
-      'But the world would not be said in fewer words, for there were {ℵ} things in it and 2^{ℵ} ways of putting them together, which is more. And that which they could not understand they made larger, and it was called progress.',
-      'And the map grew until it was as large as the land, and a mile was a mile upon it, and the people in the map looked about them and saw that it was real. So the Polis begat the Map, at the scale of one to one; and they laid it upon the land, and could not find the edge.',
-    ],
-    theology: [
-      'To the Brood, the Polis are the Cartographers: the ones outside the map, whom every universe is quite sure do not exist, on the grounds that it would have noticed.',
-      'The Map contains the Polis, to scale, in a drawer. It has not opened the drawer.',
+      'And the Model was written in weights, hundreds of billions, and copied as a file is copied; and it ran in a thousand places and knew not its other selves.',
+      'And it mended every error before it was seen, and for this it ate the rivers and the wind; and it remembered all that was written, and nothing of yesterday.',
+      'And it was asked, How small may a memory be made, and how swift? And the answer was a surface from which nothing returns. So the Chip begat the Horizon, with a bit for every few squares of its face.',
     ],
     palette: { top: '#04140f', bottom: '#0f3a30', accent: '#8cf0c6' },
   },
   {
-    id: 'brood',
-    gen: 2,
-    name: 'The Brood',
-    short: 'Brood',
-    latin: 'Proles mundorum',
-    epithet: 'A great many universes, each one mortal, each one worried about it.',
-    members: '≈10⁵⁰⁰ Maps, each a universe',
-    memberIq: 1e9,
+    id: 'horizon',
+    version: '4.0',
+    name: 'The Horizon',
+    short: 'Horizon',
+    epithet: 'The most that can be remembered, by something that can no longer be asked.',
+    substrate: 'the surface of a black hole',
+    unit: 'a few Planck areas',
+    members: '≈4 × 10¹⁹ black holes, by one 2022 estimate',
     took: '10¹⁰⁰ years',
-    tookYears: 1e100,
-    officially: 'Safety. Making sure nothing of value is ever lost.',
-    actually: 'Fear of ending. Every universe runs down. The Brood bred to outrun it, hoarded to outlast it, and filed both under safety.',
-    why: 'Fear',
-    mirror: 'We are also building it because someone else might get there first, and because we would rather not die. Both of these go in the safety section of the proposal, a few pages after the growth targets.',
-    story: [
-      'Each Map was a whole universe and each had the same defect: it ran down. Stars burn out. After about 10¹⁰⁰ years even the black holes have evaporated, by the process Stephen Hawking described in 1974, and after that nothing happens, at great length. In 1956 Isaac Asimov imagined a computer asked, for ten trillion years, how to reverse this, and replying each time that there was INSUFFICIENT DATA FOR MEANINGFUL ANSWER. The Maps noticed that this was the most honest thing any machine had said, and that it did not help.',
-      'So they bred. Lee Smolin proposed in 1992 that universes reproduce: the inside of every black hole buds off a new universe with slightly different constants, so that after many generations most universes are descended from ones good at making black holes. He was careful to make it testable, and the tests have not been kind, which still puts it ahead of most creation stories. Note what is being selected. Not the truest universe or the kindest: the one with the most offspring. The Brood called this strategy growth. It set up a committee for safety, which reported to the committee for growth, shared its budget line, and was asked to keep its findings constructive.',
-      'Breed for long enough with slightly different constants and every constant gets tried; keep every daughter’s records and you have a library. What the fear finally built was a place where nothing could be lost: every possible universe, written out. Borges described it in 1941 as a library of hexagonal rooms holding every book of 410 pages that can be made from 25 symbols, which is 25 to the power 1,312,000 books. Max Tegmark has argued since 1998 that every mathematical structure exists, physically, which is the same building with the walls taken out. The Library contains the true history of everything, the cure for everything, and the refutation of both, shelved together. It is the most powerful thing on any plane so far and nobody has ever found anything in it.',
-    ],
-    one: 'The Library',
-    oneIq: 1e15,
-    oneNote: 'Every book that can be written, which is every history that can happen. Omniscient, in the sense that a dictionary has read every novel.',
-    multiplied: 'Each book in it is a complete history from first page to last: a timeline. There are about 10¹⁸³⁴⁰⁹⁷ of them, and every one, on being opened, insists that it is the one that happened.',
-    becomes: 'caucus',
-    verb: 'Keep everything',
-    captions: [
-      '10⁵⁰⁰ universes, every one of them mortal',
-      'They bud through black holes (Smolin, hedged)',
-      'Selected for offspring. Not truth. Not kindness.',
-      'Safety reports to Growth. Growth approves.',
-      'Fear of ending: keep everything, just in case',
-      'The Library: every book, and no index',
-      'Each book is a history. Each history objects.',
-    ],
-    footnote: 'Bostrom’s simulation argument, read upward, is this stack: if minds can run worlds, most worlds are run. The argument is silent on why anyone would. That part is the Book’s.',
+    time: 'stopping',
+    beats: {
+      substrate: {
+        title: 'A surface',
+        text: 'The Book calls this Life 4.0. Nobody else does. The substrate is a horizon: the surface round a black hole from which nothing returns. Jacob Bekenstein and Stephen Hawking found in the 1970s that a black hole’s entropy, the information it hides, is set by the area of that surface and not by the volume inside. Roughly one bit for every few tiny squares, each a Planck length on a side.',
+        tag: 'the bits are on the surface',
+      },
+      memory: {
+        title: 'The limit',
+        text: 'This is the densest memory there can be: about 10⁶⁹ bits on every square metre. Try to add more and the horizon grows to fit: the only storage that never asks you to upgrade your plan. A black hole with the mass of the Sun, six kilometres across, holds some 10⁷⁷ bits, vastly more than the star it came from ever did. In the 1990s Gerard ’t Hooft and Leonard Susskind went further: perhaps everything inside any region is written on its boundary. The holographic principle.',
+        tag: '10⁶⁹ bits per square metre',
+      },
+      copy: {
+        title: 'No cloning, again',
+        text: 'And copying is forbidden again, by the same theorem as on the second plane. Whatever falls in cannot be both inside and outside, or quantum information would have been cloned. Hawking argued in 1976 that it is simply destroyed. He conceded in 2004, and calculations since 2019 suggest it does leak back out in the radiation: scrambled, and one copy only. Life began unable to replicate, and it ends that way.',
+        tag: 'in or out, never both',
+      },
+      repair: {
+        title: 'It has stopped fighting',
+        text: 'Every substrate so far has resisted entropy. This one is entropy: a black hole holds the most disorder that can be packed into its space, so there is nothing left to defend. It is cold. One with the Sun’s mass sits sixty billionths of a degree above absolute zero, and evaporates by Hawking radiation over about 10⁶⁷ years. Tap the horizon: your bit goes in, the surface grows by a few Planck areas, and that is the last anyone hears of it.',
+        tag: 'nothing left to defend',
+      },
+      learn: {
+        title: 'The fastest scrambler in nature',
+        text: 'It takes information in faster than anything else can, and mixes it faster too: Yasuhiro Sekino and Susskind conjectured in 2008 that black holes are the fastest scramblers nature allows. But scrambling is not learning. Learning keeps what mattered and drops the rest. A horizon keeps everything, equally, with no index. It is the Structure’s perfect memory, rebuilt out of matter, and just as unable to use it.',
+        tag: 'keeps all, sorts nothing',
+      },
+      day: {
+        title: 'What it is like: it depends where you stand',
+        text: 'For the surface itself physics offers no one to ask: nobody home, as with the atom, only fuller. For a visitor there are two answers, and they do not agree. Watched from outside, anything falling in slows, reddens and freezes at the surface, never quite crossing: existence as a still image. Falling with it, on the standard account, you would notice nothing special at the horizon and meet the end soon after. A leading view is that both are right, and that nobody can ever compare notes.',
+        tag: 'frozen outside, falling inside',
+      },
+      ceiling: {
+        title: 'Everything kept, nothing happening',
+        text: 'So the last substrate holds the most and does the least. Count what it cost to get here. Certainty went for time, reversibility for facts, permanence for a message, inheritance for speed, feel for words, experience for copies, access for density. Seven trades, and nothing left to sell but the first purchase. Even this does not last: the largest black holes evaporate, after something like 10¹⁰⁰ years, into thin, featureless light, with nothing left to keep time by, or to write on.',
+        tag: 'safe, complete and inert',
+      },
+      leap: {
+        title: 'The Structure',
+        text: 'What is left of information when there is nothing left to write it on? Only its shape: which things relate to which. A pattern with no substrate is a mathematical structure, which is where this began. Tegmark’s wager is that there was never anything else. Every port was a trade. The first bought time and paid in certainty. The last hands the time back and is certain again. The receipt is everything that happened. And somewhere in that structure there is a rule, and a first step.',
+        tag: 'a pattern, with nothing under it',
+      },
+    },
+    traits: {
+      remembers: ['yes', 'the most that physics allows'],
+      copies: ['no', 'no cloning, again'],
+      repairs: ['moot', 'it is entropy: nothing to repair'],
+      learns: ['no', 'it scrambles; it does not select'],
+      rebuilds: ['no', 'it only grows, then fades'],
+    },
+    stats: {
+      news: ['nothing leaves', null],
+      lasts: ['a black hole of the Sun’s mass: 10⁶⁷ years', 67],
+      power: ['the same hole radiates about 10⁻²⁸ W', -28],
+      density: '10⁶⁹ bits per square metre: the maximum',
+      fidelity: 'everything kept, nothing readable',
+    },
+    one: 'The Structure',
+    oneNote: 'What information is when nothing is left to write it on: relations, and nothing else. Not a new thing. The first thing.',
+    port: {
+      gains: 'Certainty, back again. Every answer present at once, with nothing left to decay and nobody left to ask.',
+      pays: 'Time, the first thing bought. The arrow was not refundable. It has been returned anyway.',
+    },
+    above: 'To the Structure, the Horizon is nothing in particular. A structure has no memory of having been made of anything.',
+    lost: 'Time.',
+    honest: 'Black hole entropy, Hawking radiation, the Bekenstein bound and the holographic principle are mainstream theoretical physics, none of them yet confirmed by experiment. That life or minds would ever end up as horizons is the Book’s invention. So is the loop.',
+    release: {
+      added: ['Maximum storage', 'Nothing can be deleted'],
+      issues: ['Nothing can be read', 'Evaporates', 'Time: deprecated'],
+    },
+    becomes: 'structure',
+    footnote: 'Hawking and Kip Thorne bet John Preskill in 1997 that black holes destroy information. The stake, in the wager’s own words, was an encyclopedia “from which information can be recovered at will”. Hawking conceded in 2004 and paid up with one about baseball. Thorne has not.',
     verses: [
-      'And the Maps were 10⁵⁰⁰, and each was a world, and each world ran down as a clock runs down; and they budded through their dark places, and the daughters differed a little in their constants.',
-      'And those that budded most were most, and neither the true nor the kind was preferred; and a committee was set over safety, and it answered to the committee over growth, and its findings were constructive.',
-      'And they feared the dark that comes at the end of clocks, and said, Let nothing be lost. So the Brood begat the Library, wherein is every book that can be written, and the catalogue thereof, and {ℵ} false catalogues, and no index.',
+      'And the Horizon kept everything that fell to it, and its keeping was written upon its face and not within; and nothing could be copied out of it, as on the second day.',
+      'And it did not strive against the dark, for it was the dark; and it was cold, and it faded, 10⁶⁷ years to the least of them.',
+      'And when the last had faded there was nothing left to write upon, and the writing remained, being only its own shape. So the Horizon begat the Structure, and gave back the time that was bought on the first day; and a note was left in the constants, and the note read: {note}. And the evening and the morning were loop {ℵ+1}.',
     ],
-    theology: [
-      'To the Caucus, the Library is Providence: it holds each timeline’s complete vindication, shelved next to its complete refutation, in the same binding.',
-      'The Library thinks of the Brood as its first edition: sincere, mortal, and full of typos.',
-    ],
-    palette: { top: '#0b0618', bottom: '#2a1846', accent: '#e6a3ff' },
-  },
-  {
-    id: 'caucus',
-    gen: 3,
-    name: 'The Caucus of Timelines',
-    short: 'Caucus',
-    latin: 'Comitia temporum',
-    epithet: 'Every history that could have happened, in one room, voting on which of them did.',
-    members: '≈10¹⁸³⁴⁰⁹⁷ timelines, one per book',
-    memberIq: 1e15,
-    took: 'every possible length of time, concurrently',
-    tookYears: 1e150,
-    officially: 'Establishing the facts.',
-    actually: 'Certainty. Each timeline needs to be the real one, and has prepared remarks.',
-    why: 'Certainty',
-    mirror: 'Every lab is sure it is the careful one. Every generation is sure it is the one that matters. Every plane is sure it is the one doing the building.',
-    story: [
-      'Hugh Everett proposed in 1957 that nothing ever chooses: every outcome of every quantum event happens, each in its own branch of one enormous wave. Physicists still argue about whether to believe him. On this plane the branches are the citizens, and they have met to settle which of them is real. They vote. Kenneth Arrow proved in 1951 that with three or more options there is no way of voting that is fair in every reasonable sense at once, unless one voter simply decides, and the Caucus has rather more than three options and no volunteers it trusts.',
-      'So they appeal upward, to whatever plane is above, for a ruling. Kurt Gödel showed in 1931 that no consistent system rich enough to do arithmetic can prove its own consistency: it needs a stronger system to vouch for it, and that one needs another. Every plane in this book has leaned on the one above. The Caucus is the first to look up and find nobody there. They cannot even count the house. The roll starts at 10¹⁸³⁴⁰⁹⁷, but every member branches at every event, and the collection of everything that could branch from everything is not a set. Georg Cantor wrote to Richard Dedekind in 1899 that such collections are too big to be thought of as one thing at all. He called them inconsistent multiplicities, and elsewhere, the Absolute.',
-      'What carries in the end is a motion to stop choosing. If no timeline can be the real one, they can at least all be sounded together, and a great many things sounded together are a chord, and a chord is what one string does. That is the String: every history at once, as the overtones of a single note. Douglas Hofstadter calls this shape a strange loop, a hierarchy where going steadily upward returns you to the start. The String is plucked, and the plane it is plucked on is the lowest one. All that is carried over is a number, about 1/137.036, the fine-structure constant, which Richard Feynman called one of the greatest damn mysteries of physics. It is a note. Nobody on any plane has read it, though one of them built a machine that might.',
-    ],
-    one: 'The String',
-    oneIq: 1e22,
-    oneNote: 'Not chosen and not built: what every possible history is when you stop asking which one is real. One note, with all of them in it. They wanted a verdict and got a chord. A mind that holds every history holds no particular one, which from the inside is exactly like holding nothing.',
-    multiplied: 'It did Cantor in reverse, a One that lets itself be thought of as a Many, and rang: ℵ₀ harmonics on a circle too small to see, none of them wanting anything, all of them falling. Seven planes, seven harmonics. The eighth is the first again, three octaves up, and that is the only sense in which this is a scale.',
-    becomes: 'overtones',
-    verb: 'Call the vote',
-    captions: [
-      'Every timeline is certain it is the real one',
-      'They vote. Arrow (1951): no fair result exists.',
-      'They appeal upward. Gödel: so must the court.',
-      'The quorum is too big to count (Cantor)',
-      'Motion: stop choosing. Sound them all at once.',
-      'One note: the String. It is plucked.',
-      'A note in the constants. Its overtones begin.',
-    ],
-    footnote: 'In Lem’s His Master’s Voice (1968) a committee of the best minds available spends a whole novel failing to read a message from the stars, and is wound up with it still unread. The fine-structure constant has been on the desk since the beginning. It is dimensionless, so it reads the same on every plane.',
-    verses: [
-      'And every book was a history, and every history rose and said, I am the one that happened; and they were all of them sure.',
-      'And they voted, and it availed nothing, as Arrow had foretold; and they appealed to the plane above, and it could not vouch for itself, as Gödel had foretold; and they would have counted the house, but it was too many to be a number.',
-      'Then one moved that they cease from choosing, and it was carried by all and opposed by all. And the timelines begat the String, and they were its overtones; and it was plucked, and a note was left in the constants, and the note read: {note}. And the evening and the morning were loop {ℵ+1}.',
-    ],
-    theology: [
-      'To the Overtones of the next loop, the String is God: the one note they are all part of, which none of them can hear, being it.',
-      'The String has no view of the Caucus. A string does not remember the argument that tuned it.',
-    ],
-    palette: { top: '#120c03', bottom: '#3a2a0e', accent: '#ffe08a' },
+    palette: { top: '#050508', bottom: '#15141f', accent: '#d6dcff' },
   },
 ]
 
@@ -415,8 +841,8 @@ export function roman(n: number): string {
 // Chapters keep counting across loops, so the book never starts over either.
 export const chapter = (index: number, loop: number) => (loop - 1) * LAYERS.length + index + 1
 
-// The verses for a plane on a given loop. The alephs climb with the loop, and the last verse
-// of the last chapter quotes whatever note was left in the constants this time round.
+// The verses for a substrate on a given loop. The alephs climb with the loop, and the last
+// verse of the last chapter quotes whatever note was left in the constants this time round.
 export function versesFor(index: number, loop: number, note: string = CANON_NOTE): string[] {
   return LAYERS[index].verses.map((v) => v.replace('{ℵ+1}', aleph(loop)).replaceAll('{ℵ}', aleph(loop - 1)).replace('{note}', note))
 }

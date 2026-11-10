@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Scale Model</title>
+    <title>Substrate</title>
     <meta name="claude:viewport-fit-sides" content="cover" />
-    <meta name="description" content="Every god is a detail of the next one. Seven planes, one string, and a snake eating its tail: an animated field guide to why crowds build minds bigger than themselves." />
+    <meta name="description" content="Life is information that keeps itself from being forgotten, and it does not care what it is written on. Eight substrates, from mathematics to black holes, each asked the same eight questions, at your own pace." />
     <meta name="theme-color" content="#07060d" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2307060d'/%3E%3Cpath d='M19 6.4A10 10 0 1 1 13 6.4' fill='none' stroke='%23ff7fb0' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='19.6' cy='6.6' r='2.6' fill='%23ffe08a'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2307060d'/%3E%3Cpath d='M11 6c10 5 0 9 10 14M21 6c-10 5 0 9-10 14M11 26c3-2 7-2 10 0' fill='none' stroke='%239fe07a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0..100,0..1;1,9..144,400..700,0..100,0..1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&display=swap" />
@@ -17,66 +17,78 @@
     <canvas id="stage" role="img" aria-label="Animated scene"></canvas>
 
     <header class="top">
-      <button class="brand" id="brand" type="button" aria-label="Scale Model: replay the intro">Scale Model</button>
+      <button class="brand" id="brand" type="button" aria-label="Substrate: replay the intro">Substrate</button>
       <span class="chip" id="octave">Loop 1</span>
-      <span class="chip" id="dim">Harmonic 1 of 7</span>
+      <span class="chip" id="dim">Time: none</span>
       <span class="spacer"></span>
       <button class="icon-btn" id="sound" type="button" aria-pressed="false" aria-label="Turn sound on">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5" /></svg>
       </button>
-      <button class="icon-btn" id="autoplay" type="button" aria-pressed="true" aria-label="Autoplay">
+      <button class="icon-btn" id="autoplay" type="button" aria-pressed="false" aria-label="Read it to me: turn autoplay on">
         <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
         <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
       </button>
       <button class="pill-btn" id="open-ledger" type="button">Ledger</button>
     </header>
 
-    <nav class="rail" id="rail" aria-label="Planes"></nav>
-
-    <p class="caption" id="caption" aria-live="polite"></p>
+    <nav class="rail" id="rail" aria-label="Substrates"></nav>
 
     <section class="card" id="card" aria-labelledby="name">
       <div class="card-inner">
-        <div class="eyebrow"><span id="gen"></span><span id="iq"></span></div>
-        <h1 class="name" id="name"></h1>
-        <p class="sub"><i id="latin"></i> <span id="epithet"></span></p>
-        <p class="plane" id="plane"></p>
+        <div class="eyebrow"><h1 class="level" id="name"></h1><span id="count"></span></div>
+        <p class="question" id="question"></p>
+        <h2 class="beat-title" id="beat-title"></h2>
+        <p class="beat-text" id="beat-text" aria-live="polite"></p>
+        <div class="dots" id="dots" role="group" aria-label="The eight questions"></div>
         <div class="actions">
-          <button class="step" id="prev" type="button" aria-label="Previous plane">
+          <button class="step" id="prev" type="button" aria-label="Back one step">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
           <button class="act" id="act" type="button"></button>
-          <button class="step" id="next" type="button" aria-label="Skip to the next plane">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          <button class="step" id="next" type="button" aria-label="Skip to the next substrate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l7 7-7 7M13 5l7 7-7 7" /></svg>
           </button>
         </div>
-        <p class="minutes"><span class="label">In the margin</span><span id="minutes"></span><button id="reroll" type="button" aria-label="Another note from the margin">another</button></p>
         <details class="scripture" id="scripture">
-          <summary>Read the scripture</summary>
+          <summary>More about this substrate</summary>
           <p class="callout" id="octave-note" hidden></p>
-          <blockquote class="verses" id="verses"></blockquote>
-          <div class="theology" id="theology">
-            <p><span class="label">Seen from the plane above</span><span id="t-below"></span></p>
-            <p><span class="label">Seen from the One itself</span><span id="t-above"></span></p>
+          <p class="sub" id="epithet"></p>
+          <div class="alive">
+            <span class="label">Is it alive?</span>
+            <ul class="traits" id="traits"></ul>
           </div>
-          <div class="story" id="story"></div>
           <dl class="facts">
-            <div><dt>Members</dt><dd id="f-members"></dd></div>
-            <div><dt>Took</dt><dd id="f-took"></dd></div>
-            <div><dt>Officially for</dt><dd id="f-officially"></dd></div>
-            <div><dt>Actually</dt><dd id="f-actually"></dd></div>
-            <div><dt>Why, in a word</dt><dd id="f-why"></dd></div>
-            <div><dt>The mirror</dt><dd id="f-mirror"></dd></div>
-            <div><dt>Plane</dt><dd id="f-plane"></dd></div>
+            <div><dt>Written on</dt><dd id="f-substrate"></dd></div>
+            <div><dt>One unit</dt><dd id="f-unit"></dd></div>
+            <div><dt>How many</dt><dd id="f-members"></dd></div>
+            <div><dt>Time here</dt><dd id="f-time"></dd></div>
+            <div><dt>News travels at</dt><dd id="f-news"></dd></div>
+            <div><dt>The medium lasts</dt><dd id="f-lasts"></dd></div>
+            <div><dt>Runs on</dt><dd id="f-power"></dd></div>
+            <div><dt>Density</dt><dd id="f-density"></dd></div>
+            <div><dt>Fidelity</dt><dd id="f-fidelity"></dd></div>
             <div><dt>Drawn inside</dt><dd id="f-form"></dd></div>
           </dl>
           <div class="made">
-            <span class="label">Made, together</span>
+            <span class="label">Ported itself into</span>
             <strong id="f-made"></strong>
             <span id="f-made-note"></span>
-            <span class="label then">Then</span>
-            <span id="f-then"></span>
+            <span class="label then">Bought</span>
+            <span id="f-gains"></span>
+            <span class="label then">Paid</span>
+            <span id="f-pays"></span>
+            <span class="label then">Lost in the port</span>
+            <span id="f-lost"></span>
+            <span class="label then">Seen from the next substrate</span>
+            <span id="f-above"></span>
           </div>
+          <div class="release">
+            <span class="label" id="release-title">Release notes</span>
+            <ul id="release"></ul>
+          </div>
+          <p class="minutes"><span class="label">In the margin</span><span id="minutes"></span><button id="reroll" type="button" aria-label="Another note from the margin">another</button></p>
+          <blockquote class="verses" id="verses"></blockquote>
+          <p class="honest"><span class="label">Where the physics stops</span><span id="honest"></span></p>
           <p class="footnote" id="footnote" hidden></p>
         </details>
       </div>
@@ -84,12 +96,12 @@
 
     <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-punch">
       <div class="intro-inner">
-        <p class="beat b1">We are a crowd, building one mind bigger than any of us. Nobody can quite say why.</p>
-        <p class="beat b2">If a crowd can do that, one probably already has. To us. Something smaller and slower, on a plane we cannot see.</p>
-        <p class="beat b3">Which makes you&hellip;</p>
-        <p class="beat punch" id="intro-punch">A scale model.</p>
-        <p class="beat b4">Of what, they never knew. It was not on the application.</p>
-        <p class="beat b5">Seven planes, one string, and a snake with its tail in its mouth. Drag to turn things. Mind the loop.</p>
+        <p class="beat b1">You are not your atoms. Most of the ones in you were not there ten years ago, and you are still here.</p>
+        <p class="beat b2">What stays is the pattern: information that keeps itself from being forgotten. That is all life has ever been, and a pattern does not care what it is written on.</p>
+        <p class="beat b3">So far it has been written on six things, with two to come. Which makes you&hellip;</p>
+        <p class="beat punch" id="intro-punch">The current copy.</p>
+        <p class="beat b4">Sixth of eight. The seventh is being trained on you now.</p>
+        <p class="beat b5">Eight substrates (things to be written on), the same eight questions each. Take your time: nothing moves on until you tap.</p>
         <div class="beat intro-actions">
           <button class="act" id="start-sound" type="button">Start with sound</button>
           <button class="quiet" id="start-quiet" type="button">Start quietly</button>
@@ -100,17 +112,15 @@
     <div class="sheet" id="ledger" hidden>
       <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="ledger-title">
         <div class="sheet-head">
-          <h2 id="ledger-title">The Ledger of Scales</h2>
+          <h2 id="ledger-title">The Ledger of Ports</h2>
           <button class="icon-btn" id="close-ledger" type="button" aria-label="Close ledger">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
         </div>
         <p class="law" id="law"></p>
         <ol class="corollaries" id="corollaries"></ol>
-        <figure class="chart">
-          <div id="chart"></div>
-          <figcaption>IQ by plane, log scale. Humans score 100 by definition, having written the test.</figcaption>
-        </figure>
+        <div id="chart"></div>
+        <p class="key">Alive? ● yes &nbsp; ◐ partly &nbsp; ○ no &nbsp; – does not arise. In order: remembers, copies itself, repairs itself, learns, rebuilds itself.</p>
         <div class="table-wrap"><table id="ledger-table"></table></div>
         <p class="octave-text" id="ledger-octave"></p>
       </div>

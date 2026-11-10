@@ -5,14 +5,14 @@ import { HUE_RANGE, LEARNED, accentFor, headStart, hueShift, lessonFor, minuteFo
 import { juliaFor, JULIA_C } from '../src/fractal.ts'
 
 describe('the margins', () => {
-  it('has a dozen notes per plane, short, and free of em dashes', () => {
+  it('has six notes per substrate, short, and free of em dashes', () => {
     for (const L of LAYERS) {
-      expect(MINUTES[L.id], L.id).toHaveLength(12)
+      expect(MINUTES[L.id], L.id).toHaveLength(6)
       for (const m of MINUTES[L.id]) {
-        expect(m.length, m).toBeLessThanOrEqual(180)
+        expect(m.length, m).toBeLessThanOrEqual(210)
         expect(m).not.toContain('—')
       }
-      expect(new Set(MINUTES[L.id]).size).toBe(12)
+      expect(new Set(MINUTES[L.id]).size).toBe(6)
     }
     for (const n of [...NOTES_EARLY, ...NOTES_LATE, CANON_NOTE]) expect(n.length, n).toBeLessThanOrEqual(60)
     expect(NOTES_EARLY.length + NOTES_LATE.length).toBeGreaterThanOrEqual(12)
@@ -22,9 +22,9 @@ describe('the margins', () => {
   it('rotates per loop and repeats nothing within a loop', () => {
     setSalt(7)
     const seen = new Set<string>()
-    for (let k = 0; k < 12; k++) seen.add(minuteFor('humans', 1, k))
-    expect(seen.size).toBe(12)
-    expect(minuteFor('humans', 1, 12)).toBe(minuteFor('humans', 1, 0))
+    for (let k = 0; k < 6; k++) seen.add(minuteFor('word', 1, k))
+    expect(seen.size).toBe(6)
+    expect(minuteFor('word', 1, 6)).toBe(minuteFor('word', 1, 0))
     const first = LAYERS.map((L) => minuteFor(L.id, 1))
     const second = LAYERS.map((L) => minuteFor(L.id, 2))
     expect(first).not.toEqual(second)
@@ -44,11 +44,11 @@ describe('every pass round the loop is a little different', () => {
 
   it('quotes the loop’s own note in the last verse of the last chapter', () => {
     setSalt(7)
-    expect(versesFor(6, 1)[2]).toContain(`the note read: ${CANON_NOTE}.`)
-    expect(versesFor(6, 5, noteFor(5))[2]).toContain(`the note read: ${noteFor(5)}.`)
+    expect(versesFor(7, 1)[2]).toContain(`the note read: ${CANON_NOTE}.`)
+    expect(versesFor(7, 5, noteFor(5))[2]).toContain(`the note read: ${noteFor(5)}.`)
   })
 
-  it('gives each plane five lines to say, in order, and never goes back to the first', () => {
+  it('gives each newborn substrate five first words, in order, and never goes back to the first', () => {
     setSalt(3)
     for (const L of LAYERS) {
       const lines = SAYINGS[L.id]
@@ -104,15 +104,13 @@ describe('every pass round the loop is a little different', () => {
   })
 })
 
-describe('the planes', () => {
-  it('are the first seven harmonics of the String, humans on the fourth', () => {
-    expect(LAYERS.map((L) => PLANES[L.id].harmonic)).toEqual([1, 2, 3, 4, 5, 6, 7])
-    expect(PLANES.humans.harmonic).toBe(4)
+describe('the forms', () => {
+  it('sets the eight substrates on the first eight harmonics of one string', () => {
+    expect(LAYERS.map((L) => PLANES[L.id].harmonic)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
     for (const L of LAYERS) {
       const plane = PLANES[L.id]
-      expect(plane.note.length, L.id).toBeLessThanOrEqual(260)
+      expect(plane.note.length, L.id).toBeLessThanOrEqual(300)
       expect(plane.form.length).toBeGreaterThan(8)
-      expect(plane.dims.length).toBeGreaterThan(0)
     }
     expect(new Set(LAYERS.map((L) => PLANES[L.id].form)).size).toBe(LAYERS.length)
   })

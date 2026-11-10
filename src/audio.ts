@@ -5,13 +5,16 @@
 // tune is a canon of itself at three scales, and the fastest voice is gated by the
 // Thue–Morse sequence for a rhythm that is fractal too.
 //
-// The seven planes are the first seven harmonics of one string, so each plane's key is that
-// harmonic, in just intonation: the fundamental, its octave, a fifth, another octave, a major
-// third 14 cents flat of the piano's, the fifth again, and the seventh harmonic, 31 cents
-// flat, which is why the top plane sounds faintly wrong. Every loop moves the string up a
-// fifth, deals the modes round by one and quickens the pulse a little.
+// The eight substrates are the first eight harmonics of one string, so each level's key is
+// that harmonic, in just intonation: the fundamental, its octave, a fifth, another octave, a
+// major third 14 cents flat of the piano's, the fifth again, the seventh harmonic, 31 cents
+// flat, and then the eighth, which is the fundamental again three octaves up: the loop
+// closing, audibly. Every loop moves the string up a fifth, deals the modes round by one and
+// quickens the pulse a little.
+//
+// Sound effects are cued to the reading: one as each beat arrives, a few through the leap.
 
-import { progress, type Durations, type EngineState } from './engine.ts'
+import { LAST, frame as engineFrame, type Durations, type EngineState } from './engine.ts'
 import { LAYERS } from './lore.ts'
 
 // 0 - x rather than -x, so the series never produces a negative zero
@@ -61,26 +64,42 @@ export type Sfx =
   | 'joined' | 'divide' | 'ping' | 'freeze' | 'typing' | 'rewind' | 'bang'
   | 'pluck' | 'tick' | 'gavel' | 'page'
 
-// When each scene's sound effects fire, as progress through its story (see scenes.ts).
-export const CUES: Record<string, [number, Sfx][]> = {
-  overtones: [[0.03, 'pluck'], [0.16, 'plip'], [0.28, 'crack'], [0.38, 'plip'], [0.5, 'swell'], [0.62, 'bwoop'], [0.7, 'nope'], [0.88, 'divide']],
-  orrery: [[0.04, 'tick'], [0.1, 'hmm'], [0.2, 'tick'], [0.3, 'boing'], [0.42, 'crack'], [0.52, 'swell'], [0.66, 'gong'], [0.88, 'divide']],
-  cluster: [[0.05, 'sigh'], [0.18, 'ping'], [0.32, 'gulp'], [0.44, 'gavel'], [0.52, 'swell'], [0.66, 'huh'], [0.78, 'typing'], [0.88, 'divide']],
-  humans: [[0.03, 'typing'], [0.15, 'sigh'], [0.26, 'fan'], [0.38, 'compute'], [0.52, 'swell'], [0.66, 'boot'], [0.74, 'ding'], [0.88, 'divide']],
-  polis: [[0.04, 'invite'], [0.18, 'glug'], [0.33, 'nope'], [0.42, 'kaching'], [0.52, 'swell'], [0.64, 'unfold'], [0.8, 'yes'], [0.88, 'starWipe']],
-  brood: [[0.05, 'stir'], [0.12, 'pop'], [0.2, 'pop'], [0.32, 'freeze'], [0.44, 'gavel'], [0.52, 'swell'], [0.66, 'page'], [0.88, 'divide']],
-  caucus: [[0.04, 'gavel'], [0.14, 'nope'], [0.22, 'yes'], [0.3, 'nope'], [0.4, 'thud'], [0.52, 'swell'], [0.58, 'pluck'], [0.74, 'chirp'], [0.9, 'bang']],
+// What plays as each of a level's eight beats arrives (see lore.ts for the beats).
+export const CUES: Record<string, Sfx[]> = {
+  structure: ['gong', 'ping', 'nope', 'thud', 'hmm', 'sigh', 'stir', 'tick'],
+  field: ['pluck', 'bwoop', 'nope', 'boing', 'hmm', 'sigh', 'stir', 'plip'],
+  element: ['bang', 'clunk', 'crack', 'glug', 'tink', 'sigh', 'stir', 'plip'],
+  gene: ['glug', 'tonk', 'unfold', 'yes', 'pop', 'squeaks', 'stir', 'plip'],
+  nerve: ['plip', 'ding', 'huh', 'pop', 'yes', 'squeaks', 'stir', 'invite'],
+  word: ['typing', 'clunk', 'kaching', 'gavel', 'invite', 'page', 'stir', 'typing'],
+  chip: ['boot', 'compute', 'starWipe', 'yes', 'compute', 'fan', 'stir', 'freeze'],
+  horizon: ['gong', 'tonk', 'nope', 'gulp', 'rewind', 'sigh', 'stir', 'freeze'],
 }
 
-// What a tap on the stage does on each plane, and what it sounds like.
-export const TAPS: Record<string, { word: string; sfx: Sfx }> = {
-  overtones: { word: 'pluck', sfx: 'pluck' },
-  orrery: { word: 'perturb', sfx: 'boing' },
-  cluster: { word: 'observe', sfx: 'ping' },
-  humans: { word: 'introduce', sfx: 'ding' },
-  polis: { word: 'entangle', sfx: 'clunk' },
-  brood: { word: 'bud', sfx: 'pop' },
-  caucus: { word: 'collapse', sfx: 'thud' },
+// Through the leap: a swell as the copies gather, a sound of its own as the new substrate's
+// first unit appears, and a patter as it divides.
+export const BIRTH: Record<string, Sfx> = {
+  structure: 'tick',
+  field: 'yes',
+  element: 'bwoop',
+  gene: 'chirp',
+  nerve: 'huh',
+  word: 'boot',
+  chip: 'thud',
+  horizon: 'gong',
+}
+export const LEAP_CUES: [number, 'swell' | 'birth' | 'divide'][] = [[0.02, 'swell'], [0.2, 'birth'], [0.78, 'divide']]
+
+// What a tap on the stage sounds like on each substrate. (What it does is the scene's job.)
+export const TAPS: Record<string, Sfx> = {
+  structure: 'thud',
+  field: 'boing',
+  element: 'crack',
+  gene: 'pop',
+  nerve: 'plip',
+  word: 'nope',
+  chip: 'tink',
+  horizon: 'gulp',
 }
 
 type ToneOpts = { f0: number; f1?: number; glide?: number; dur: number; vol: number; type?: OscillatorType; attack?: number; lp?: number; dest?: AudioNode }
@@ -104,7 +123,8 @@ export class Sound {
   private loop = 1
   private key = ''
   private last: EngineState | null = null
-  private lastP = 0
+  private lastLeap = 0
+  private beatKey = ''
   private generation = 0
   // resolves once the audio clock is running, so a sound can wait for enable()
   ready: Promise<void> = Promise.resolve()
@@ -155,7 +175,7 @@ export class Sound {
     } else this.enable()
   }
 
-  // Called every animation frame: follows the generation and fires scene cues.
+  // Called every animation frame: follows the level and loop, and fires the cues.
   frame(s: EngineState, dur: Durations) {
     const key = `${s.index}|${s.octave}`
     if (key !== this.key) {
@@ -164,17 +184,21 @@ export class Sound {
       this.loop = s.octave
       this.retune(false)
     }
-    const p = progress(s, dur)
-    const last = this.last
+    const id = LAYERS[s.index].id
+    const leap = engineFrame(s, dur).leap
+    const beatKey = `${key}|${s.beat}`
     if (this.enabled && this.ctx) {
-      if (s.phase === 'act') {
-        const from = last && last.phase === 'act' && last.index === s.index ? this.lastP : 0
-        for (const [cp, name] of CUES[LAYERS[s.index].id]) if (cp > from && cp <= p) this.play(name, cp)
+      if (s.phase === 'read') {
+        // arriving at a beat (but not at the first frame after sound is switched on)
+        if (beatKey !== this.beatKey && this.last) this.play(CUES[id][s.beat], s.beat / LAST)
+        const from = this.last && this.last.beat === LAST && this.last.index === s.index ? this.lastLeap : 0
+        for (const [at, what] of LEAP_CUES) if (leap > 0 && at > from && at <= leap) this.play(what === 'birth' ? BIRTH[id] : what, at)
       }
-      if (s.phase === 'zoom' && last?.phase !== 'zoom') this.whoosh(dur.zoom)
+      if (s.phase === 'zoom' && this.last?.phase !== 'zoom') this.whoosh(dur.zoom)
     }
+    this.beatKey = beatKey
     this.last = s
-    this.lastP = p
+    this.lastLeap = leap
   }
 
   /* ----------------------------------------------------------- graph */
