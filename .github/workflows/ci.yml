@@ -3,13 +3,13 @@ name: ci
 # Safe for pull requests from forks: this uses `pull_request` (never `pull_request_target`),
 # so fork PRs run with a read-only token and no secrets. Every action is pinned to a commit.
 #
-# The site has two cuts: `main` is published at the root and the `v3` branch at /v3/. Every
-# deploy builds both branches, so publishing one never knocks the other off the air. Only
-# `main` may deploy to the github-pages environment; a green push to `v3` asks main's
-# workflow to run, which rebuilds both and deploys.
+# The site has three cuts: `main` is published at the root, the `v3` branch at /v3/ and the
+# `v4` branch at /v4/. Every deploy builds all three branches, so publishing one never knocks
+# the others off the air. Only `main` may deploy to the github-pages environment; a green
+# push to `v3` or `v4` asks main's workflow to run, which rebuilds everything and deploys.
 on:
   push:
-    branches: [main, v3]
+    branches: [main, v3, v4]
   pull_request:
   workflow_dispatch:
 
@@ -89,12 +89,12 @@ jobs:
           name: claude-artifact
           path: dist-artifact/godstack.html
 
-  # A green v3 asks main to publish (workflow_dispatch is one of the two events a
+  # A green v3 or v4 asks main to publish (workflow_dispatch is one of the two events a
   # GITHUB_TOKEN may trigger). The deploy itself only ever runs from main.
   publish:
     name: ask main to publish
     needs: [lint, workflows, build]
-    if: github.ref == 'refs/heads/v3' && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/v3' || github.ref == 'refs/heads/v4') && github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -104,7 +104,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-  # Both cuts are built fresh from their branches, so the published site is never half of one.
+  # Every cut is built fresh from its branch, so the published site is never half of one.
   site:
     name: assemble the site
     needs: [lint, workflows, build]
@@ -124,6 +124,11 @@ jobs:
           ref: v3
           path: v3
           persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v4
+          path: v4
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
@@ -131,10 +136,13 @@ jobs:
         working-directory: main
       - run: npm ci && npm run build
         working-directory: v3
+      - run: npm ci && npm run build
+        working-directory: v4
       - run: |
-          mkdir -p site/v3
+          mkdir -p site/v3 site/v4
           cp main/dist/index.html site/index.html
           cp v3/dist/index.html site/v3/index.html
+          cp v4/dist/index.html site/v4/index.html
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site
