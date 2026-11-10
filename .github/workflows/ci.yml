@@ -3,13 +3,14 @@ name: ci
 # Safe for pull requests from forks: this uses `pull_request` (never `pull_request_target`),
 # so fork PRs run with a read-only token and no secrets. Every action is pinned to a commit.
 #
-# The site has three cuts: `main` is published at the root, the `v3` branch at /v3/ and the
-# `v4` branch at /v4/. Every deploy builds all three branches, so publishing one never knocks
-# the others off the air. Only `main` may deploy to the github-pages environment; a green
-# push to `v3` or `v4` asks main's workflow to run, which rebuilds everything and deploys.
+# The site has four cuts: `main` is published at the root, and the `v3`, `v4` and `v5`
+# branches at /v3/, /v4/ and /v5/. Every deploy builds all four branches, so publishing one
+# never knocks the others off the air. Only `main` may deploy to the github-pages
+# environment; a green push to a cut's branch asks main's workflow to run, which rebuilds
+# everything and deploys.
 on:
   push:
-    branches: [main, v3, v4]
+    branches: [main, v3, v4, v5]
   pull_request:
   workflow_dispatch:
 
@@ -75,7 +76,7 @@ jobs:
       # own installer apt-gets dozens of font packages, which is slow and flaky.
       - run: google-chrome --version
       - run: npm run e2e
-        timeout-minutes: 8
+        timeout-minutes: 12
         env:
           PW_CHANNEL: chrome
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -89,12 +90,12 @@ jobs:
           name: claude-artifact
           path: dist-artifact/godstack.html
 
-  # A green v3 or v4 asks main to publish (workflow_dispatch is one of the two events a
+  # A green v3, v4 or v5 asks main to publish (workflow_dispatch is one of the two events a
   # GITHUB_TOKEN may trigger). The deploy itself only ever runs from main.
   publish:
     name: ask main to publish
     needs: [lint, workflows, build]
-    if: (github.ref == 'refs/heads/v3' || github.ref == 'refs/heads/v4') && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/v3' || github.ref == 'refs/heads/v4' || github.ref == 'refs/heads/v5') && github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -129,6 +130,11 @@ jobs:
           ref: v4
           path: v4
           persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v5
+          path: v5
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
@@ -138,11 +144,14 @@ jobs:
         working-directory: v3
       - run: npm ci && npm run build
         working-directory: v4
+      - run: npm ci && npm run build
+        working-directory: v5
       - run: |
-          mkdir -p site/v3 site/v4
+          mkdir -p site/v3 site/v4 site/v5
           cp main/dist/index.html site/index.html
           cp v3/dist/index.html site/v3/index.html
           cp v4/dist/index.html site/v4/index.html
+          cp v5/dist/index.html site/v5/index.html
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site

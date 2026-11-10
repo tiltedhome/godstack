@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
@@ -55,6 +55,10 @@ The full canon is in [LORE.md](LORE.md), generated from [`src/lore.ts`](src/lore
 ## Scale Model (branch `v4`)
 
 A third, parallel version, published at [/v4/](https://tiltedhome.github.io/godstack/v4/) from the [`v4` branch](https://github.com/tiltedhome/godstack/tree/v4), with a new name, a new canon and new scenes. The tiers are planes, not biology: seven harmonics of one string, from a society of overtones up through an orrery, a parliament of old suns, us, a city of models and a brood of universes to a caucus of timelines, whose One is plucked on the lowest plane. Each is drawn inside a real 3D form (a torus, Kepler's nested solids, Metatron's cube, a Penrose tiling, the roots of E8), the zoom pulls back so each plane lands as a detail of the next, and every loop round the ouroboros has different jokes. Its README has the details.
+
+## Substrate (branch `v5`)
+
+A fourth, parallel version, published at [/v5/](https://tiltedhome.github.io/godstack/v5/) from the [`v5` branch](https://github.com/tiltedhome/godstack/tree/v5). It is read, not watched: nothing moves on until you tap. Its subject is Max Tegmark's idea that life is information, indifferent to what it is written on, followed across eight substrates (mathematics, a quantum field, matter, genes, nerves, words, chips, a black hole's horizon, and back), each asked the same eight questions: what it is written on, how it remembers, copies, repairs and learns, what it is like, where it stops, and how it ported itself onto the next. Tap any scene to damage it and see whether that substrate heals. Its README has the details.
 
 ## How it works
 
