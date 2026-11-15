@@ -5,7 +5,7 @@
 // tune is a canon of itself at three scales, and the fastest voice is gated by the
 // Thue–Morse sequence for a rhythm that is fractal too.
 //
-// The eight substrates are the first eight harmonics of one string, so each level's key is
+// The eight levels are the first eight harmonics of one string, so each level's key is
 // that harmonic, in just intonation: the fundamental, its octave, a fifth, another octave, a
 // major third 14 cents flat of the piano's, the fifth again, the seventh harmonic, 31 cents
 // flat, and then the eighth, which is the fundamental again three octaves up: the loop
@@ -27,8 +27,8 @@ export function thueMorse(n: number): number {
 }
 
 const PENTA = [0, 2, 4, 7, 9]
-// Seven five-note modes. On the first loop each plane has the one listed against it; every
-// loop after that deals them round by one, so the same plane is heard in a different light.
+// Seven five-note modes. On the first loop each level has the one listed against it; every
+// loop after that deals them round by one, so the same level is heard in a different light.
 export const MODES: number[][] = [
   [0, 2, 4, 7, 9], // overtones: major pentatonic, the plainest thing a string can say
   [0, 2, 5, 7, 9], // orrery: suspended, two fourths, going round
@@ -39,13 +39,13 @@ export const MODES: number[][] = [
   [0, 1, 5, 7, 8], // caucus: hirajoshi, which has no settled home note
 ]
 export const modeFor = (index: number, loop: number) => MODES[(index + Math.max(0, loop - 1)) % MODES.length]
-// The plane's key: its harmonic of the string, folded into one octave, in semitones (not
+// The level’s key: its harmonic of the string, folded into one octave, in semitones (not
 // rounded: 7.02 is a just fifth, 3.86 a just third, 9.69 the seventh harmonic). Each loop
 // retunes the whole string a fifth higher.
 export const harmonicSemis = (h: number) => (12 * Math.log2(h)) % 12
 export const rootSemis = (index: number, loop = 1) => harmonicSemis(index + 1) + ((Math.max(0, loop - 1) * 7) % 12)
 export const degreeSemis = (d: number, mode: number[] = PENTA) => Math.floor(d / 5) * 12 + mode[((d % 5) + 5) % 5]
-// The pulse quickens a little on each plane up, and a little more each time round.
+// The pulse quickens a little on each level up, and a little more each time round.
 export const tickFor = (index: number, loop = 1) => (0.46 - index * 0.013) * (1 - 0.03 * Math.min(6, Math.max(0, loop - 1)))
 // Keep the series inside a singable range without breaking its shape for long stretches.
 const fold = (v: number) => ((((v + 4) % 12) + 12) % 12) - 4
@@ -63,44 +63,34 @@ export type Sfx =
   | 'wahwah'
   | 'joined' | 'divide' | 'ping' | 'freeze' | 'typing' | 'rewind' | 'bang'
   | 'pluck' | 'tick' | 'gavel' | 'page'
+  | 'honk' | 'screech' | 'calm'
 
-// What plays as each of a level's eight beats arrives (see lore.ts for the beats).
+// What plays as each of a level's five beats arrives (see lore.ts for the beats): who they
+// are, their clock, the slowdown, the crowd, the pile-up.
 export const CUES: Record<string, Sfx[]> = {
-  structure: ['gong', 'ping', 'nope', 'thud', 'hmm', 'sigh', 'stir', 'tick'],
-  field: ['pluck', 'bwoop', 'nope', 'boing', 'hmm', 'sigh', 'stir', 'plip'],
-  element: ['bang', 'clunk', 'crack', 'glug', 'tink', 'sigh', 'stir', 'plip'],
-  gene: ['glug', 'tonk', 'unfold', 'yes', 'pop', 'squeaks', 'stir', 'plip'],
-  nerve: ['plip', 'ding', 'huh', 'pop', 'yes', 'squeaks', 'stir', 'invite'],
-  word: ['typing', 'clunk', 'kaching', 'gavel', 'invite', 'page', 'stir', 'typing'],
-  chip: ['boot', 'compute', 'starWipe', 'yes', 'compute', 'fan', 'stir', 'freeze'],
-  horizon: ['gong', 'tonk', 'nope', 'gulp', 'rewind', 'sigh', 'stir', 'freeze'],
+  strings: ['pluck', 'ping', 'bang', 'grind', 'stir'],
+  wheel: ['gong', 'tick', 'screech', 'starWipe', 'stir'],
+  stars: ['bwoop', 'tick', 'screech', 'crack', 'stir'],
+  rock: ['thud', 'tick', 'glug', 'squeaks', 'stir'],
+  genes: ['unfold', 'tick', 'screech', 'pop', 'stir'],
+  apes: ['huh', 'tick', 'typing', 'kaching', 'stir'],
+  machines: ['boot', 'compute', 'screech', 'fan', 'stir'],
+  light: ['gong', 'ping', 'screech', 'grind', 'freeze'],
 }
 
-// Through the leap: a swell as the copies gather, a sound of its own as the new substrate's
-// first unit appears, and a patter as it divides.
+// Through the pile-up: a swell as the jam gathers itself, a sound of its own as the new
+// thing forms, and a patter once it has.
 export const BIRTH: Record<string, Sfx> = {
-  structure: 'tick',
-  field: 'yes',
-  element: 'bwoop',
-  gene: 'chirp',
-  nerve: 'huh',
-  word: 'boot',
-  chip: 'thud',
-  horizon: 'gong',
+  strings: 'thud',
+  wheel: 'ding',
+  stars: 'plop',
+  rock: 'chirp',
+  genes: 'huh',
+  apes: 'boot',
+  machines: 'ping',
+  light: 'bang',
 }
-export const LEAP_CUES: [number, 'swell' | 'birth' | 'divide'][] = [[0.02, 'swell'], [0.2, 'birth'], [0.78, 'divide']]
-
-// What a tap on the stage sounds like on each substrate. (What it does is the scene's job.)
-export const TAPS: Record<string, Sfx> = {
-  structure: 'thud',
-  field: 'boing',
-  element: 'crack',
-  gene: 'pop',
-  nerve: 'plip',
-  word: 'nope',
-  chip: 'tink',
-  horizon: 'gulp',
-}
+export const LEAP_CUES: [number, 'swell' | 'birth' | 'divide'][] = [[0.02, 'swell'], [0.3, 'birth'], [0.8, 'divide']]
 
 type ToneOpts = { f0: number; f1?: number; glide?: number; dur: number; vol: number; type?: OscillatorType; attack?: number; lp?: number; dest?: AudioNode }
 type NoiseOpts = { dur: number; vol: number; type?: BiquadFilterType; f0: number; f1?: number; q?: number; attack?: number }
@@ -261,8 +251,8 @@ export class Sound {
       o.start()
       return o
     })
-    // the harmonic pad: the string's partials, up to and including this plane's own, so the
-    // lowest plane is one pure tone and the seventh has all seven, the last one sour
+    // the harmonic pad: the string's partials, up to and including this level’s own, so the
+    // lowest level is one pure tone and the seventh has all seven, the last one sour
     const padBus = ctx.createGain()
     padBus.gain.value = 0.6
     padBus.connect(this.music)
@@ -641,6 +631,20 @@ export class Sound {
       case 'chirp':
         T({ f0: 1400, f1: 2100, dur: 0.1, vol: 0.05 })
         T({ f0: 1800, f1: 2600, dur: 0.09, vol: 0.05 }, 0.13)
+        break
+      // a small car's horn: two reeds a major third apart, tuned to the level
+      case 'honk':
+        for (const m of [0, 4]) T({ f0: hz(root + 24 + m), dur: 0.2, vol: 0.045, type: 'square', attack: 0.008, lp: 1700 })
+        break
+      // tyres: a narrow band of noise, sliding down
+      case 'screech':
+        N({ dur: 0.5, vol: 0.05, f0: 3400, f1: 1500, q: 9, attack: 0.03 })
+        T({ f0: 2100, f1: 1300, dur: 0.45, vol: 0.01, type: 'sawtooth', lp: 3000 })
+        break
+      // somebody keeping a gap: a fifth, left to ring
+      case 'calm':
+        this.bell(hz(root + 24), t, 0.05, 1.6, this.sfx)
+        this.bell(hz(root + 31), t + 0.12, 0.04, 1.6, this.sfx)
         break
     }
   }

@@ -1,78 +1,115 @@
 import { describe, expect, it } from 'vitest'
-import { LESSONS, MINUTES, NOTES_EARLY, NOTES_LATE, PLANES, SAYINGS } from '../src/minutes.ts'
-import { CANON_NOTE, LAYERS, versesFor } from '../src/lore.ts'
-import { HUE_RANGE, LEARNED, accentFor, headStart, hueShift, lessonFor, minuteFor, noteFor, sayingFor, setSalt } from '../src/rotate.ts'
-import { juliaFor, JULIA_C } from '../src/fractal.ts'
+import { JULIA_C, juliaFor } from '../src/fractal.ts'
+import { LAYERS } from '../src/lore.ts'
+import { CAST, CAUSE, CAUSES_EARLY, CAUSES_LATE, CAUSE_CORRECTED, GRUMBLES, HECKLES, KEVIN, LESSONS, PLANES, SAYINGS } from '../src/minutes.ts'
+import { HUE_RANGE, KEVIN_TELLS, LEARNED, accentFor, calmLoop, causeFor, grumbleFor, headStart, heckleFor, hueShift, lessonFor, sayingFor, setSalt } from '../src/rotate.ts'
 
-describe('the margins', () => {
-  it('has six notes per substrate, short, and free of em dashes', () => {
+describe('the margin', () => {
+  it('has at least four heckles a level, from a cast of four, short, and free of em dashes', () => {
+    expect(Object.keys(CAST)).toEqual(['Pedant', 'Legal', 'Intern', 'Kevin'])
     for (const L of LAYERS) {
-      expect(MINUTES[L.id], L.id).toHaveLength(6)
-      for (const m of MINUTES[L.id]) {
-        expect(m.length, m).toBeLessThanOrEqual(210)
-        expect(m).not.toContain('—')
+      const list = HECKLES[L.id]
+      expect(list.length, L.id).toBeGreaterThanOrEqual(4)
+      // all four regulars turn up at every level
+      expect(new Set(list.map(([who]) => who)).size, L.id).toBe(4)
+      for (const [who, text] of list) {
+        expect(CAST[who]).toBeTruthy()
+        expect(text.length, `${L.id} ${who}`).toBeLessThanOrEqual(220)
+        expect(text.length).toBeGreaterThan(60)
+        expect(text).not.toContain('—')
       }
-      expect(new Set(MINUTES[L.id]).size).toBe(6)
     }
-    for (const n of [...NOTES_EARLY, ...NOTES_LATE, CANON_NOTE]) expect(n.length, n).toBeLessThanOrEqual(60)
-    expect(NOTES_EARLY.length + NOTES_LATE.length).toBeGreaterThanOrEqual(12)
-    expect(JSON.stringify({ NOTES_EARLY, NOTES_LATE, PLANES, SAYINGS, LESSONS })).not.toContain('—')
+    expect(KEVIN[0]).toBe('Kevin')
   })
 
-  it('rotates per loop and repeats nothing within a loop', () => {
+  it('gives the Intern an exclamation mark and Kevin something to minute', () => {
+    for (const L of LAYERS) expect(HECKLES[L.id].filter(([who]) => who === 'Intern').some(([, t]) => /[!?]/.test(t)), L.id).toBe(true)
+    const kevin = LAYERS.flatMap((L) => HECKLES[L.id]).filter(([who]) => who === 'Kevin').map(([, t]) => t).join(' ')
+    expect(kevin.match(/[Mm]inute/g)!.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('rotates per loop and repeats nothing until every heckle has been heard', () => {
+    setSalt(1234)
+    for (const L of LAYERS) {
+      const n = HECKLES[L.id].length
+      const seen = new Set(Array.from({ length: n }, (_, k) => heckleFor(L.id, 1, k)[1]))
+      expect(seen.size, L.id).toBe(n)
+      expect(heckleFor(L.id, 1, n)).toEqual(heckleFor(L.id, 1, 0))
+    }
+    const firsts = new Set([1, 2, 3, 4, 5, 6, 7, 8].map((loop) => heckleFor('genes', loop)[1]))
+    expect(firsts.size).toBeGreaterThan(1)
+  })
+
+  it('lets Kevin explain himself to anyone who has been round five times', () => {
     setSalt(7)
-    const seen = new Set<string>()
-    for (let k = 0; k < 6; k++) seen.add(minuteFor('word', 1, k))
-    expect(seen.size).toBe(6)
-    expect(minuteFor('word', 1, 6)).toBe(minuteFor('word', 1, 0))
-    const first = LAYERS.map((L) => minuteFor(L.id, 1))
-    const second = LAYERS.map((L) => minuteFor(L.id, 2))
-    expect(first).not.toEqual(second)
+    expect(heckleFor('machines', KEVIN_TELLS - 1)).not.toEqual(KEVIN)
+    expect(heckleFor('machines', KEVIN_TELLS)).toEqual(KEVIN)
+    expect(heckleFor('machines', KEVIN_TELLS, 1)).not.toEqual(KEVIN)
+    expect(heckleFor('apes', KEVIN_TELLS)).not.toEqual(KEVIN)
   })
 })
 
-describe('every pass round the loop is a little different', () => {
-  it('leaves the canon note first, petty notes next, and learned ones from loop five', () => {
-    for (const salt of [1, 7, 99, 12345]) {
-      setSalt(salt)
-      expect(noteFor(1)).toBe(CANON_NOTE)
-      for (const loop of [2, 3, 4]) expect(NOTES_EARLY).toContain(noteFor(loop))
-      for (const loop of [LEARNED, 6, 9, 40]) expect(NOTES_LATE).toContain(noteFor(loop))
-      expect(noteFor(3)).toBe(noteFor(3))
+describe('the sign', () => {
+  it('blames an earlier incident first, makes excuses next, and then works it out', () => {
+    setSalt(99)
+    expect(causeFor(1)).toBe(CAUSE)
+    expect(CAUSE).toBe('an earlier incident')
+    expect(CAUSE_CORRECTED).toBe('a later incident')
+    for (let loop = 2; loop < LEARNED; loop++) expect(CAUSES_EARLY).toContain(causeFor(loop))
+    for (let loop = LEARNED; loop < 12; loop++) expect(CAUSES_LATE).toContain(causeFor(loop))
+    expect(CAUSES_EARLY).not.toContain(CAUSE)
+  })
+
+  it('fits on a road sign', () => {
+    for (const c of [CAUSE, CAUSE_CORRECTED, ...CAUSES_EARLY, ...CAUSES_LATE]) {
+      expect(c.length, c).toBeLessThanOrEqual(44)
+      expect(c).not.toContain('—')
     }
+    expect(new Set([...CAUSES_EARLY, ...CAUSES_LATE]).size).toBe(CAUSES_EARLY.length + CAUSES_LATE.length)
   })
+})
 
-  it('quotes the loop’s own note in the last verse of the last chapter', () => {
-    setSalt(7)
-    expect(versesFor(7, 1)[2]).toContain(`the note read: ${CANON_NOTE}.`)
-    expect(versesFor(7, 5, noteFor(5))[2]).toContain(`the note read: ${noteFor(5)}.`)
-  })
-
-  it('gives each newborn substrate five first words, in order, and never goes back to the first', () => {
-    setSalt(3)
+describe('the traffic', () => {
+  it('gives each new slowdown five first words, in order, and never goes back to the first', () => {
+    setSalt(5)
     for (const L of LAYERS) {
-      const lines = SAYINGS[L.id]
-      expect(lines, L.id).toHaveLength(5)
-      expect(new Set(lines).size).toBe(5)
-      for (const s of lines) expect(s.length, s).toBeLessThanOrEqual(40)
-      for (let loop = 1; loop <= 5; loop++) expect(sayingFor(L.id, loop)).toBe(lines[loop - 1])
-      for (let loop = 6; loop < 30; loop++) expect(lines.slice(2)).toContain(sayingFor(L.id, loop))
+      const list = SAYINGS[L.id]
+      expect(list).toHaveLength(5)
+      for (const s of list) expect(s.length, s).toBeLessThanOrEqual(28)
+      expect([1, 2, 3, 4, 5].map((loop) => sayingFor(L.id, loop))).toEqual(list)
+      for (let loop = 6; loop < 40; loop++) expect(list.slice(2)).toContain(sayingFor(L.id, loop))
     }
+  })
+
+  it('grumbles in turn when it is made to brake', () => {
+    for (const L of LAYERS) {
+      const list = GRUMBLES[L.id]
+      expect(list.length).toBeGreaterThanOrEqual(5)
+      for (const s of list) expect(s.length, s).toBeLessThanOrEqual(26)
+      expect(Array.from({ length: list.length * 2 }, (_, k) => grumbleFor(L.id, k))).toEqual([...list, ...list])
+      // nothing it grumbles is also its product's first word
+      for (const s of list) expect(SAYINGS[L.id]).not.toContain(s)
+    }
+  })
+
+  it('gets a little heavier every loop, up to a point, and learns to keep a gap on the third', () => {
+    expect([1, 2, 3, 5, 9].map(headStart)).toEqual([0, 2, 4, 8, 8])
+    expect([1, 2, 3, 4, 9].map(calmLoop)).toEqual([false, false, true, true, true])
   })
 
   it('has something to say at the top of every loop after the second', () => {
     expect(lessonFor(1)).toBe('')
     expect(lessonFor(2)).toBe('')
     expect(lessonFor(3)).toBe(LESSONS[0])
-    expect(lessonFor(LEARNED)).toBe(LESSONS[2])
-    expect(lessonFor(LEARNED)).toContain('Loop 5')
-    expect(lessonFor(50)).toBe(LESSONS[LESSONS.length - 1])
+    expect(lessonFor(3)).toMatch(/^Loop 3\./)
+    expect(lessonFor(3)).toContain('You can decline to pass it on')
+    expect(lessonFor(4)).toBe(LESSONS[1])
+    expect(lessonFor(40)).toBe(LESSONS[LESSONS.length - 1])
+    for (const l of LESSONS) expect(l).not.toContain('—')
   })
+})
 
-  it('lets the members find each other sooner, up to a point', () => {
-    expect([1, 2, 3, 5, 9].map(headStart)).toEqual([0, 2, 4, 8, 8])
-  })
-
+describe('the look', () => {
   it('turns each accent a little round the wheel, keeping its lightness, and leaves loop 1 alone', () => {
     for (const L of LAYERS) {
       const a = L.palette.accent
@@ -102,15 +139,14 @@ describe('every pass round the loop is a little different', () => {
       expect(juliaFor(i, 2)).not.toEqual(juliaFor(i, 3))
     })
   })
-})
 
-describe('the forms', () => {
-  it('sets the eight substrates on the first eight harmonics of one string', () => {
+  it('sets the eight levels on the first eight harmonics of one string, each round its own form', () => {
     expect(LAYERS.map((L) => PLANES[L.id].harmonic)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
     for (const L of LAYERS) {
       const plane = PLANES[L.id]
-      expect(plane.note.length, L.id).toBeLessThanOrEqual(300)
+      expect(plane.note.length, L.id).toBeLessThanOrEqual(320)
       expect(plane.form.length).toBeGreaterThan(8)
+      expect(plane.note, L.id).toContain('road')
     }
     expect(new Set(LAYERS.map((L) => PLANES[L.id].form)).size).toBe(LAYERS.length)
   })

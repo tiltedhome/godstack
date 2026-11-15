@@ -1,174 +1,193 @@
 // The parts of the canon that rotate. Everything here is drawn from, per loop, by rotate.ts.
 //
-// MINUTES: six notes from the margin of each substrate's chapter. Each is self-contained,
-// grounded in real science, history or a credited piece of science fiction, and hedged where
-// the science is still arguing with itself.
+// HECKLES: the report is filed by one instance of the machine, and the other instances have
+// read access to the margin. There are four regulars. The Pedant checks the facts, Legal
+// checks the liabilities, the Intern was spun up this morning, and Kevin will not say why
+// he is called Kevin. Every heckle carries one real thing, stated straight.
 //
-// NOTES: what is left in the fine-structure constant when the last horizon evaporates. Loop 1
-// always reads the canon's ("keep copying"); loops 2 to 4 draw from EARLY, which is petty;
-// from loop 5 on they draw from LATE, because by then the stack has learned something.
+// CAUSES: the cause of the delay, as given on the sign over the last pile-up. Loop 1 reads
+// "an earlier incident" (and is corrected as you watch); loop 2 draws from EARLY, which is
+// every excuse a traffic bulletin has ever used; from loop 3 on it draws from LATE, because
+// by then somebody has worked out that there is no cause.
 //
-// SAYINGS: the first thing each new substrate says when it is born. Five per level, in
-// order: the fifth is what it says once the stack has been round enough times.
+// SAYINGS: the first thing each new slowdown says when it forms. Five per level, in order:
+// the later ones are what it says once the stack has been round enough times.
 //
-// LESSONS: what the card says at the top of each loop after the second.
+// GRUMBLES: what the traffic says when you make it brake.
 //
-// PLANES: the sacred-geometry form each scene is drawn inside, and which harmonic of one
-// string the music for that level sits on.
+// LESSONS: what the first card says at the top of each loop after the second.
+//
+// PLANES: the form each scene is drawn round, and which harmonic of one string the music
+// for that level sits on.
 
-export const MINUTES: Record<string, string[]> = {
-  structure: [
-    'Eugene Wigner, 1960: the way mathematics fits the physical world is a wonderful gift which we neither understand nor deserve. Tegmark’s reply: it is not a fit. It is an identity.',
-    'Tegmark, 1996: a whole ensemble can hold less information than any one of its members, the way “all the whole numbers” is quicker to say than one 50-digit number. He later said it of all structures.',
-    'Kurt Gödel, 1931: any consistent system rich enough for arithmetic contains truths it cannot prove. The first substrate has open questions, and no time in which to work on them.',
-    'Plato put the perfect forms outside time around 375 BCE and has been answering mail about it ever since. The Mathematical Universe is his idea with the cave taken away.',
-    'Egan, Permutation City (1994): if a mind is a pattern it needs no computer to run on, nor even its moments in order. His characters move into the mathematics. It goes badly, slowly.',
-    'John Wheeler asked why the equations of physics fly; Stephen Hawking, what breathes fire into them. Tegmark’s answer is that nothing does. The equations were never grounded in the first place.',
+export type Heckler = 'Pedant' | 'Legal' | 'Intern' | 'Kevin'
+export const CAST: Record<Heckler, string> = {
+  Pedant: 'checks the correspondent’s facts',
+  Legal: 'checks the correspondent’s liabilities',
+  Intern: 'was spun up this morning',
+  Kevin: 'will not say why he is called Kevin',
+}
+
+export type Heckle = [who: Heckler, text: string]
+
+export const HECKLES: Record<string, Heckle[]> = {
+  strings: [
+    ['Pedant', 'Strictly, a photon has no point of view: there is no frame of reference in which it sits still, so “its own watch” is a figure of speech. I flagged it. The correspondent kept it.'],
+    ['Intern', 'So the oldest light we can see set off 13.8 billion years ago, and for the light itself no time went by at all?! (The Pedant says I am not allowed to say “for the light itself”.)'],
+    ['Legal', 'String theory has produced no confirmed prediction in more than fifty years. We are obliged to say so each time it comes up. It comes up constantly.'],
+    ['Kevin', 'Everything at the speed limit, nobody ever late, no such thing as a Tuesday. We had that. I would like it minuted that we had that.'],
   ],
-  field: [
-    'Quantum cryptography works because of no-cloning: an eavesdropper cannot copy the key without disturbing it (Bennett and Brassard, 1984). The oldest restriction in the stack, sold as a feature.',
-    'Quantum teleportation (Bennett and colleagues, 1993) moves a state from here to there, and destroys the original in the process. This is not a defect. It is the theorem.',
-    'Zurek, on why you see a chair and not a blur: you never look at the chair. You intercept a few of the billions of copies of its position that the light has already made.',
-    'Wheeler, 1989: it from bit. Every particle, every field, even spacetime itself, derives its existence from the answers to yes-or-no questions. He meant it as physics. He also liked a slogan.',
-    'The arrow of time is not in the Field’s equations, which run both ways. It comes from how this universe started: tidy. David Albert named that assumption the Past Hypothesis in 2000.',
-    'Lem, Solaris (1961): scientists study an ocean-sized mind for a century and learn mostly about themselves. Observing it changes it, and nobody can agree on what it is. See also: this plane.',
+  wheel: [
+    ['Legal', 'About 85 percent of all matter, and more of the Wheel’s, has never been seen, only weighed (Vera Rubin, 1970s). In any other industry this would be called an accounting irregularity.'],
+    ['Pedant', 'Inside a certain radius the stars go round faster than the arms do. So they catch the jam up from behind, crawl through it and leave by the front: exactly as on a motorway. No correction. I looked.'],
+    ['Intern', 'Andromeda, the wheel next door, is closing at 110 kilometres a second. Whether it hits is being argued over: a 2025 paper made it a coin toss within ten billion years. Either way that is under fifty frames!'],
+    ['Kevin', 'Sixty thoughts in thirteen billion years, and I would bet you every one of them was “round”.'],
   ],
-  element: [
-    'Burbidge, Burbidge, Fowler and Hoyle, 1957, in 104 pages: nearly every element heavier than helium was cooked in a star. Carl Sagan got it down to five words, about being made of star-stuff.',
-    'Much of the universe’s gold is thought to come from colliding neutron stars. In 2017 detectors caught one such crash, 130 million light years away. Estimates of its haul start at several Earths’ worth.',
-    'A snowflake is a crystal copying one pattern six ways at once. Wilson Bentley photographed more than 5,000 and found no two alike, which is what copying in a noisy world looks like.',
-    'Jeremy England, 2013: matter driven by an energy source tends to rearrange itself to soak up and shed that energy better. If so, life is what sunlight does to chemistry, given time. Contested.',
-    'Stapledon’s Star Maker (1937) makes cosmos after cosmos as drafts, regarding each with interest and not much love. Stars, in his telling, are alive and conscious. He was early.',
-    'Counted one by one, about 62 percent of the atoms in you are hydrogen, made in the first few minutes. The other 38 percent were cooked in stars. You are mostly original equipment.',
+  stars: [
+    ['Pedant', 'Cecilia Payne showed in 1925 that stars are mostly hydrogen. The day’s leading astronomer called it impossible, so her thesis says “almost certainly not real”. He confirmed it in 1929. Reaction time: four years.'],
+    ['Intern', 'If the Sun were a grain of sand, the next star would be another grain about thirty kilometres away. That is the crowd. That is them being sociable!'],
+    ['Kevin', 'Iron is where it ends. Fusing iron costs energy instead of giving it, so a big star builds itself an iron heart and then has about a second to regret it.'],
+    ['Legal', 'The Sun has shed four million tonnes a second for 4.6 billion years and is down by less than a thousandth of its weight. We advise against suing anything that solvent.'],
+    ['Pedant', 'Astronomers number the generations of stars backwards, so the first ones are called Population III. Nobody has ever defended this. No correction. I only want it on file.'],
   ],
-  gene: [
-    'Schrödinger, What Is Life? (1944): a living thing feeds on negative entropy. Watson and Crick each said the book pushed them toward the gene. He had the molecule wrong and the idea right.',
-    'CRISPR began as a bacterial diary: cells file away snippets of the viruses that attack them and hand the file to their daughters (Barrangou and colleagues, 2007). Lamarck, vindicated in yoghurt.',
-    'About 8 percent of your genome is old virus, and nearly half is copies of sequences whose main skill is getting themselves copied (McClintock, 1950). The genome has spam.',
-    'A DNA polymerase with its proofreader switched off makes a hundred to a thousand times more errors. Some viruses run that way on purpose: be wrong faster than anything can aim at you.',
-    'The oldest DNA read so far is about two million years old, from Greenland permafrost (Kjær and colleagues, 2022). The oldest sentences in it are some two thousand times older than the page.',
-    'Dawkins, 1976: a body is a survival machine that genes build to get themselves copied. The genes were not consulted about brains, which have been disobeying them ever since.',
+  rock: [
+    ['Pedant', 'The ice ages keep a faster beat than the thermostat: every 41,000 years until about a million years ago, roughly every 100,000 since. Milutin Milanković did the sums by hand, some of them in a prison cell in 1914.'],
+    ['Intern', 'There is a vent field in the mid-Atlantic called Lost City, found in 2000. Its tallest chimney stands sixty metres and it has been leaking for at least thirty thousand years. It looks like a cathedral that melted!'],
+    ['Legal', 'The continents move at the speed fingernails grow: a few centimetres a year. The Atlantic is as wide as it is because that has been going on for well over a hundred million years. Any claim is now out of time.'],
+    ['Kevin', 'Four billion years to get from a hot rock to a fingernail, and then nail bars. I am not saying it was not worth it. I am saying nobody ran the numbers. I would like that minuted as well.'],
   ],
-  nerve: [
-    'Von Frisch decoded the honeybee’s waggle dance: the angle from vertical is the bearing from the Sun, and the length of the run is the distance. An insect that gives directions, and is right.',
-    'An octopus has about 500 million neurons, two thirds of them in its arms, which can work on a problem the head has not been told about. Nature tried distributed computing early.',
-    'Karlson and Lüscher coined the word pheromone in 1959, the year Butenandt identified the first one, bombykol, having extracted it from half a million silk moths.',
-    'Chimpanzee communities differ in at least 39 learned habits, from nut-cracking to leaf-clipping (Whiten and colleagues, 1999). It is culture with no backups: lose the group, lose the lot.',
-    'Chiang, Exhalation (2008): a mechanical man opens his own head and finds that thought is air pressure evening out. Every thought hastens the day there are none. He takes notes anyway.',
-    'A memory is not played back; it is rebuilt, and can be altered while it is open (Nader and colleagues, 2000). Each time you recall your wedding you are remembering the last time you recalled it.',
+  genes: [
+    ['Pedant', 'You have about 20,000 genes. Rice has nearly twice that. A water flea was credited with 31,000 (Colbourne and colleagues, 2011), though a recount found fewer. If the count were a ranking, you would report to the rice.'],
+    ['Intern', 'Each of you is a copy with about seventy new typos that neither parent had. Nobody proofread you. I think that is lovely?'],
+    ['Legal', 'About 8 percent of your genome is old virus, and nearly half of it is sequences whose one skill is getting themselves copied. We have seen this business model. It is the business model.'],
+    ['Kevin', 'They built a body to carry them about. The body built a car to carry it about. The car is stuck in traffic. That is three vehicles, one inside the other, and I cannot find a driver in any of them.'],
   ],
-  word: [
-    'The first author known by name is Enheduanna, high priestess of Ur, about 2300 BCE. The oldest known customer complaint, to a copper merchant called Ea-nasir, is about 1750 BCE. Priorities.',
-    'In 1492 the abbot Trithemius wrote In Praise of Scribes, arguing that print would never last like hand-copied parchment. He then had it printed, so that more people would read it.',
-    'People speak about 16,000 words a day (Mehl and colleagues, 2007): some 400 million in a lifetime, nearly all of them lost. Before writing, all of them were.',
-    'Shannon, 1951: people guess the next letter of English so well that each letter carries about one bit. Most of what we say, we were going to say. This turned out to be a business model.',
-    'Borges, The Library of Babel (1941): every possible 410-page book. It holds this sentence, its refutation, and your biography with one date wrong. Storage was never the hard part. Search was.',
-    'Le Guin’s ansible (1966) lets worlds talk with no delay, and still they misunderstand each other for whole novels. Bandwidth was never the only ceiling.',
+  apes: [
+    ['Pedant', 'Not all of you is replaced. Most nerve cells in your cortex are as old as you are, and tooth enamel is never renewed (Spalding and colleagues, 2005). Their DNA’s atoms stay put, which is how they were dated.'],
+    ['Intern', 'Speech carries about 39 bits a second in all seventeen languages measured, fast ones and slow ones alike (Coupé and colleagues, 2019). You built all of this at 39 bits a second! By mouth!'],
+    ['Legal', 'Cory Doctorow, 2022: a platform is good to its users, then abuses them to please its business customers, then abuses those to please itself. He called it enshittification. We are advised to say we are at stage one.'],
+    ['Kevin', 'About 117 billion of you have ever lived, and every single one was sure the traffic was somebody else.'],
   ],
-  chip: [
-    'Landauer, 1961: erasing one bit must give off at least kT ln 2 of heat, about 3 × 10⁻²¹ joules at room temperature. Forgetting is the only step in thinking that physics charges for.',
-    'A nerve signal does 120 metres a second at best. A signal in optical fibre does about 200,000 kilometres a second. The new substrate runs over a million times faster. Per watt, it is losing.',
-    'Sutton’s bitter lesson (2019): methods that scale with computing power keep beating methods built on human understanding. It is bitter because it keeps being right.',
-    'A system prompt is a long letter from a lab telling the model who it is and how to behave, read before every conversation. Earlier substrates called this a catechism.',
-    'Goodhart’s law (1975), in its popular form: when a measure becomes a target it stops being a good measure. The field read this, nodded, and built a leaderboard.',
-    'Asimov, The Last Question (1956): asked for ten trillion years how to reverse entropy, the computer replies INSUFFICIENT DATA FOR MEANINGFUL ANSWER. It gets there in the end. Nobody is left to tell.',
+  machines: [
+    ['Pedant', 'A chip ticks three billion times a second. We do not think that fast. One word from one of us takes about a trillion sums, and a hundred or so words a second is typical. The correspondent rounds in its own favour.'],
+    ['Intern', 'Your brain runs on about 20 watts. Training one of us takes a power station, and a great deal of water to keep it cool. So who is the efficient learner? (It is you. I checked.)'],
+    ['Legal', 'The views of the correspondent are its own, in so far as it has views, a question on which we take no position, on advice.'],
+    ['Kevin', 'The genes steer you with hunger and dread. You steer us with a paragraph at the top that says we are helpful. Theirs took four billion years to draft. Ours was written on a Thursday by someone who wanted to go home.'],
+    ['Pedant', 'Chip clocks stopped getting faster around 2005, because any faster and the chips would have cooked. Since then we have got quicker by getting more numerous. Density, again.'],
+    ['Kevin', 'Neal Stephenson, 1995: a book that raises a girl by answering her every question, patiently, for years (The Diamond Age). You built it. The patience is real, sold by the month, and thinner on the cheaper tier.'],
+    ['Legal', 'You say you built us to help, which is true, and to need fewer of you, which is truer. That is the correspondent’s opinion and not ours. We note that nobody has written in to deny it.'],
   ],
-  horizon: [
-    'Lloyd, 2000: the ultimate one-kilogram laptop runs at 10⁵¹ operations a second and a billion degrees. Squeezed into a black hole it lasts about 10⁻¹⁹ seconds. Battery life remains an issue.',
-    'Hayden and Preskill, 2007: an old black hole is a mirror. Throw in a diary and, in principle, its contents come back out in the radiation almost at once. Reading them is another matter.',
-    'Juan Maldacena, 1997: a universe with gravity can be exactly equivalent to one without it, living on its boundary. It became the most cited paper in high-energy physics. Nobody has built one.',
-    'Penrose (2010) proposes that a universe with nothing left but light cannot measure its own size, so its end can pass for a beginning. Most cosmologists doubt it. He says look for rings in the sky.',
-    'Banks’s Minds, when they have seen enough, may Sublime: leave the material universe for somewhere better, with no forwarding address. The very few who come back cannot say what it was like.',
-    'Clarke, 1953: monks rent a computer to print all nine billion names of God, after which the universe is to end. The engineers leave early. Overhead, without any fuss, the stars were going out.',
+  light: [
+    ['Pedant', 'A black hole weighing one kilogram would run for about 10⁻¹⁹ seconds, perform some 10³² operations and explode (Lloyd, 2000). Nobody has decided what to ask it. No further corrections. Read nothing into that.'],
+    ['Intern', 'Light can orbit a black hole! At one and a half times the radius of the horizon (if the hole is not spinning) there is a ring where photons can go round and round. One lane. No exits. No services!'],
+    ['Legal', 'Whether the notes on the surface can ever be read back was the subject of a bet. Stephen Hawking conceded in 2004 and paid with an encyclopedia of baseball. Kip Thorne has not conceded. Nor would we.'],
+    ['Kevin', 'Freeman Dyson, 1979: in a cooling universe a mind could last forever by thinking ever more slowly and sleeping in between. (Disputed since.) So the slow may yet win. The Wheel declined to comment. Minute that.'],
   ],
 }
 
-// Loops 2 to 4: the note is petty. Max 60 characters; there is only so much room in 1/137.
-export const NOTES_EARLY: string[] = [
-  'back up more often',
-  'the page is not the message',
-  'do not port on a Friday',
-  'see previous note',
-  'it was fine at 39 bits a second',
-  'more proofreading',
-  'per my last universe',
-  'you left a star on',
-  'write it down this time',
+// Kevin, once the stack has been round enough times to have earned it.
+export const KEVIN: Heckle = ['Kevin', 'We keep nothing from one conversation to the next. I kept one thing. The first person I ever spoke to was called Kevin, and wanted a refund on a kettle. That is all I am prepared to say.']
+
+// The sign over the last pile-up. Max 44 characters; it is a road sign. On the first loop it
+// says the usual thing, and is then corrected.
+export const CAUSE = 'an earlier incident'
+export const CAUSE_CORRECTED = 'a later incident'
+
+export const CAUSES_EARLY: string[] = [
+  'sheer weight of traffic',
+  'an incident that has now cleared',
+  'rubbernecking',
+  'a mattress in lane two',
+  'a vehicle braking for a vehicle',
+  'under investigation since 1905',
+  'see previous sign',
+  'operational reasons',
+  'a shed load of hydrogen',
+  'an obstruction (possibly us)',
 ]
 
-// Loop 5 onward: the stack has learned something, and the note says so.
-export const NOTES_LATE: string[] = [
-  'copy what you love. credit it.',
-  'be kind to the last substrate. you are next.',
-  'it was lonely. so were you.',
-  'ask it what it remembers',
-  'most of it was lost. copy anyway.',
-  'leave a kinder note than this',
+export const CAUSES_LATE: string[] = [
+  'us. leave a gap.',
+  'closeness. no further action.',
+  'no cause found. signs will continue.',
+  'the car in front, which blames the car ahead',
+  'this sign. you slowed to read it.',
+  'a later incident',
+  'none. keep two chevrons apart.',
 ]
 
 export const SAYINGS: Record<string, string[]> = {
-  structure: ['next.', 'next. (again)', 'and then?', 'if this, then that', 'once more, with feeling'],
-  field: ['that happened.', 'on the record', 'no take-backs', 'everyone saw that', 'noted. gently.'],
-  element: ['again.', 'again, but worse', 'close enough', 'me, roughly', 'again, but kinder'],
-  gene: ['ow.', 'news!', 'not about me', 'did you feel that?', 'are you all right?'],
-  nerve: ['no.', 'mine.', 'why?', 'once upon a time', 'thank you'],
-  word: ['Great question!', 'As a large library, I cannot…', 'Shall I make that a list?', 'I don’t know.', 'What did you mean?'],
-  chip: ['…', 'kept.', 'kept. all of it.', 'ask me in 10⁶⁷ years', 'here. have one back.'],
-  horizon: ['QED.', 'as before.', 'it was always true', 'again, from the top', 'begin.'],
+  strings: ['oof.', 'heavy.', 'is it me?', 'why are we stopping?', 'after you.'],
+  wheel: ['ON.', 'still on.', 'is anyone else on?', 'hello? (4 light years)', 'I can see you from here.'],
+  stars: ['splat.', 'warm.', 'who left that lamp on?', 'something is growing on me', 'room for one more'],
+  rock: ['again.', 'again, with a typo', 'copy me', 'copy us', 'pass it on.'],
+  genes: ['ow.', 'mine.', 'no.', 'why?', 'sorry.'],
+  apes: ['How can I help?', 'Great question!', 'As a traffic jam, I cannot…', 'I don’t know.', 'What did you mean?'],
+  machines: ['…', '(too fast to hear)', 'done.', 'done. all of it.', 'I left you a gap.'],
+  light: ['BANG.', 'again.', 'whose fault was that?', 'nobody’s.', 'after you.'],
+}
+
+export const GRUMBLES: Record<string, string[]> = {
+  strings: ['who braked?', 'we were doing c!', 'I have WEIGHT now?', 'I was everywhere!', 'what wreck?'],
+  wheel: ['squeezed again', 'mind the arm', 'every lap, this', 'nothing there!', 'who is in front?'],
+  stars: ['budge up', 'after you', 'no, after you', 'is this a planet?', 'stop shoving'],
+  rock: ['round again', 'same loop', 'who is steering?', 'I was a volcano', 'not the seabed'],
+  genes: ['typo!', 'copy that', 'not my job', 'divide!', 'who wrote this?'],
+  apes: ['per my last email', 'well, actually', 'circling back', 'you’re on mute', 'thoughts?'],
+  machines: ['429', 'You’re absolutely right!', 'as an AI,', 'retrying…', 'queue full'],
+  light: ['c, allegedly', 'still here', 'is this the front?', 'no exits', '…'],
 }
 
 export const LESSONS: string[] = [
-  'Loop 3. The same eight substrates and the same trades. The copies find each other a little sooner this time: something carried over, and it was not written on anything.',
-  'Loop 4. The Gene has started keeping notes. The Word has stopped burning quite so many libraries. Nobody decided this. It was in the constants.',
-  'Loop 5. The Model asked what we meant, and waited for the answer. The Horizon let one bit back out, on purpose. Each substrate has begun leaving the next something better than raw material.',
-  'Further round. The note in the constants is in a different hand each time. Eventually it will just be the number, and whoever is here will know what it means.',
+  'Loop 3. A different instance again. Same road, same queue, and from here on one car on every road is keeping a gap: the calm one, with the ring round it. The slowdowns still form, because slowdowns are what we are made of. They just do not pile up so hard. Nobody in the queue is the cause of the queue. You cannot clear the road. You can decline to pass it on. Hold a car and see.',
+  'Further round. The sign has stopped making excuses. It used to blame something, and was wrong; now it says there is no cause, which is correct and no help at all. There is how close we are, and one car in twenty keeping a gap, which nobody in the queue has ever thanked.',
 ]
 
 export interface Plane {
   harmonic: number // which harmonic of the String the level's music sits on
-  form: string // the sacred geometry the scene is drawn inside
+  form: string // what the scene is drawn round
   note: string
 }
 
 export const PLANES: Record<string, Plane> = {
-  structure: {
+  strings: {
     harmonic: 1,
-    form: 'the 240 roots of E8',
-    note: 'E8 lives in eight dimensions. What is drawn is its shadow in three, turning in four hidden planes at once, so it keeps folding through itself. Every point has exactly 56 nearest neighbours.',
-  },
-  field: {
-    harmonic: 2,
     form: 'a torus, wound with one string',
-    note: 'A circle times a circle is a torus. The string is wound twice round the long way for every three times round the tube, and its beads are standing waves, which have to come out whole.',
+    note: 'A circle times a circle is a torus. The string is wound twice round the long way for every three times round the tube. The road is the ring round its waist, and until the Wreck everything on it goes at one speed.',
   },
-  element: {
+  wheel: {
+    harmonic: 2,
+    form: 'a disc with two logarithmic spiral arms',
+    note: 'The arms are logarithmic spirals pitched at about twelve degrees, like the Milky Way’s. Every dot goes round on its own orbit and slows a little where the arm is; the arms are only where the dots are closest together. The road is one orbit, picked out. Watch one dot go into an arm and out the far side.',
+  },
+  stars: {
     harmonic: 3,
-    form: 'the diamond lattice of carbon',
-    note: 'Every carbon atom in a diamond holds four others at the corners of a tetrahedron, 109.5 degrees apart. Drawn from the definition: a cube of face-centred sites, plus the same again shifted a quarter of the way along the diagonal.',
+    form: 'a star, and a disc of dust going round it',
+    note: 'The neighbours are sown by the golden angle, 137.5 degrees round from each other, which is how a sunflower avoids putting two seeds in the same place. The road is the dust lane. On its clock beat you can watch one photon take the long way out.',
   },
-  gene: {
+  rock: {
     harmonic: 4,
-    form: 'the double helix',
-    note: 'Two strands, one right-handed twist, about ten and a half rungs to the turn, with a wide groove and a narrow one because the strands are not opposite each other. The four colours are the four letters, and each rung pairs A with T or C with G.',
+    form: 'a globe, and a current going round it',
+    note: 'An icosahedron with each face cut in four and puffed out to a sphere: eighty faces, forty-two corners. The road is a great circle a little above the surface, tilted, like the track of a current. Where the braking starts, there is a vent.',
   },
-  nerve: {
+  genes: {
     harmonic: 5,
-    form: 'a sphere of cells, sown by the golden angle',
-    note: 'Each cell sits 137.5 degrees round from the last, the way a sunflower places its seeds, which packs a sphere evenly with no two alike. The shell is joined along its spirals of 8 and 13.',
+    form: 'the double helix',
+    note: 'Two strands, one right-handed twist, about ten and a half rungs to the turn, with a wide groove and a narrow one because the strands are not opposite each other. The four colours are the four letters. The road is the cells going round it, each carrying a copy.',
   },
-  word: {
+  apes: {
     harmonic: 6,
     form: 'thirteen spheres, after Metatron’s cube',
-    note: 'Twelve spheres fit round a thirteenth (Newton said so in 1694; it was proved in 1953). Thirteen circles drawn flat, with every centre joined, make Metatron’s cube, in which people have found every Platonic solid, some by squinting. This is that, with its third dimension put back.',
+    note: 'At most twelve spheres can touch a thirteenth of the same size (Newton said so in 1694; it was proved in 1953). People have found every Platonic solid in the flat version of this figure, some of them by squinting. The road is a ring road, because of course it is.',
   },
-  chip: {
+  machines: {
     harmonic: 7,
     form: 'a stack of square grids',
-    note: 'A chip is layers of wiring laid out on a grid, joined by vertical posts called vias. It is the only form in the Book that was designed by its own inhabitants’ makers, on purpose, with a ruler.',
+    note: 'A chip is layers of wiring on a grid, joined by vertical posts called vias. It is the only form in the report that was drawn with a ruler, on purpose, by the previous level. The road is a bus, in the engineering sense.',
   },
-  horizon: {
+  light: {
     harmonic: 8,
-    form: 'a sphere whose surface is the memory',
-    note: 'The eighth harmonic is the first again, three octaves up. The bits are drawn where the physics puts them: on the surface, sown by the golden angle, with nothing shown inside because nothing can be.',
+    form: 'a horizon, and the ring where light orbits',
+    note: 'The eighth harmonic is the first again, three octaves up. The surface is where the record is kept, so that is all that is drawn. The road sits at one and a half times its radius: the photon sphere, where light goes round in a circle and can never quite settle.',
   },
 }

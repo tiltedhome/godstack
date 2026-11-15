@@ -1283,3 +1283,165 @@ td.who {
     margin: 4px 0 0;
   }
 }
+
+/* ------------------------------------------------------------ Phantom Jam */
+
+/* The main button is also the countdown: it fills from the left as the beat's reading time
+   runs out, so nobody is surprised when the page turns. */
+.act {
+  position: relative;
+  overflow: hidden;
+}
+
+.act .fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+  background: rgba(7, 6, 13, 0.22);
+  pointer-events: none;
+}
+
+.act .label {
+  position: relative;
+}
+
+.act.skip .fill {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* play and pause sit next to the button they govern */
+#autoplay[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+#autoplay svg {
+  fill: currentColor;
+}
+
+.beatline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hint {
+  margin: 0;
+  font: 500 10px var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* five beats, each a paragraph: the card needs less room than it did */
+.beat-text {
+  min-height: 11.5em;
+}
+
+@media (max-height: 720px) {
+  .beat-text {
+    min-height: 10.5em;
+  }
+}
+
+@media (min-width: 760px) and (min-aspect-ratio: 1/1) {
+  .beat-text {
+    min-height: 0;
+  }
+}
+
+/* the cast, under the chart */
+.key {
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* what it is like to be this level, a line or two per beat */
+.strip {
+  margin: 2px 0 0;
+  font: 400 11.5px/1.4 var(--sans, 'IBM Plex Sans', sans-serif);
+  color: color-mix(in srgb, var(--accent) 72%, var(--text));
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.strip:empty {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  .beat-text {
+    font-size: 15px;
+    line-height: 1.46;
+  }
+}
+
+/* the intro has more to say than it used to, and still has to fit a phone without scrolling */
+@media (max-width: 520px) {
+  .intro-inner {
+    gap: 11px;
+  }
+
+  .beat {
+    font-size: clamp(16px, 4.3vw, 18.5px);
+    line-height: 1.36;
+  }
+
+  .punch {
+    font-size: 78px;
+    margin: 4px 0;
+  }
+
+  .b4 {
+    font-size: 11.5px;
+  }
+
+  .b5 {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-height: 660px) and (max-width: 520px) {
+  .intro {
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .intro-inner {
+    gap: 8px;
+  }
+
+  .beat {
+    font-size: 14.5px;
+    line-height: 1.33;
+  }
+
+  .punch {
+    font-size: 46px;
+    margin: 2px 0;
+  }
+
+  .b4 {
+    font-size: 10.5px;
+  }
+
+  .b5 {
+    font-size: 12px;
+  }
+
+  .intro-actions {
+    margin-top: 2px;
+  }
+}
+
+/* a long press on the road asks a car to keep a gap; it must not also select the page or
+   bring up the system's own menu */
+#stage {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}

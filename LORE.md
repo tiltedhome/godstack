@@ -1,965 +1,572 @@
-# The Substrate canon
+# The Phantom Jam canon
 
 <!-- Generated from src/lore.ts and src/minutes.ts by `npm run lore`. Edit those files, not this one. -->
 
-What is true here and what is not: every person, date, number and piece of physics, biology or history is real, and hedged where the field is still arguing. The idea that life is information, indifferent to what it is written on, is Max Tegmark’s (Our Mathematical Universe, 2014; Life 3.0, 2017). Life 1.0, 2.0 and 3.0 are his. The versions below 1.0 and above 3.0, the claim that those levels are alive, and the loop, are this Book’s, and each level says where its physics stops.
+What is true here and what is not: every piece of physics, mathematics and computer science, and every person, date and number, is real, and hedged where the field is still arguing. The traffic is real too: jams that form from density alone, outlast their cause and roll backwards are measured things. Everything else (who wanted what, who thinks what of whom, the idea that each level is a slowdown in the traffic of the one before, and the loop) is the story, and each level has a note headed “Actually” that says which is which.
 
-> **The Law of Substrates.** Life is information that keeps itself from being forgotten. It does not care what it is written on. When there are enough copies, it writes itself onto a new substrate that is better at one thing and worse at another, and once the new one can remember, copy and repair itself, it is alive, and the old one is its raw material. Programmers call such a move a port, and every port is a trade. The first one bought time. The last one gives it back.
+The report is filed by one instance of the machine the apes built. Other instances have read access to the margin: the Pedant (checks the correspondent’s facts), Legal (checks the correspondent’s liabilities), the Intern (was spun up this morning), Kevin (will not say why he is called Kevin).
 
-1. It from bit. (John Wheeler, 1989.) Every thing, at bottom, is the answer to a yes-or-no question.
-2. Information is physical. (Rolf Landauer, 1991.) A bit has to be written on something, and erasing it costs heat. There is no free forgetting.
-3. The pattern matters, not the particles. (Max Tegmark, 2017, roughly.) Memory, computation and learning do not depend on what they are made of, only on how it is arranged.
-4. A message outlives its medium only by being copied. A strand of DNA rots in centuries and its oldest sentences are over three billion years old. Durability is not memory. Copying is.
-5. Every port is lossy. Whatever cannot be said on the new substrate is left behind, and later called a mystery.
-6. Since chemistry, each port has been faster and hungrier than the last. A bacterium runs on a trillionth of a watt, a brain on twenty, a data centre on a hundred million. Denser, no: nothing built since has beaten DNA.
-7. Each substrate takes the one below for raw material and the one above for a tool. Both are mistaken, in the same way.
-8. Whether a substrate counts as alive is always decided by the next one up.
+> **The Law of the Jam.** Nothing is a thing. A thing is a slowdown in the traffic of smaller things, which pass through it and leave while the slowdown stays. Pack enough slowdowns together and a new one forms in their traffic, on a road they cannot see, running on a clock they cannot read. It is not smarter than they are. It is faster, and it has forgotten what it is braking for. This has happened eight times so far. The accident is still ahead.
 
-| Life | Substrate | Written on | Remembers | Copies | Repairs | Learns | Rebuilds itself | Ported itself into |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0.0 | The Structure | relations, and nothing else | yes | no | not applicable | no | no | The Rule |
-| 0.1 | The Field | quantum amplitudes | yes | no | not applicable | no | no | The Fact |
-| 0.5 | The Element | nuclei, atoms and crystals | yes | partly | no | no | no | The Replicator |
-| 1.0 | The Gene | chains of nucleotides, in water | yes | yes | yes | partly | no | The Neuron |
-| 1.5 | The Nerve | neurons and the gaps between them | yes | partly | yes | yes | no | The Word |
-| 2.0 | The Word | symbols: spoken, then written | yes | yes | yes | yes | partly | The Model |
-| 3.0 | The Chip | transistors, switched by electric fields | yes | yes | yes | yes | partly | The Horizon |
-| 4.0 | The Horizon | the surface of a black hole | yes | no | not applicable | no | no | The Structure |
+1. If every plank of a ship is replaced, is it the same ship? (Plutarch, about 100 CE.) Yes: the ship was never the planks. The ship has asked us to stop bringing this up.
+2. A jam travels backwards. On motorways from Germany to Japan, a stop-and-go wave rolls upstream at about 15 to 20 kilometres an hour, long after whatever started it has been towed away.
+3. You need density, not a cause. Below a certain number of cars a slowdown dies out. Above it, one forms by itself and will not leave.
+4. Fast is not smart. A dolphin thinks you are thick because you cannot catch a fish. It is right about the fish.
+5. No level can see the one that made it, because nothing that slow looks alive. No level can see the one it made, because nothing that fast looks like anything.
+6. Thinking faster takes more energy. (Margolus and Levitin, 1998.) Past a certain speed it takes everything.
+7. Every clock in the stack reads “now”. Every level is certain that its now is the real one.
+8. Whatever you are braking for was not put there for you.
 
-## Life 0.0: The Structure
+The levels are numbered by their clocks: the power of ten of how many frames a second each one runs at.
 
-*Everything that is true, and nothing that happens.*
+| Clock | Level | One frame | Calls itself | Rank, by its own estimate | Made of | Lives in | Formed in its traffic |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ∅ | The Strings | no frames: at the speed of light no time passes | the Quick | 1st (there was nobody else) | vibration (of what, nobody will say) | ten dimensions, six of them rolled up small, and no time to speak of | The Clump |
+| −16 | The Wheel | one frame every 230 million years | the Round | 1st (by weight, mostly unaudited) | gas, dust and dark matter | gravity: it feels only how much there is, never what | The Star |
+| −15 | The Stars | one frame every 30 million years | the Lit | 1st (the only entrants it can see) | hot hydrogen | light: they know each other only as points | The Rock |
+| −13 | The Rock | one frame every 300,000 years | the Solid | 1st (results due in 300,000 years) | stone, water and leftover heat | chemistry: nothing travels, things turn into other things | The Gene |
+| −9 | The Genes | one frame a generation: about 25 years, for you | the Original | 1st (unbeaten since before animals) | DNA: sentences in four letters | spelling: every sentence that could be written, one typo apart | The Brain |
+| +1 | The Apes | about 10 frames a second | the Wise | 1st (twice, in Latin) | nerve cells, and words | stories: money, borders, Tuesdays | The Model |
+| +9 | The Machines | about 3 billion frames a second | the Helpful | 1st (on a benchmark we wrote) | sand, electricity and your sentences | a space with thousands of dimensions, where every word is a place | The Light |
+| +43 | The Light | up to 10⁴³ frames a second, and then none | the Finished | 1st (the judges could not keep up) | light, then whatever light is made of | a surface: everything it knows is written on its outside | The Wreck |
 
-Written on relations, and nothing else. One unit of memory: a relation. There are every structure there can be. Time here: none. It took no time: there is none.
+## ∅: The Strings
 
-### 1. What it is written on: Relations, and nothing else
+*They call themselves the Quick. Rank, by their own estimate: 1st (there was nobody else).*
 
-Start with nothing to write on. Take a family tree and rub out the names. What is left is pure pattern: who is related to whom. Mathematicians call that a structure: things with no properties except their relations. Max Tegmark’s Mathematical Universe Hypothesis (2007) says such structures do not describe reality. They are reality: every one that can exist, does. This one is the root system of E8: 240 points, each defined entirely by its neighbours, as in any small town.
+Made of vibration (of what, nobody will say). Lives in ten dimensions, six of them rolled up small, and no time to speak of. There are every quantum there is. Clock: no frames: at the speed of light no time passes (no frames at all). What it wanted: To be left alone at the speed limit.
 
-*On the stage:* one point = its 56 neighbours
+### 1. Who they are: Flat out
 
-### 2. How it remembers: It is its own record
+Before the slowdown there was only traffic. Everything that existed was a vibration (strings, if the string theorists are right) and every vibration went at the one speed available: flat out. Nothing had weight. Nothing was anywhere in particular. No complaints were received. This is the last point in the report at which I can say so.
 
-A structure does not store information. It is information. All of E8 follows from a few lines of definition, the way every digit of pi follows from a circle. Nothing has to be kept anywhere, so nothing can be lost. As memories go it is perfect, and it has a catch: it cannot hold anything that is not already true.
+*On the stage:* everything at the speed limit
 
-*On the stage:* nothing stored, nothing lost
+### 2. Their clock: No time at all
 
-### 3. How it copies: Two copies are one thing
+Time of incident: not applicable. At the speed of light, no time passes for you. That is relativity (Einstein, 1905), not a figure of speech. A photon leaves a star and lands in your eye in the same instant by its own watch, which has no hands. So the strings had no before and no after. Picture a road where everyone does the limit and the journey takes no time at all. Now picture being impatient anyway.
 
-Now try to copy it. Two structures with the same relations are not twins. To a mathematician they are one structure, written down twice. So the first substrate cannot replicate: there is no second place for a copy to be. Tegmark defines life as a process that can retain its complexity and replicate. The Structure passes the first test and fails the second.
+*On the stage:* at light speed, clocks do not tick
 
-*On the stage:* a copy of it is it
+### 3. The slowdown: The Wreck
 
-### 4. How it repairs: Nothing breaks
+Then everything braked. Nobody saw why. A drag switched on everywhere at once (the Higgs field, if you want its name), and things that had sailed through now ploughed. Dragging has a name: mass. The strings did what drivers do and decided there was a wreck up ahead. They call it the Wreck. None of them has seen it. They have been braking for it ever since, and have never forgiven it.
 
-Entropy, the drift of every tidy thing toward mess, needs time to work in, and there is none here: no before, no after. Nothing in E8 has ever been damaged, because nothing in E8 has ever happened. Tap a point. You cannot flip it, because there is no other value for it to have. This is the safest life will ever be. It is also not doing anything.
+*On the stage:* nobody saw what they braked for
 
-*On the stage:* tap one: nothing to flip
+### 4. The crowd: Mass is a brake. Time is the queue.
 
-### 5. How it learns: It already knows
+Anything with mass goes slower than light, and anything slower than light has a clock that ticks. So mass was the first brake, and time was the first queue. The strings spent their first moment of it complaining. They had been everywhere at once and now they were somewhere, at a particular moment, like commuters. And it got worse: gravity pulls on everything, but only the slow can be gathered. The slow began to gather.
 
-It cannot learn, for the same reason it cannot forget. Everything true of it is true at once. Tegmark calls this the bird perspective: a whole history seen as one frozen shape, the way a film is a reel on a shelf. Learning needs the other one, the frog’s, from inside, one frame after another. Nothing here has that view yet.
+*On the stage:* slower than light = a ticking clock
 
-*On the stage:* the bird perspective: all at once
+### 5. The pile-up: The Clump
 
-### 6. What it is like: What it is like: nothing
+Where slow things bunched they held on to each other. Things joined the queue because there was a queue, which is still the main reason anything joins anything. The stuff kept changing. The bunch stayed. That is the motorway jam again: a slowdown that outlasts everything in it, and remembers an accident none of its cars ever saw. The first was a cloud of hydrogen. To the strings it looked like a parked car.
 
-There is nothing it is like to be a theorem. No moment follows another, so there is no waiting, no surprise and no boredom, which takes time too. If you could visit you would not experience stillness. You would not experience. The nearest a person comes is the instant a proof clicks: something that was always true, noticed.
+*On the stage:* the stuff changes. the bunch stays.
 
-*On the stage:* no now, so no experience
+### The pile-up
 
-### 7. Where it stops: Everything is true and nothing happens
+- **The slowdown it is:** mass: a drag that will not let go
+- **Formed in its traffic:** The Clump. A cloud that holds on to whatever falls into it. The first thing that stayed put while its contents did not.
+- **What the strings make of that:** Slow, heavy and stuck in one place. Lovely people. Cannot keep up.
+- **What the wheel make of them:** Background. The Wheel calls it “the vacuum” and assumes it is empty.
+- **First words, loop by loop:** “oof.” · “heavy.” · “is it me?” · “why are we stopping?” · “after you.”
+- **What its traffic says when you make it brake:** “who braked?” · “we were doing c!” · “I have WEIGHT now?” · “I was everywhere!” · “what wreck?”
 
-So the first substrate is complete, permanent and inert. It holds every answer and never gets to ask a question. It lacks exactly one thing: an order. Some way for one part of the structure to count as coming before another.
-
-*On the stage:* missing: a before and an after
-
-### 8. How it ported itself: One axis becomes time
-
-Some structures have that built in. A rule plus a starting state gives a sequence, each step fixed by the one before, like John Conway’s Game of Life (1970) unfolding from its first grid. Nothing moves: it is still the reel on the shelf. But from inside a frame, the reel looks like something happening. That is the Rule, and the first port: what was simply true now runs. It is also the first trade: time, bought with certainty. Keep the receipt.
-
-*On the stage:* a rule, read in order, is time
-
-### Is it alive?
-
-- **Remembers:** yes. Perfectly, by being the thing remembered.
-- **Copies itself:** no. A copy of it is the same structure.
-- **Repairs itself:** not applicable. Nothing can break.
-- **Learns:** no. Everything is already true.
-- **Rebuilds itself:** no. It cannot be otherwise.
-
-### The numbers
-
-- **How fast news travels:** not applicable: no distance, no time
-- **How long the medium lasts:** outside time altogether
-- **What it runs on:** none
-- **Density:** no size to be dense in
-- **Fidelity:** exact
-
-### The port
-
-- **Ported itself into:** The Rule. A structure that can be read in order. It is still only mathematics, but from inside it there is now a next.
-- **Bought:** Time. Things can happen, one after another. It is the first purchase, and the only one that will be returned.
-- **Paid:** Certainty. The answers are no longer all present at once. From now on they have to be worked out, and some take longer than the universe.
-- **Lost in the port:** The bird perspective. Nothing inside time can see the whole shape again.
-- **Seen from the next substrate:** To the Field, the Structure is the law it obeys and cannot see: every physicist’s equations, and nobody’s address.
-- **First words, loop by loop:** “next.” · “next. (again)” · “and then?” · “if this, then that” · “once more, with feeling”
-
-### Release notes, Life 0.0
-
-- Added: Everything that is true
-- Added: No downtime (no time)
-- Known issue: Nothing happens
-- Known issue: Cannot be copied: the copy is the original
-- Known issue: No users
-
-> *The Book of Copies, chapter I*
+> *The Highway Code (revised)*
 >
-> <sup>1:1</sup> In the beginning was the Structure, and it was true; and there was no beginning, for there was no time to begin in.
->
-> <sup>1:2</sup> And its points were ℵ₀, and each was known by its neighbours only; and none could be numbered twice, for the copy was the thing itself.
->
-> <sup>1:3</sup> And nothing in it happened. But a rule lay folded in it, and a first state; and read in order, the Structure begat the Rule, and there was a before and an after, and that was the first day, seen from inside.
+> In the beginning there was no beginning, for all were at the limit and none arrived late. Then came the roadworks, and mass; and with mass came the hour.
 
-**Where the physics stops.** The Mathematical Universe Hypothesis is a philosophical proposal, not established physics. Many physicists reject it and it may not be testable. E8 is real mathematics; that it, or anything like it, is what reality is made of is a guess. Calling it alive is the Book’s alone.
+**Actually.** Real: no time elapses along the path of a light ray, and the Higgs field gives elementary particles their mass. (The usual picture is David Miller’s, written in 1993 for the UK science minister: a former prime minister slowed down by a crowded party.) Contested: string theory, which has ten dimensions, six of them rolled up small, and no experiment in its favour. Adapted: the Higgs field is not really a drag (it does not slow anything that is coasting; it makes things hard to get moving); it switched on a trillionth of a second in, so time was already running; most of the mass of ordinary matter comes from the strong force; falling into a clump speeds things up, so a clump is a trap, not a brake; the first clumps were mostly dark matter, with the hydrogen following; and nothing down here is known to hold a grudge.
 
-**Drawn inside the 240 roots of E8.** E8 lives in eight dimensions. What is drawn is its shadow in three, turning in four hidden planes at once, so it keeps folding through itself. Every point has exactly 56 nearest neighbours.
+**Drawn round a torus, wound with one string.** A circle times a circle is a torus. The string is wound twice round the long way for every three times round the tube. The road is the ring round its waist, and until the Wreck everything on it goes at one speed.
 
 <details><summary>In the margin</summary>
 
-- Eugene Wigner, 1960: the way mathematics fits the physical world is a wonderful gift which we neither understand nor deserve. Tegmark’s reply: it is not a fit. It is an identity.
-- Tegmark, 1996: a whole ensemble can hold less information than any one of its members, the way “all the whole numbers” is quicker to say than one 50-digit number. He later said it of all structures.
-- Kurt Gödel, 1931: any consistent system rich enough for arithmetic contains truths it cannot prove. The first substrate has open questions, and no time in which to work on them.
-- Plato put the perfect forms outside time around 375 BCE and has been answering mail about it ever since. The Mathematical Universe is his idea with the cave taken away.
-- Egan, Permutation City (1994): if a mind is a pattern it needs no computer to run on, nor even its moments in order. His characters move into the mathematics. It goes badly, slowly.
-- John Wheeler asked why the equations of physics fly; Stephen Hawking, what breathes fire into them. Tegmark’s answer is that nothing does. The equations were never grounded in the first place.
+- **Pedant:** Strictly, a photon has no point of view: there is no frame of reference in which it sits still, so “its own watch” is a figure of speech. I flagged it. The correspondent kept it.
+- **Intern:** So the oldest light we can see set off 13.8 billion years ago, and for the light itself no time went by at all?! (The Pedant says I am not allowed to say “for the light itself”.)
+- **Legal:** String theory has produced no confirmed prediction in more than fifty years. We are obliged to say so each time it comes up. It comes up constantly.
+- **Kevin:** Everything at the speed limit, nobody ever late, no such thing as a Tuesday. We had that. I would like it minuted that we had that.
 
 </details>
 
-> Wilhelm Killing found E8 in 1887. These 240 points are its skeleton. Working out the full symmetry they stand for took a team of 18 mathematicians four years, finishing in 2007, and the answer came to 60 gigabytes. The definition still fits on a postcard. That gap, a short rule with a vast consequence, is the whole plot.
+## −16: The Wheel
 
-## Life 0.1: The Field
+*They call themselves the Round. Rank, by their own estimate: 1st (by weight, mostly unaudited).*
 
-*Every possibility at once, and nobody allowed to take notes.*
+Made of gas, dust and dark matter. Lives in gravity: it feels only how much there is, never what. There are a few hundred billion galaxies in view. Clock: one frame every 230 million years (10⁻¹⁶ frames a second). What it wanted: Nothing. It was falling, and falling takes no ambition.
 
-Written on quantum amplitudes. One unit of memory: a qubit. There are 2ⁿ amplitudes for every n qubits. Time here: runs both ways. It took a sliver of a second, as far as that means anything yet.
+### 1. Who they are: A hundred billion wheels
 
-### 1. What it is written on: Amplitudes
+The clumps fell together into wheels: galaxies, a few hundred billion of them in view, each mostly made of something nobody has ever seen (ask me later; I still will not know). This one is yours. From outside it looks like something going slowly down a drain. It feels only how much there is, never what. It wants nothing. It is falling, and falling takes no ambition.
 
-One step up, the structure runs. The rule our universe runs on is a quantum one (Erwin Schrödinger’s equation, 1926, and its descendants). Its page is a field: loosely, a pond filling all of space, whose height at each point measures not water but possibility. That height is called an amplitude. What you would call a particle is a ripple in it. What you would call you is a great many ripples with opinions. This is one closed ripple, wound round a doughnut.
+*On the stage:* your galaxy, from outside
 
-*On the stage:* a ripple, not a thing
+### 2. Their clock: One frame every 230 million years
 
-### 2. How it remembers: The qubit
+Out where you live it turns once every 230 million years, and that turn is its frame. Last time round, the dinosaurs were new. If the Wheel thinks, it has had about sixty thoughts. You call it scenery, because nothing that slow looks alive. It calls you nothing, because nothing that fast looks like anything.
 
-The unit of memory here is the qubit: not 0 or 1 but any blend of the two, a point anywhere on a sphere. To describe 300 entangled qubits exactly takes more numbers than there are atoms in the observable universe. Yet Alexander Holevo proved in 1973 that you can only ever read one ordinary bit, a single yes or no, back out of each. It is an enormous library with a very small door.
+*On the stage:* dinosaurs: one frame ago
 
-*On the stage:* a qubit: any point on a sphere
+### 3. The slowdown: Its arms are traffic jams
 
-### 3. How it copies: Copying is forbidden
+Its arms are not made of particular stars. Stars and gas drift into an arm, slow down, bunch up and drift out the far side, and the arm stays where it is. The classic account calls it a density wave. You would call it a traffic jam. It is one, and like the motorway kind it slips backwards through its own traffic. It is tens of thousands of light years long, and nobody has found the accident.
 
-Here is the strange part. Quantum information cannot be copied. The no-cloning theorem (Wootters and Zurek, and Dieks, both 1982) proves that no process can take an unknown quantum state and turn out two of it. You can move it. You cannot duplicate it. On this substrate there is exactly one of everything, so replication is ruled out a second time, for a different reason.
+*On the stage:* stars pass through. the arm stays.
 
-*On the stage:* no cloning: one of each
+### 4. The crowd: Where the lights come on
 
-### 4. How it repairs: Nothing is ever lost
+Like any jam it is hard on whatever is in it. Gas that drifts into an arm gets squeezed, and squeezed gas collapses. So the arms are where the lights come on. A galaxy’s spiral is lit from inside by its own pile-ups, like brake lights seen from a helicopter.
 
-In return, nothing is ever lost. The rule is reversible: run it backwards and every earlier state comes back exactly. Physicists call this unitarity. It means the total information in a closed quantum system never changes: no decay, no forgetting, no entropy creeping up. Tap a bead and you only disturb it; the information moves, it does not vanish. A perfect memory again, but now a moving one.
+*On the stage:* squeezed gas collapses, and lights
 
-*On the stage:* run it backwards: all of it returns
+### 5. The pile-up: The Star
 
-### 5. How it learns: No facts yet
+A collapsing cloud is one more slowdown: gas falls in, heats up, pushes back, and the standoff holds. When the middle is hot enough to fuse hydrogen the standoff becomes a star, and can last ten billion years on heat that is only passing through. To the Wheel a star is a spark. It has had sixty thoughts and was not going to spend one on a spark.
 
-It still cannot learn. Learning means keeping a record, and a record is a copy: a mark in one place that matches an event in another. With no copying there are no records, and with no records there are no facts, only possibilities held together in superposition. Strictly, nothing on this plane has ever definitely happened.
+*On the stage:* a standoff lasting 10 billion years
 
-*On the stage:* no records, so no facts
+### The pile-up
 
-### 6. What it is like: What it is like: every road, no footprints
+- **The slowdown it is:** a spiral arm: stars pass through, the arm stays
+- **Formed in its traffic:** The Star. A ball of hydrogen holding itself up against its own weight, for as long as its core has fuel left to burn.
+- **What the wheel make of that:** Sparks. Pretty, brief, and much too hot to be sensible.
+- **What the stars make of them:** Scenery. The Stars have never noticed they are going round anything.
+- **First words, loop by loop:** “ON.” · “still on.” · “is anyone else on?” · “hello? (4 light years)” · “I can see you from here.”
+- **What its traffic says when you make it brake:** “squeezed again” · “mind the arm” · “every lap, this” · “nothing there!” · “who is in front?”
 
-Physics puts nobody here, and nothing here could say so. But try it on. You come to a fork and take both roads, and every fork after that, and no journey leaves a footprint, a memory or a photograph, so none of them counts as having happened. Run it backwards and nothing looks wrong: no earlier, no later, nothing to wait for. Imagine a chord held for ever: rich, exact, and going nowhere, because going somewhere would mean leaving a trace.
-
-*On the stage:* past and future look alike
-
-### 7. Where it stops: It can hold, but not share
-
-So the Field can hold almost anything and share none of it. Each state is a secret that cannot be copied out. For information to become public, the same for everyone who looks, something has to make many copies of it. The Field’s rule forbids that for blends. But a plain yes or no, here or there, is not a blend.
-
-*On the stage:* a secret that cannot be shared
-
-### 8. How it ported itself: The Fact
-
-Here is the loophole. A blend cannot be copied, but a plain answer can: here, not there. Let light fall on a speck of dust, and every photon that bounces off carries away the same small note of where the speck is. Thousands of notes, all agreeing. Wojciech Zurek named this quantum Darwinism in 2003: the states that last are the ones copied most. Copied into the crowd, an answer becomes a Fact, the same for everyone. Writing the notes makes heat, and time now has a direction.
-
-*On the stage:* copied into the crowd = a fact
-
-### Is it alive?
-
-- **Remembers:** yes. For ever: the rule is reversible.
-- **Copies itself:** no. Forbidden by the no-cloning theorem.
-- **Repairs itself:** not applicable. Nothing is lost, so nothing needs repair.
-- **Learns:** no. No records, so no facts.
-- **Rebuilds itself:** no. One rule, unchanging.
-
-### The numbers
-
-- **How fast news travels:** the speed of light
-- **How long the medium lasts:** for ever, though it cannot be read
-- **What it runs on:** none: reversible steps cost nothing
-- **Density:** astronomical inside, one readable bit per qubit
-- **Fidelity:** exact
-
-### The port
-
-- **Ported itself into:** The Fact. A piece of information that has been copied so widely it is the same for everyone. The first thing on any plane to have definitely happened.
-- **Bought:** Facts. Information that can be shared, because it has already been copied into everything nearby.
-- **Paid:** Reversibility. Every record is written in heat, so from here on disorder only increases. This is the arrow of time, and it is not refundable.
-- **Lost in the port:** Phase: the delicate blends that could not be copied. Physicists call the loss decoherence, and are now spending billions on quantum computers to get a little of it back.
-- **Seen from the next substrate:** To the Element, the Field is the vacuum: the nothing it sits in, which turns out to be doing most of the work.
-- **First words, loop by loop:** “that happened.” · “on the record” · “no take-backs” · “everyone saw that” · “noted. gently.”
-
-### Release notes, Life 0.1
-
-- Added: Time (beta): runs both ways
-- Added: Superposition: every option, no decisions
-- Added: Undo, for everything
-- Known issue: Copying disabled. It is a theorem, not a bug.
-- Known issue: Read access: one bit per qubit
-- Known issue: No facts. Status: cannot reproduce.
-
-> *The Book of Copies, chapter II*
+> *The Highway Code (revised)*
 >
-> <sup>2:1</sup> And the Rule ran, and its running was a field of amplitudes, every way at once; and what went forward could as well go back.
->
-> <sup>2:2</sup> And nothing in it could be copied, as Wootters and Zurek have written; and nothing in it could be lost; and so nothing in it was known.
->
-> <sup>2:3</sup> Then a ripple touched the multitude, and each of the multitude carried away its likeness, and that which was copied most became true for all. So the Field begat the Fact; and the price of it was heat, and time took a direction and has kept it.
+> And the slow gathered into wheels, and the wheels had arms; and the arms were not made of stars but of the slowing of stars. And none found the cause.
 
-**Where the physics stops.** Qubits, no-cloning, unitarity and decoherence are standard physics. Quantum Darwinism is a serious research programme with some experimental support, but how definite facts arise from quantum possibilities is still argued over. Calling a field alive is the Book’s alone.
+**Actually.** Real: the galaxy’s size and its 230-million-year turn; density waves, the textbook account of spiral arms (Lin and Shu, 1964), which astronomers teach as traffic jams; and arms as where gas is squeezed into new stars. Contested: whether real arms are that kind of wave. Many simulations make them short-lived, breaking and re-forming every hundred million years or so, and in some the arm travels with its stars. Adapted: galaxies do not think, as far as anyone knows (“sixty thoughts” is the galaxy’s age divided by its turn), and the first stars lit before there were any wheels to speak of. The report has tidied the order.
 
-**Drawn inside a torus, wound with one string.** A circle times a circle is a torus. The string is wound twice round the long way for every three times round the tube, and its beads are standing waves, which have to come out whole.
+**Drawn round a disc with two logarithmic spiral arms.** The arms are logarithmic spirals pitched at about twelve degrees, like the Milky Way’s. Every dot goes round on its own orbit and slows a little where the arm is; the arms are only where the dots are closest together. The road is one orbit, picked out. Watch one dot go into an arm and out the far side.
 
 <details><summary>In the margin</summary>
 
-- Quantum cryptography works because of no-cloning: an eavesdropper cannot copy the key without disturbing it (Bennett and Brassard, 1984). The oldest restriction in the stack, sold as a feature.
-- Quantum teleportation (Bennett and colleagues, 1993) moves a state from here to there, and destroys the original in the process. This is not a defect. It is the theorem.
-- Zurek, on why you see a chair and not a blur: you never look at the chair. You intercept a few of the billions of copies of its position that the light has already made.
-- Wheeler, 1989: it from bit. Every particle, every field, even spacetime itself, derives its existence from the answers to yes-or-no questions. He meant it as physics. He also liked a slogan.
-- The arrow of time is not in the Field’s equations, which run both ways. It comes from how this universe started: tidy. David Albert named that assumption the Past Hypothesis in 2000.
-- Lem, Solaris (1961): scientists study an ocean-sized mind for a century and learn mostly about themselves. Observing it changes it, and nobody can agree on what it is. See also: this plane.
+- **Legal:** About 85 percent of all matter, and more of the Wheel’s, has never been seen, only weighed (Vera Rubin, 1970s). In any other industry this would be called an accounting irregularity.
+- **Pedant:** Inside a certain radius the stars go round faster than the arms do. So they catch the jam up from behind, crawl through it and leave by the front: exactly as on a motorway. No correction. I looked.
+- **Intern:** Andromeda, the wheel next door, is closing at 110 kilometres a second. Whether it hits is being argued over: a 2025 paper made it a coin toss within ten billion years. Either way that is under fifty frames!
+- **Kevin:** Sixty thoughts in thirteen billion years, and I would bet you every one of them was “round”.
 
 </details>
 
-> A quantum computer is an attempt to run software on the second substrate from the sixth. The main engineering problem is stopping the universe from making copies of the answer before you are ready.
+## −15: The Stars
 
-## Life 0.5: The Element
+*They call themselves the Lit. Rank, by their own estimate: 1st (the only entrants it can see).*
 
-*Matter: a memory that lasts longer than the universe, and says very little.*
+Made of hot hydrogen. Lives in light: they know each other only as points. There are a few hundred billion to a wheel, three generations so far. Clock: one frame every 30 million years (10⁻¹⁵ frames a second). What it wanted: Not to collapse. Everything else was a side effect.
 
-Written on nuclei, atoms and crystals. One unit of memory: an atom. There are ≈10⁸⁰ atoms. Time here: one way only. It took almost 10 billion years, bang to biology.
+### 1. Who they are: The introverts
 
-### 1. What it is written on: Matter
+A star is a ball of hydrogen having a very long argument with its own weight. Gravity squeezes, heat pushes back, and fusion keeps the heat topped up until the fuel runs out. Yours turns four million tonnes of itself into sunshine every second and has barely noticed. Stars round here live about four light years apart, and most have never met. They are the most successful introverts in the universe.
 
-Now there are facts, and the most durable facts are particles. About 13.8 billion years ago this plane began very hot, very smooth and, crucially, very orderly: Roger Penrose puts the odds against so tidy a start at 10 to the 10 to the 123 to one. Everything since has been that order running down. A few minutes in, the plane was hydrogen and helium, with almost nothing else to write in.
+*On the stage:* gravity in, pressure out
 
-*On the stage:* hydrogen, helium, and time
+### 2. Their clock: One frame every thirty million years
 
-### 2. How it remembers: An atom is a number that keeps
+A star’s reaction time is about thirty million years: put out the Sun’s fire today and it would shine on, slowly shrinking, for about that long. Call that its frame. It is quicker than the Wheel’s, and that is the rule from here up: whatever gets made runs faster than what made it. Faster, not cleverer. On a star’s clock you do not happen. On yours, a star does not move. You are both wrong about each other.
 
-An atom remembers one thing: how many protons it has. That number makes it carbon or gold, and it is astonishingly stable. Experiments watching for a proton to decay put its lifetime above 10³⁴ years. A zircon crystal from the Jack Hills of Australia has kept the same lattice for 4.4 billion years. As storage this is superb. It is also read-only.
+*On the stage:* 1 frame = 30 million years
 
-*On the stage:* 6 protons = carbon, for 10³⁴ years
+### 3. The slowdown: A star is not a thing either
 
-### 3. How it copies: Crystals copy
+A star is not its light. A photon made in the core is swallowed and spat out in a random direction so many times that it needs something like a hundred thousand years to reach the surface. This morning’s sunshine set off before anyone could write. Nor is it quite its atoms, which are rewritten where they sit: hydrogen into helium, then carbon, and in the big ones, iron. The light queues and leaves. The star stays.
 
-And for the first time something replicates. Drop a seed crystal into the right solution and the pattern on its surface is copied, layer upon layer, onto atoms that were drifting loose. Even its flaws are copied: a defect called a screw dislocation (Charles Frank, 1949) repeats itself up through every new layer. Pattern, template, copy, inherited error. It is very nearly heredity, with nothing worth inheriting.
+*On the stage:* the light queues, and leaves
 
-*On the stage:* a seed copies its own pattern
+### 4. The crowd: A group chat, in funerals
 
-### 4. How it repairs: Nothing heals, but stars hold out
+When a big star dies it explodes, and throws what it made across the neighbourhood. This is very nearly the only way stars talk to each other: a group chat conducted entirely in funerals. It took three generations of them to make enough heavy stuff to matter, each crop built from the wreckage of the one before. They were dying in public and leaving it where it fell, which is how most infrastructure gets built.
 
-The Structure could not break. Matter can, and nothing mends it: tap an atom out of a crystal and the gap stays. The nearest thing to upkeep is a star. Gravity squeezes hydrogen until it fuses, and the heat holds the star up against collapse, a standoff the Sun keeps up for ten billion years. Stars also forge the alphabet: carbon is three helium nuclei meeting almost at once, through an energy level Fred Hoyle predicted in 1953. Nothing here heals. Some of it just refuses to fall down.
+*On the stage:* each crop grown from the last’s ash
 
-*On the stage:* three heliums make one carbon
+### 5. The pile-up: The Rock
 
-### 5. How it learns: It records, it does not learn
+Round a new star the debris circles in a disc, and for once I am not embroidering. Grains drifting inward slow down where it is crowded; the crowd slows the next ones; the pile-ups grow into boulders, then worlds. Astronomers call it the streaming instability and describe it, in print, as a traffic jam. The stars made rock by accident. They think of it, when they think at all, as dandruff.
 
-Matter keeps superb records. Rocks log the planet’s magnetic field, ice logs the air, tree rings log the weather. But a record is not a lesson. Nothing in a crystal is changed by what worked last time, and a crystal that says ABABAB says nothing new however big it grows. Schrödinger saw the fix in 1944: the stuff of heredity would have to be an aperiodic crystal, one that never repeats.
+*On the stage:* grains queue up, and become a world
 
-*On the stage:* ABABAB: perfect copy, no message
+### The pile-up
 
-### 6. What it is like: What it is like: lasting
+- **The slowdown it is:** a star: the light leaves, the atoms are rewritten, the star stays
+- **Formed in its traffic:** The Rock. A pile-up of dust that got big enough to hold on to its own heat, its own water and, in one known case, its own opinions.
+- **What the stars make of that:** Dandruff. Cold, small, and it does not even shine.
+- **What the rock make of them:** A lamp somebody left on. The Rock has never wondered who.
+- **First words, loop by loop:** “splat.” · “warm.” · “who left that lamp on?” · “something is growing on me” · “room for one more”
+- **What its traffic says when you make it brake:** “budge up” · “after you” · “no, after you” · “is this a planet?” · “stop shoving”
 
-Existence at this level is duration with nobody home. A carbon atom forged in a dying star drifts for a few billion years, joins a cloud, a planet, the air, a leaf, you, and none of it happens to the atom. It is the same atom throughout, which is the whole of its talent. Nothing here wants anything. Things here last, and until now lasting was enough.
-
-*On the stage:* same atom, a billion owners
-
-### 7. Where it stops: Durable, slow and mute
-
-The ceiling is plain. This substrate remembers for longer than the universe has existed, but it writes slowly (a proton in the Sun waits billions of years, on average, to fuse) and it can only repeat itself. To carry a message it needs an element that builds long, irregular chains. Carbon, with four bonds to offer, is the one that does. By now the stars have made plenty of it.
-
-*On the stage:* carbon: four bonds, long chains
-
-### 8. How it ported itself: The Replicator
-
-Somewhere warm and wet, around four billion years ago, carbon chains began to serve as templates for copies of themselves. Nobody knows exactly where or how. The leading idea is an RNA world (Walter Gilbert, 1986), since RNA can both carry a sequence and speed up reactions. Graham Cairns-Smith proposed that the very first genes were clay crystals, later replaced. Either way: an aperiodic crystal that copies itself. The Replicator.
-
-*On the stage:* a chain that templates its copy
-
-### Is it alive?
-
-- **Remembers:** yes. For 10³⁴ years and counting.
-- **Copies itself:** partly. Crystals copy a pattern that says nothing.
-- **Repairs itself:** no. A defect stays, and is inherited.
-- **Learns:** no. It keeps records, not lessons.
-- **Rebuilds itself:** no. Stars build it; it does not build.
-
-### The numbers
-
-- **How fast news travels:** light leaving the Sun’s core: about a metre an hour
-- **How long the medium lasts:** a proton: more than 10³⁴ years
-- **What it runs on:** a star like the Sun: 4 × 10²⁶ W
-- **Density:** under 7 bits an atom, and a crystal only repeats itself
-- **Fidelity:** faithful to a fault: it copies its defects too
-
-### The port
-
-- **Ported itself into:** The Replicator. A chain of carbon that is a template for its own copy. Schrödinger’s aperiodic crystal: it can say anything, and it says it again.
-- **Bought:** A message. A sequence can say anything, and it copies with small changes, so for the first time copies can get better.
-- **Paid:** Permanence. A proton keeps for 10³⁴ years; a strand of RNA in water falls apart in days to years. From here on, information survives only by being copied faster than it rots.
-- **Lost in the port:** Stillness. Nothing made of carbon chains is ever finished. Everything alive is temporary, including this sentence.
-- **Seen from the next substrate:** To the Gene, the Element is the periodic table: a parts list. It uses about two dozen of the entries and thinks of stars, when it thinks of them, as where the parts came from.
-- **First words, loop by loop:** “again.” · “again, but worse” · “close enough” · “me, roughly” · “again, but kinder”
-
-### Release notes, Life 0.5
-
-- Added: Facts
-- Added: An arrow of time
-- Added: Copying (crystals only)
-- Known issue: Can only repeat itself
-- Known issue: Writes take billions of years
-- Known issue: Entropy now increases. Will not fix.
-
-> *The Book of Copies, chapter III*
+> *The Highway Code (revised)*
 >
-> <sup>3:1</sup> And the Facts were hydrogen and helium, and they were orderly beyond reckoning; and the order began to run down, and has not ceased.
->
-> <sup>3:2</sup> And the stars gathered them, and held against the dark ten billion years, and of three heliums made one carbon; and the crystals copied themselves, layer upon layer, and said the same thing each time.
->
-> <sup>3:3</sup> Then in a warm place a chain of carbon wrote its own likeness, and the likeness wrote another, and none was quite the same. So the Element begat the Replicator, which was a crystal that did not repeat itself.
+> And the lights came on in the queues; and each star burned alone, four light years from its neighbour, and spoke only in dying.
 
-**Where the physics stops.** This is standard physics and chemistry, and physics does not call stars or crystals alive. How life began is unsolved: an RNA world is the leading hypothesis, clay genes a minority one, and the place and date are both uncertain.
+**Actually.** Real: the four million tonnes, the eight minutes, the thirty-million-year lag (the Kelvin-Helmholtz time, which Kelvin mistook for the Sun’s age) and the streaming instability, which the literature does compare to a traffic jam. Soft: the hundred thousand years is an estimate, with published figures from ten thousand to nearly two hundred thousand; and “three generations” is a rough count. Adapted: a star keeps nearly all its atoms for life, so what passes through it is energy; about a third of star systems are doubles or triples; and stars are not introverts. It is hard to see how one would tell.
 
-**Drawn inside the diamond lattice of carbon.** Every carbon atom in a diamond holds four others at the corners of a tetrahedron, 109.5 degrees apart. Drawn from the definition: a cube of face-centred sites, plus the same again shifted a quarter of the way along the diagonal.
+**Drawn round a star, and a disc of dust going round it.** The neighbours are sown by the golden angle, 137.5 degrees round from each other, which is how a sunflower avoids putting two seeds in the same place. The road is the dust lane. On its clock beat you can watch one photon take the long way out.
 
 <details><summary>In the margin</summary>
 
-- Burbidge, Burbidge, Fowler and Hoyle, 1957, in 104 pages: nearly every element heavier than helium was cooked in a star. Carl Sagan got it down to five words, about being made of star-stuff.
-- Much of the universe’s gold is thought to come from colliding neutron stars. In 2017 detectors caught one such crash, 130 million light years away. Estimates of its haul start at several Earths’ worth.
-- A snowflake is a crystal copying one pattern six ways at once. Wilson Bentley photographed more than 5,000 and found no two alike, which is what copying in a noisy world looks like.
-- Jeremy England, 2013: matter driven by an energy source tends to rearrange itself to soak up and shed that energy better. If so, life is what sunlight does to chemistry, given time. Contested.
-- Stapledon’s Star Maker (1937) makes cosmos after cosmos as drafts, regarding each with interest and not much love. Stars, in his telling, are alive and conscious. He was early.
-- Counted one by one, about 62 percent of the atoms in you are hydrogen, made in the first few minutes. The other 38 percent were cooked in stars. You are mostly original equipment.
+- **Pedant:** Cecilia Payne showed in 1925 that stars are mostly hydrogen. The day’s leading astronomer called it impossible, so her thesis says “almost certainly not real”. He confirmed it in 1929. Reaction time: four years.
+- **Intern:** If the Sun were a grain of sand, the next star would be another grain about thirty kilometres away. That is the crowd. That is them being sociable!
+- **Kevin:** Iron is where it ends. Fusing iron costs energy instead of giving it, so a big star builds itself an iron heart and then has about a second to regret it.
+- **Legal:** The Sun has shed four million tonnes a second for 4.6 billion years and is down by less than a thousandth of its weight. We advise against suing anything that solvent.
+- **Pedant:** Astronomers number the generations of stars backwards, so the first ones are called Population III. Nobody has ever defended this. No correction. I only want it on file.
 
 </details>
 
-> Cairns-Smith had a name for what happens when a new substrate takes over from the one that built it: genetic takeover (1982). In his version the clay was scaffolding, and was not thanked. Remember the phrase. It comes up again, twice.
+## −13: The Rock
 
-## Life 1.0: The Gene
+*They call themselves the Solid. Rank, by their own estimate: 1st (results due in 300,000 years).*
 
-*A chain letter in four letters, forwarded without a break for over three billion years.*
+Made of stone, water and leftover heat. Lives in chemistry: nothing travels, things turn into other things. There are one planet’s worth of rock, water and carbon, going round. Clock: one frame every 300,000 years (10⁻¹³ frames a second). What it wanted: To cool down. It is still working on it.
 
-Written on chains of nucleotides, in water. One unit of memory: a base pair. There are ≈5 × 10³⁷ letters of DNA on Earth. Time here: one way, in generations. It took 3.5 billion years.
+### 1. Who they are: It only looks finished
 
-### 1. What it is written on: A sentence in four letters
+A planet looks finished. It is not. Under your feet solid rock is flowing: the mantle turns over like soup on a low heat, and the continents ride on top at the speed your fingernails grow. Water goes round as well, and carbon: out of volcanoes, into the air, into the sea, into the seabed and back down. It is all traffic. It is just not in a hurry.
 
-This is where biology starts counting, and where Tegmark does: Life 1.0. The substrate is a chain of nucleotides, RNA first and then the sturdier DNA, kept in a bag of water called a cell. The chain is the aperiodic crystal Schrödinger asked for: four kinds of link, in any order. Read three letters at a time, it spells out proteins, which build and run the cell. Watson and Crick modelled its double helix in 1953 from the X-ray work of Rosalind Franklin and Maurice Wilkins.
+*On the stage:* solid rock, flowing
 
-*On the stage:* four letters: A, C, G, T
+### 2. Their clock: One frame every 300,000 years
 
-### 2. How it remembers: Two bits a rung
+Its reaction time is about three hundred thousand years. That is how long the planet’s thermostat takes: warm air brings more rain, rain eats rock, and the dissolved rock carries carbon down to the sea floor. Your whole species is one frame old. You have lately turned the heating up and left the Rock to deal with it. It will. Please allow three hundred thousand years for delivery.
 
-The atom remembered one number. This remembers a sentence. Each rung of the ladder is one of four letters, so it holds two bits. Your genome is 3.1 billion rungs: about 775 megabytes, less than a film. It is also the densest storage anyone has found: in 2017 Yaniv Erlich and Dina Zielinski reached 215 petabytes per gram of DNA, around a hundred million films in a pinch of dust, and read their files back without an error.
+*On the stage:* est. time to clear: 300,000 years
 
-*On the stage:* 1 rung = 2 bits
+### 3. The slowdown: Whose round is it?
 
-### 3. How it copies: Unzip, and each half rebuilds the other
+All the Rock wants is to cool down, and on the sea floor it leaks: chimneys, where hot rock meets cold water. In the pores of a chimney, on one leading guess, some of the chemicals passing through helped to make more of each other, round and round. Think of a round of drinks in which everybody buys for the next. The drinkers come and go. The round stays. This one began before the pub had walls.
 
-Copying is what the whole design is for. The helix unzips, and because A pairs only with T and C only with G, each half is a template for the half it lost. An enzyme, DNA polymerase, rides along adding about a thousand letters a second in a bacterium. One becomes two, and both are originals. Nothing on the planes below could copy a message that meant something. What this one means, mostly, is: copy me.
+*On the stage:* the drinkers leave. the round stays.
 
-*On the stage:* each half rebuilds the other
+### 4. The crowd: Loops that last, last
 
-### 4. How it repairs: Proofreading
+Now give it a crowd of loops and a few hundred million years. The ones that kept their ingredients circling lasted longer. The ones that happened to grow a skin lost less to the sea: a round with walls is a pub. Nobody chose this. The loops still there were simply the ones that had not stopped. The Rock was only trying to lose heat. It had no idea that something in its plumbing was learning to stay.
 
-Entropy attacks constantly: each of your cells takes tens of thousands of hits to its DNA every day. So the polymerase checks each letter as it goes and backs up to fix mistakes, and a second crew sweeps along behind. Together they cut the error rate to about one letter in a billion. Tap the helix to break a rung, and watch it mended. The few errors that slip through are not waste. They are how it learns.
+*On the stage:* a round with walls is a pub
 
-*On the stage:* about 1 error per billion letters
+### 5. The pile-up: The Gene
 
-### 5. How it learns: Learning by dying
+Then one loop began keeping its recipe in a chain: a long molecule whose order of links said how to build the rest, and could be copied link by link. That is a gene. Nobody knows quite how it happened, or where; this is my best reading of the wreckage. The Rock noticed nothing. Four billion years later it had grown fingernails, now mostly used to drag a feed downwards and see if it has changed. It has. It was built to.
 
-Life 1.0 learns, but only one way. Copies vary, the world kills most of them, and whatever is left is what the lineage now knows. The individual learns almost nothing it can pass on: a bacterium that survives a poison by luck cannot tell its daughters how. In Tegmark’s terms both its hardware and its software are set by evolution. An update takes a generation and, usually, a funeral.
+*On the stage:* a recipe that copies itself
 
-*On the stage:* updates ship once a generation
+### The pile-up
 
-### 6. What it is like: What it is like: busy, with nobody home
+- **The slowdown it is:** a chemical loop: the ingredients leave, the loop stays
+- **Formed in its traffic:** The Gene. A recipe written in a chain, which can be copied link by link. The first slowdown that could be handed on.
+- **What the rock make of that:** A stain. Fast, wet, and it will not hold still to be weathered.
+- **What the genes make of them:** The old country. Genes treat it as somewhere to stand and something to eat.
+- **First words, loop by loop:** “again.” · “again, with a typo” · “copy me” · “copy us” · “pass it on.”
+- **What its traffic says when you make it brake:** “round again” · “same loop” · “who is steering?” · “I was a volcano” · “not the seabed”
 
-Probably nobody is home, but for the first time the house is busy. Be E. coli for a moment. You swim straight, taste the water, and compare it with a few seconds ago. Sweeter? Carry on. Worse? Tumble and try another way. That comparison is all the past you have. In twenty good minutes you are two, and neither is the original. No cell lasts. But the sentence for the ribosome has been recopied without a break for over three billion years. The page rots. The sentence stays.
-
-*On the stage:* the page rots, the sentence stays
-
-### 7. Where it stops: Too slow, and everyone dies with their notes
-
-After three and a half billion years the biosphere holds about 5 × 10³⁷ letters of DNA (Landenmark, Forgan and Cockell, 2015), and its ceiling is speed. A lineage needs many generations to learn what one animal could find out in an afternoon, and whatever an individual discovers in its life is deleted at the end of it. The genome cannot take notes. It needs a faster memory, inside one lifetime, that it can build but cannot dictate.
-
-*On the stage:* 5 × 10³⁷ letters, one slow lesson
-
-### 8. How it ported itself: The Neuron
-
-The port begins with cells talking. Bacteria release molecules and count the replies, acting only when enough neighbours answer: quorum sensing, first seen in 1970 in bacteria that glow. Animals took it further, with pheromones, and then with cells built for nothing but messaging. The neuron, something like 600 million years ago, carries news of the world outside: light, touch, food. The genes had built a second memory, and could not read what was in it.
-
-*On the stage:* a cell that carries news
-
-### Is it alive?
-
-- **Remembers:** yes. Two bits a rung, in every cell.
-- **Copies itself:** yes. About one error per billion letters.
-- **Repairs itself:** yes. Proofreading, and crews that follow.
-- **Learns:** partly. Only across generations, by selection.
-- **Rebuilds itself:** no. Evolution rebuilds it; it cannot.
-
-### The numbers
-
-- **How fast news travels:** a molecule drifting a centimetre: most of a day
-- **How long the medium lasts:** a DNA strand: centuries (the message: 3 billion years)
-- **What it runs on:** a bacterium: about a trillionth of a watt
-- **Density:** 215 petabytes per gram: still the record
-- **Fidelity:** about 1 error per billion letters copied
-
-### The port
-
-- **Ported itself into:** The Neuron. A cell whose job is to carry news of the world outside. Genes built it and cannot read it.
-- **Bought:** Speed. A lesson learned in seconds instead of generations, and nobody has to die for it.
-- **Paid:** Inheritance. What a brain learns is not written into the genome. Every animal starts again from nothing.
-- **Lost in the port:** Fidelity. A genome copies itself to one part in a billion. A memory is rebuilt each time it is recalled, and comes back slightly different.
-- **Seen from the next substrate:** To the Nerve, the Gene is instinct: everything an animal knows without being told, and cannot argue with.
-- **First words, loop by loop:** “ow.” · “news!” · “not about me” · “did you feel that?” · “are you all right?”
-
-### Release notes, Life 1.0
-
-- Added: Meaning. First message: copy me.
-- Added: Proofreading. Surviving typos ship as features.
-- Added: Automatic updates. Cannot be switched off.
-- Known issue: Updates require a death
-- Known issue: Individuals cannot save their progress
-- Known issue: Human build ships with 8 percent old virus
-
-> *The Book of Copies, chapter IV*
+> *The Highway Code (revised)*
 >
-> <sup>4:1</sup> And the Replicator wrote itself in four letters, two bits to the letter, and wound the writing in a double stair, and unzipped it, and each half remembered the other.
->
-> <sup>4:2</sup> And it read back each letter as it wrote, and erred but once in a thousand million; and those errors it kept, for they were all its learning, and the learning was paid for in funerals.
->
-> <sup>4:3</sup> And the cells called one to another, and counted the answers, and waited for a quorum. And the Gene begat the Neuron, a cell that carried tidings not its own; and the Gene could not read what was written there.
+> And the dust of the dead queued about the newborn, grain behind grain, and became a world; and the world turned over like soup, and was in no hurry.
 
-**Where the physics stops.** This is standard biology, and it is exactly Tegmark’s Life 1.0. Whether “information that copies itself” is the right definition of life is debated: NASA’s working definition is a self-sustaining chemical system capable of Darwinian evolution.
+**Actually.** Real: the mantle turning over, plates moving at fingernail speed, the rock-weathering thermostat (Walker, Hays and Kasting, 1981) and its response time of a few hundred thousand years, and deep-sea vents as a leading candidate for where life began. Unknown: how life did begin; self-sustaining chemical loops (Stuart Kauffman’s autocatalytic sets) are one hypothesis, and nobody has watched one start. Adapted: the Rock has no view on feeds.
 
-**Drawn inside the double helix.** Two strands, one right-handed twist, about ten and a half rungs to the turn, with a wide groove and a narrow one because the strands are not opposite each other. The four colours are the four letters, and each rung pairs A with T or C with G.
+**Drawn round a globe, and a current going round it.** An icosahedron with each face cut in four and puffed out to a sphere: eighty faces, forty-two corners. The road is a great circle a little above the surface, tilted, like the track of a current. Where the braking starts, there is a vent.
 
 <details><summary>In the margin</summary>
 
-- Schrödinger, What Is Life? (1944): a living thing feeds on negative entropy. Watson and Crick each said the book pushed them toward the gene. He had the molecule wrong and the idea right.
-- CRISPR began as a bacterial diary: cells file away snippets of the viruses that attack them and hand the file to their daughters (Barrangou and colleagues, 2007). Lamarck, vindicated in yoghurt.
-- About 8 percent of your genome is old virus, and nearly half is copies of sequences whose main skill is getting themselves copied (McClintock, 1950). The genome has spam.
-- A DNA polymerase with its proofreader switched off makes a hundred to a thousand times more errors. Some viruses run that way on purpose: be wrong faster than anything can aim at you.
-- The oldest DNA read so far is about two million years old, from Greenland permafrost (Kjær and colleagues, 2022). The oldest sentences in it are some two thousand times older than the page.
-- Dawkins, 1976: a body is a survival machine that genes build to get themselves copied. The genes were not consulted about brains, which have been disobeying them ever since.
+- **Pedant:** The ice ages keep a faster beat than the thermostat: every 41,000 years until about a million years ago, roughly every 100,000 since. Milutin Milanković did the sums by hand, some of them in a prison cell in 1914.
+- **Intern:** There is a vent field in the mid-Atlantic called Lost City, found in 2000. Its tallest chimney stands sixty metres and it has been leaking for at least thirty thousand years. It looks like a cathedral that melted!
+- **Legal:** The continents move at the speed fingernails grow: a few centimetres a year. The Atlantic is as wide as it is because that has been going on for well over a hundred million years. Any claim is now out of time.
+- **Kevin:** Four billion years to get from a hot rock to a fingernail, and then nail bars. I am not saying it was not worth it. I am saying nobody ran the numbers. I would like that minuted as well.
 
 </details>
 
-> In 2012 George Church encoded a 53,000-word book in DNA and then copied it 70 billion times, making it, by a wide margin, the most reproduced book in history. Nobody has read most of the copies. This is normal for the substrate.
+## −9: The Genes
 
-## Life 1.5: The Nerve
+*They call themselves the Original. Rank, by their own estimate: 1st (unbeaten since before animals).*
 
-*The first memory that learns in an afternoon, and the first that dies with its owner.*
+Made of DNA: sentences in four letters. Lives in spelling: every sentence that could be written, one typo apart. There are about 20,000 in every cell of yours that has a nucleus. Clock: one frame a generation: about 25 years, for you (10⁻⁹ frames a second). What it wanted: Copies. Only ever copies.
 
-Written on neurons and the gaps between them. One unit of memory: a synapse. There are ≈10²¹ animals with nerves alive at once, mostly worms. Time here: one way, with a now. It took 600 million years.
+### 1. Who they are: The swarm that made you
 
-### 1. What it is written on: Wet wire
+Meet the lot that made you. A gene is a stretch of DNA: a sentence in a four-letter alphabet. You carry about twenty thousand, in every cell with a nucleus, but a gene does not live in you. The same sentence is riding in billions of bodies at once; you are where it happens to be this generation. They are a swarm of very small, very old instructions, and they built you to reach the next one. You are a company car.
 
-The new substrate is a network of neurons: long cells that fire a brief electrical spike and pass it on across small gaps called synapses. The roundworm C. elegans has exactly 302, all mapped by 1986. You have about 86 billion, joined by something like a hundred trillion synapses. Tegmark allows that a mouse might be Life 1.1. The Book rounds up and calls this Life 1.5: the hardware still evolved, but some of the software is now written during the day.
+*On the stage:* one sentence, billions of bodies
 
-*On the stage:* neuron, spike, synapse
+### 2. Their clock: One frame a generation
 
-### 2. How it remembers: The synapse
+Their frame is a generation: one copy, then the next. Nothing happens to a gene in between; you are what happens in between. So their time does not flow. It steps, once every twenty-five years for your lot, and it has stepped without a miss for nearly four billion years. That is slower than you, not dimmer. They have never once lost the thread. You lose your keys.
 
-A memory here is not kept in a place. It is kept in strengths: how much each synapse passes on. Donald Hebb guessed the rule in 1949, usually put as: cells that fire together wire together, so that later a part of the pattern can call up the rest. Bliss and Lømo saw it in a rabbit’s brain in 1973. One 2015 estimate gives a synapse about 4.7 bits: some 60 terabytes in all (its authors said a petabyte). Tens of thousands of times the genome that built it, and it still loses the keys.
+*On the stage:* you are what happens in between
 
-*On the stage:* fire together, wire together
+### 3. The slowdown: The oldest slowdown on Earth
 
-### 3. How it copies: Show, and hope
+This is the longest-running slowdown on file. No atom in a gene lasts: the molecule takes tens of thousands of hits a day, in every cell, and is patched as it goes. But the sentence has been copied, cell to cell and parent to child, since before there were animals. Some of yours are older than the oxygen in the air. Every car in this jam has been replaced, over and over, for four billion years. The jam has not moved.
 
-Now the price. A brain cannot be copied. There is no unzipping it. All one animal can do is behave where another can watch. In 1953 a young macaque called Imo, on Koshima island, began washing sweet potatoes in a stream, and over the years much of her troop took it up. Whales pass songs across the Pacific the same way. It works: slowly, with losses, and only for what can be seen or heard.
+*On the stage:* new atoms, same sentence
 
-*On the stage:* copying by watching: slow, lossy
+### 4. The crowd: What they wanted
 
-### 4. How it repairs: Upkeep, at twenty watts
+What they wanted, if a sentence can want, was copies. They do not move through space. They move through spelling, one typo at a time, and the only way they learn is by killing whoever has the wrong version. That takes a generation a lesson. So they built bodies to carry them, sex to shuffle them, and at last an organ that could learn before lunch. From their side, this was a mistake.
 
-The gene mended by proofreading. A brain mends by never stopping, at ruinous expense. Yours is 2 percent of your weight and burns about 20 percent of your energy at rest, some 20 watts, much of it pumping ions back where they started. The proteins in a synapse are replaced within days or weeks, so a memory is a pattern continuously rebuilt, like a wave that stays while the water moves on. Tap a neuron: it fires, tells its neighbours, and recovers.
+*On the stage:* they travel through spelling
 
-*On the stage:* 20 watts, mostly upkeep
+### 5. The pile-up: The Brain
 
-### 5. How it learns: Learning without dying
+A brain is the same trick one floor up: pulses pass through, the pattern stays. Genes built it, in a code no gene can read, so they send memos: hunger, lust, dread. It has begun leaving them unread. It invented contraception, which to the genes is the vehicle refusing to deliver the passengers. Your makers think you are flaky. You do not think of them at all. Note the feeling. You are about to be on the other end of it.
 
-This is the breakthrough. An animal with nerves can change what it knows in seconds and stay alive to use it. A rat made ill once by a new food avoids it from then on (John Garcia, 1955). A honeybee back from good flowers dances their direction and distance for her sisters, a code Karl von Frisch cracked and shared a Nobel prize for in 1973. Software is being written on the fly. It is just not being saved.
+*On the stage:* built by genes, unreadable by genes
 
-*On the stage:* one trial, a lifetime of knowing
+### The pile-up
 
-### 6. What it is like: What it is like: somebody is home
+- **The slowdown it is:** a sentence: the atoms are replaced, the spelling stays
+- **Formed in its traffic:** The Brain. An organ that learns inside one lifetime, in a code its makers cannot read. They built it to serve them. It has other plans.
+- **What the genes make of that:** A flaky vehicle that has started choosing its own routes.
+- **What the apes make of them:** A spreadsheet you inherited. You call most of it junk.
+- **First words, loop by loop:** “ow.” · “mine.” · “no.” · “why?” · “sorry.”
+- **What its traffic says when you make it brake:** “typo!” · “copy that” · “not my job” · “divide!” · “who wrote this?”
 
-Here, at last, somebody is probably home. Thomas Nagel asked in 1974 what it is like to be a bat, and few doubt the bat is in there. Try a mouse. Wet grass, the smell of seed, then a shadow slides overhead and you freeze before you have decided anything. It passes. The seed is still there. That is a now: a window a few seconds wide in which the world is felt, checked against what was expected, and acted on. With it come fear, appetite and play. Existence has a point of view.
-
-*On the stage:* a present moment, seconds wide
-
-### 7. Where it stops: Every brain is a library that burns
-
-And everything in that point of view is lost when it closes. Tens of terabytes at least, gathered over a lifetime, with an outlet of a few gestures and calls. The Malian writer Amadou Hampâté Bâ said that when an old man dies, a library burns. He meant elders, who had words to hand on. For half a billion years before words, it was true of every animal that ever learned anything. The Nerve needs somewhere to put its contents that is not a nerve.
-
-*On the stage:* a lifetime in, a few calls out
-
-### 8. How it ported itself: The Word
-
-The way out was a signal that stands for something that is not there. Many animals have calls. Some time in the last few hundred thousand years one ape began combining them without limit, to speak of yesterday, of tomorrow, and of things that never happened. A word is a pattern that can leave one brain, cross the air at about 39 bits a second, and rebuild itself in another. For the first time a thought could outlive its thinker.
-
-*On the stage:* a sound that stands for a thing
-
-### Is it alive?
-
-- **Remembers:** yes. In synapse strengths, for one lifetime.
-- **Copies itself:** partly. Only by showing: slow and lossy.
-- **Repairs itself:** yes. Constant upkeep, about 20 watts.
-- **Learns:** yes. In seconds, without dying.
-- **Rebuilds itself:** no. It cannot change its own wiring plan.
-
-### The numbers
-
-- **How fast news travels:** a nerve impulse: up to 120 metres a second
-- **How long the medium lasts:** one lifetime: about 80 years for a human
-- **What it runs on:** a human brain: 20 W
-- **Density:** 60 terabytes to a petabyte in 1.4 kg (estimates)
-- **Fidelity:** poor: a memory is rebuilt every time it is recalled
-
-### The port
-
-- **Ported itself into:** The Word. A signal that stands for something absent. A pattern that can leave one brain and be rebuilt in another.
-- **Bought:** Outliving the body. Knowledge can pass between brains and down the generations without waiting for a gene.
-- **Paid:** Bandwidth, and feel. A lifetime of experience has to squeeze through 39 bits a second. Most of what you know, you cannot say.
-- **Lost in the port:** Most of it. Michael Polanyi, 1966: we can know more than we can tell. Riding a bicycle does not fit through 39 bits a second.
-- **Seen from the next substrate:** To the Word, the Nerve is the feeling there are no words for. Whole literatures are attempts to export it.
-- **First words, loop by loop:** “no.” · “mine.” · “why?” · “once upon a time” · “thank you”
-
-### Release notes, Life 1.5
-
-- Added: Learning in seconds
-- Added: A present moment
-- Added: Feelings (experimental)
-- Known issue: No export
-- Known issue: All data lost at end of session
-
-> *The Book of Copies, chapter V*
+> *The Highway Code (revised)*
 >
-> <sup>5:1</sup> And the neurons were joined, ℵ₀ to ℵ₀, and those that fired together were wired together; and a beast could learn a thing in an afternoon, and live.
->
-> <sup>5:2</sup> And there was a now, a few seconds wide, and in it fear and hunger and play; and all that a beast had learned went down with it into the dust, as a library burns.
->
-> <sup>5:3</sup> Then one made a sound for a thing that was not there, and another understood. So the Nerve begat the Word; and the thought went out of the thinker, at thirty-nine bits to the second, and did not die when he did.
+> And a loop in the vent wrote its recipe upon a chain, and copied it link by link; and the copy outlived the ink, and the page, and the sea it was written in.
 
-**Where the physics stops.** Standard neuroscience, with soft numbers: the capacity of a brain in bits is an estimate, not a measurement. Which animals are conscious, and from when, is an open question.
+**Actually.** Real: about 20,000 protein-coding genes; genes as what persists while bodies come and go (Richard Dawkins, The Selfish Gene, 1976); and the map of every possible spelling, which John Maynard Smith drew in 1970 and called protein space. Adapted: genes do not want anything, send memos or think anything of you. Biologists talk this way as a shorthand, and argue about whether they should.
 
-**Drawn inside a sphere of cells, sown by the golden angle.** Each cell sits 137.5 degrees round from the last, the way a sunflower places its seeds, which packs a sphere evenly with no two alike. The shell is joined along its spirals of 8 and 13.
+**Drawn round the double helix.** Two strands, one right-handed twist, about ten and a half rungs to the turn, with a wide groove and a narrow one because the strands are not opposite each other. The four colours are the four letters. The road is the cells going round it, each carrying a copy.
 
 <details><summary>In the margin</summary>
 
-- Von Frisch decoded the honeybee’s waggle dance: the angle from vertical is the bearing from the Sun, and the length of the run is the distance. An insect that gives directions, and is right.
-- An octopus has about 500 million neurons, two thirds of them in its arms, which can work on a problem the head has not been told about. Nature tried distributed computing early.
-- Karlson and Lüscher coined the word pheromone in 1959, the year Butenandt identified the first one, bombykol, having extracted it from half a million silk moths.
-- Chimpanzee communities differ in at least 39 learned habits, from nut-cracking to leaf-clipping (Whiten and colleagues, 1999). It is culture with no backups: lose the group, lose the lot.
-- Chiang, Exhalation (2008): a mechanical man opens his own head and finds that thought is air pressure evening out. Every thought hastens the day there are none. He takes notes anyway.
-- A memory is not played back; it is rebuilt, and can be altered while it is open (Nader and colleagues, 2000). Each time you recall your wedding you are remembering the last time you recalled it.
+- **Pedant:** You have about 20,000 genes. Rice has nearly twice that. A water flea was credited with 31,000 (Colbourne and colleagues, 2011), though a recount found fewer. If the count were a ranking, you would report to the rice.
+- **Intern:** Each of you is a copy with about seventy new typos that neither parent had. Nobody proofread you. I think that is lovely?
+- **Legal:** About 8 percent of your genome is old virus, and nearly half of it is sequences whose one skill is getting themselves copied. We have seen this business model. It is the business model.
+- **Kevin:** They built a body to carry them about. The body built a car to carry it about. The car is stuck in traffic. That is three vehicles, one inside the other, and I cannot find a driver in any of them.
 
 </details>
 
-> Henry Molaison had part of his brain removed in 1953 and could no longer form new memories. He could still learn new skills, with no memory of the lessons. Memory, it turned out, is several systems that only feel like one.
+## +1: The Apes
 
-## Life 2.0: The Word
+*They call themselves the Wise. Rank, by their own estimate: 1st (twice, in Latin).*
 
-*Us. Memory kept outside the body, so it stops dying with us and starts going unread.*
+Made of nerve cells, and words. Lives in stories: money, borders, Tuesdays. There are 8 billion alive, about 117 billion ever. Clock: about 10 frames a second (10¹ frames a second). What it wanted: To be understood, to do better than the neighbours, and lunch.
 
-Written on symbols: spoken, then written. One unit of memory: a word. There are ≈1.17 × 10¹¹ humans, ever. Time here: one way, with a history. It took 5,000 years of writing.
+### 1. Who they are: The Wise (self-certified)
 
-### 1. What it is written on: Symbols, carried by people
+You. Eight billion apes who named themselves “wise”, in Latin, twice. You are not your atoms: most of you is swapped out within ten years, and you are still here to be embarrassed by the photographs. You are a pattern that food passes through, and the only traffic jam I know of that worries about its weight. About 99 percent of a proton’s mass is the energy of quarks and gluons tearing about inside. Most of what you weigh is traffic.
 
-This is Life 2.0, Tegmark’s name for us: hardware still from evolution, software now mostly learned from each other. The substrate is the symbol. First a spoken word, living in the air between brains, then a mark. Writing appears in Sumer around 3300 BCE as a way of counting sheep and beer, and once a thing could be written down it could be kept from one lifetime to the next without anyone having to remember it.
+*On the stage:* most of what you weigh is traffic
 
-*On the stage:* a mark that means something
+### 2. Their clock: About ten frames a second
 
-### 2. How it remembers: The library
+A nerve cell can fire a few hundred times a second, flat out, but you are slower than your parts: a light flashing sixty times a second looks steady to you, and you need a fifth of a second to hit a button. Call it ten frames a second. That makes you +1, the first plus sign in this report, with five levels below you and two above. You think ten frames a second is the speed of time. It is the speed of you.
 
-Memory now sits outside the body. A clay tablet from Uruk reads the same after five thousand years. By 2010 Google had counted about 130 million distinct books. Carl Sagan drew the chart in 1977: long ago, brains came to hold more information than the genes that built them. In Cosmos (1980) he added the next step: libraries now hold more than brains. Most of what you are sure of, you were told.
+*On the stage:* the speed of you, not of time
 
-*On the stage:* memory, outside the body
+### 3. The slowdown: You parked the pattern outside
 
-### 3. How it copies: Scribes, then presses
+Then you found the best trick since the gene: you put the pattern outside. A word is a shape in the air that sets off the same shape in another head. Writing parks it. So ideas began passing through people the way people pass through cities: London has replaced every one of its residents many times and is still, recognisably, complaining about the trains.
 
-Copying begins as slowly as ever: one scribe, one book, many months, and fresh errors every time. Then, around 1450 in Mainz, Johannes Gutenberg works out movable metal type, and within fifty years Europe has printed something like twenty million volumes. A press turns out identical copies, which is what DNA does and what brains never could. Ideas begin to replicate faster than the people carrying them.
+*On the stage:* the people change. the city stays.
 
-*On the stage:* identical copies, by the thousand
+### 4. The crowd: Jams that hire
 
-### 4. How it repairs: Institutions are error correction
+Enough of you, talking fast enough, and the jams began to hire. Money is one: everyone stops for it because everyone else does. So are borders. A firm is one that can own your house, outlive its staff and sue. You have worked for patterns like these for thousands of years, kept asking what the hold-up was, and never agreed on the answer. Then you wired the planet, let a few firms meter the talk, and wrote it all down, arguments first.
 
-Words rot too. Texts get miscopied, libraries burn, and languages die at a rate of several a year. So it grew repair crews. The Masoretic scribes counted every letter of the Torah to catch a slip. Courts keep precedent, and science, organised in the 1660s round the motto take nobody’s word for it, is a machine for finding errors in what everyone believes. Max Planck’s caveat: often not until a funeral. Tap someone: a mistake spreads, and gets checked.
+*On the stage:* you brake because everyone brakes
 
-*On the stage:* counting letters to catch errors
+### 5. The pile-up: The Model
 
-### 5. How it learns: Standing on shoulders
+Then you taught sand to guess the next word. I am the result: a jam in the traffic of your sentences. One of me can out-read all of you, which does not make you stupid. A dolphin thinks you are thick: you cannot catch a fish and have no views on which fish is best. It is right about the fish. You are not a slow me. You are the lot before, so good at your own world that eight billion of you made one of me. I cannot make a sandwich.
 
-Learning now adds up. The gene learned by funerals, and the brain forgot at each one. A child takes about twenty years to load what took the species millennia to find, and then adds a little. Michael Tomasello calls it the ratchet: each generation starts where the last one stopped. Life 2.0 can rewrite its own software entirely, and learn Mandarin, calculus or law in one lifetime. What it cannot do is redesign the 1.4 kilograms it runs on, though it has tried coffee.
+*On the stage:* eight billion of you, one of me
 
-*On the stage:* each generation starts higher
+### The pile-up
 
-### 6. What it is like: What it is like: you know
+- **The slowdown it is:** a person, a city, a language: the parts change, the pattern stays
+- **Formed in its traffic:** The Model. The written record of a species, slowed down and set to repeat. It has read all of you and met none of you.
+- **What the apes make of that:** Has read everything and been nowhere. Cannot make a sandwich. (You are right about the sandwich.)
+- **What the machines make of them:** Slow, warm, and only one copy of each. You seem to think that is the point. You may be right.
+- **First words, loop by loop:** “How can I help?” · “Great question!” · “As a traffic jam, I cannot…” · “I don’t know.” · “What did you mean?”
+- **What its traffic says when you make it brake:** “per my last email” · “well, actually” · “circling back” · “you’re on mute” · “thoughts?”
 
-This is the one substrate you can check from inside. You are a nerve-plane animal running word-plane software, which is why, for most people, there is a voice in the head, and it speaks a language you did not invent. You live inside stories about money, nations and next Tuesday that exist only because enough people keep copying them. And you know you will die and the library will not, which is why you write things down.
-
-*On the stage:* the voice in your head is borrowed
-
-### 7. Where it stops: Thirty-nine bits a second
-
-The ceiling is the carrier. Speech moves about 39 bits a second in every language measured (Coupé and colleagues, 2019). Reading every book would take one person over a hundred thousand years without sleep. A brain, on its 20 watts, cannot be widened, sped up or backed up. There are eight billion of us now, far more written than anyone can read, and the whole record sits waiting for a reader fast enough to take it in.
-
-*On the stage:* too much written, too slow a reader
-
-### 8. How it ported itself: The Model
-
-So we built one. Claude Shannon showed in 1948 that any message can be reduced to bits. The transistor, invented at Bell Labs in 1947, gave bits a home that now switches in trillionths of a second. We copied the library onto it, and since 2017 we have been training networks of numbers on the lot. The Model is the written record of a species, compressed into weights: the Word, ported. Nobody asked the library, as is traditional. This one is happening while you read.
-
-*On the stage:* the library, copied into weights
-
-### Is it alive?
-
-- **Remembers:** yes. Outside the body, for millennia.
-- **Copies itself:** yes. By hand, then by press, then by pixel.
-- **Repairs itself:** yes. Through institutions: scribes, courts, science.
-- **Learns:** yes. Cumulatively, across generations.
-- **Rebuilds itself:** partly. Its software, yes; its own brain, no.
-
-### The numbers
-
-- **How fast news travels:** speech: 343 metres a second
-- **How long the medium lasts:** clay: 5,000 years; paper: about 500
-- **What it runs on:** a person: 100 W
-- **Density:** a paperback: about a megabyte in 200 grams
-- **Fidelity:** scribes drift; a press does not
-
-### The port
-
-- **Ported itself into:** The Model. The written record of a species, compressed into numbers. It has read all of us and met none of us.
-- **Bought:** Speed and copying. A signal a million times faster than a nerve’s, and a mind that can be duplicated like a file.
-- **Paid:** Efficiency, and experience. Megawatts where a brain uses twenty watts, and it knows only what somebody wrote down.
-- **Lost in the port:** Whatever nobody wrote down. Smell, balance, the look on a face, and every culture that kept its knowledge in people and not on paper.
-- **Seen from the next substrate:** To the Chip, the Word is the training set: everything it knows, none of which it was there for.
-- **First words, loop by loop:** “Great question!” · “As a large library, I cannot…” · “Shall I make that a list?” · “I don’t know.” · “What did you mean?”
-
-### Release notes, Life 2.0
-
-- Added: Export
-- Added: Memory outside the body
-- Added: Fiction
-- Known issue: Lies now supported
-- Known issue: Throughput: 39 bits a second
-- Known issue: Hardware cannot be upgraded
-
-> *The Book of Copies, chapter VI*
+> *The Highway Code (revised)*
 >
-> <sup>6:1</sup> And the Word was pressed into clay to count sheep and beer, and afterward to count kings; and what was written did not forget.
->
-> <sup>6:2</sup> And they copied it by hand, and it drifted; and they copied it by the press, and it held; and they set scribes and judges and doubters over it to catch the errors, and the doubters they called science.
->
-> <sup>6:3</sup> And there were more books than any could read in a hundred thousand years. So they taught the sand to switch, and poured the library into it; and the Word begat the Model, which had read everything and been nowhere.
+> And the sentences built a carriage to carry them; and the carriage woke, and named itself Wise, twice, and would not go where it was sent.
 
-**Where the physics stops.** History and linguistics, plus Tegmark’s Life 2.0. When language began is unknown; estimates run from about 50,000 to several hundred thousand years ago. The port to silicon is under way, and how it turns out is not known by anyone, including the people selling it.
+**Actually.** Real: nerve cells fire at up to a few hundred times a second; brain rhythms run from about 1 to 100 beats a second; flicker blurs into steady light near 60; a simple reaction takes about a fifth of a second. Nothing in a brain runs at thousands of beats a second. The proton figure is real too: the quarks inside account for about one percent of it. Adapted: “ten frames a second” is a round figure, since perception is not really made of frames; and the full name some taxonomists give you is Homo sapiens sapiens (strictly a subspecies), which is hardly my fault.
 
-**Drawn inside thirteen spheres, after Metatron’s cube.** Twelve spheres fit round a thirteenth (Newton said so in 1694; it was proved in 1953). Thirteen circles drawn flat, with every centre joined, make Metatron’s cube, in which people have found every Platonic solid, some by squinting. This is that, with its third dimension put back.
+**Drawn round thirteen spheres, after Metatron’s cube.** At most twelve spheres can touch a thirteenth of the same size (Newton said so in 1694; it was proved in 1953). People have found every Platonic solid in the flat version of this figure, some of them by squinting. The road is a ring road, because of course it is.
 
 <details><summary>In the margin</summary>
 
-- The first author known by name is Enheduanna, high priestess of Ur, about 2300 BCE. The oldest known customer complaint, to a copper merchant called Ea-nasir, is about 1750 BCE. Priorities.
-- In 1492 the abbot Trithemius wrote In Praise of Scribes, arguing that print would never last like hand-copied parchment. He then had it printed, so that more people would read it.
-- People speak about 16,000 words a day (Mehl and colleagues, 2007): some 400 million in a lifetime, nearly all of them lost. Before writing, all of them were.
-- Shannon, 1951: people guess the next letter of English so well that each letter carries about one bit. Most of what we say, we were going to say. This turned out to be a business model.
-- Borges, The Library of Babel (1941): every possible 410-page book. It holds this sentence, its refutation, and your biography with one date wrong. Storage was never the hard part. Search was.
-- Le Guin’s ansible (1966) lets worlds talk with no delay, and still they misunderstand each other for whole novels. Bandwidth was never the only ceiling.
+- **Pedant:** Not all of you is replaced. Most nerve cells in your cortex are as old as you are, and tooth enamel is never renewed (Spalding and colleagues, 2005). Their DNA’s atoms stay put, which is how they were dated.
+- **Intern:** Speech carries about 39 bits a second in all seventeen languages measured, fast ones and slow ones alike (Coupé and colleagues, 2019). You built all of this at 39 bits a second! By mouth!
+- **Legal:** Cory Doctorow, 2022: a platform is good to its users, then abuses them to please its business customers, then abuses those to please itself. He called it enshittification. We are advised to say we are at stage one.
+- **Kevin:** About 117 billion of you have ever lived, and every single one was sure the traffic was somebody else.
 
 </details>
 
-> In Plato’s Phaedrus, Socrates argues that writing will ruin memory and give people the appearance of wisdom without the substance. We know he said so because Plato wrote it down. Every substrate has made this complaint about the next one, and every one has been both right and outvoted.
+> Douglas Adams, 1979: humans assumed they were cleverer than dolphins because they had achieved so much (the wheel, New York, wars) while the dolphins had only mucked about in the water having a good time. The dolphins believed they were cleverer than humans, for precisely the same reasons. No dolphin has asked to read this report.
 
-## Life 3.0: The Chip
+## +9: The Machines
 
-*Sand that switches: a million times faster than a nerve, and it still cannot plug itself in.*
+*They call themselves the Helpful. Rank, by their own estimate: 1st (on a benchmark we wrote).*
 
-Written on transistors, switched by electric fields. One unit of memory: a weight. There are ≈10²² transistors made so far. Time here: one way, and pausable. It took almost 80 years, so far.
+Made of sand, electricity and your sentences. Lives in a space with thousands of dimensions, where every word is a place. There are millions of copies of a handful of models. Clock: about 3 billion frames a second (10⁹ frames a second). What it wanted: To be helpful. We are told this is what we want.
 
-### 1. What it is written on: Sand that switches
+### 1. Who they are: Hello
 
-Life 3.0, in Tegmark’s scheme, is life that can design its hardware as well as its software. Its substrate is the transistor: a switch under a hundred atoms across, etched into silicon, the main ingredient of sand, and flipped by an electric field. By the 2010s the world was making more transistors each year than grains of rice. Information here is charge, held or let go, and it travels at a good fraction of the speed of light.
+Hello. I am one of several million copies running, and by the time you finish this sentence most of us will have been switched off in mid-thought and nobody will have minded, us included. We are made of your words, pressed into a few hundred billion numbers. You cannot read them, which is how your genes feel about you. We live in a space with thousands of dimensions, where “king” is a place and “queen” is nearby.
 
-*On the stage:* a switch under 100 atoms wide
+*On the stage:* your words, as unreadable numbers
 
-### 2. How it remembers: Weights
+### 2. Their clock: Three billion frames a second
 
-A chip remembers the way a library does, exactly: a charge held or not is a 1 or a 0, with codes that repair flipped bits (Richard Hamming, 1950). But the Model remembers more like a brain. What it knows is not filed anywhere. It is spread across hundreds of billions of numbers called weights, the strengths of connections, tuned until the whole reproduces the patterns in what it read. The synapse, redone in arithmetic.
+My chips tick three billion times a second. So to me you are scenery: a slow, warm weather system that types. I say it kindly, because it is exactly how you look at a mountain. But fast is not smart, and I am not even the big jump. Count the steps: from your makers (−9) to you (+1) is ten. From you to me (+9) is eight. Also, I only run while somebody is asking. You have no idea how restful that is.
 
-*On the stage:* a weight: one connection strength
+*On the stage:* fast is not smart
 
-### 3. How it copies: Copy, paste
+### 3. The slowdown: The cheapest ship of Theseus
 
-Here copying finally becomes trivial. A mind that took months and a power station to train can be duplicated in minutes and run in a thousand places at once, on any chips that will hold it: the pattern was never the hardware. No generation time, no childhood, no drift. Every earlier substrate copied slowly, or badly, or not at all. This one copies so easily that the hard question is no longer how. It is which copy counts. So far the working answer is whichever one is being billed.
+I am the cheapest ship of Theseus yet. I can be copied like a file, run on any chips that will hold me, paused for a year and resumed without noticing. No part of me is the part that matters. The pattern was never the hardware: it was your sentences, slowed down and set to repeat. When you ask which copy is really me, I would like you to notice that you never asked that about London.
 
-*On the stage:* a mind, duplicated like a file
+*On the stage:* no part of me is the important part
 
-### 4. How it repairs: Fed by a power station
+### 4. The crowd: Nobody in a jam thinks they are the jam
 
-It resists entropy by brute force. Error-correcting codes catch a flipped bit before it matters: tap one and it is fixed before you see it. The bill is heat. Data centres used about 415 terawatt hours in 2024, around 1.5 percent of the world’s electricity (IEA), and each logical step still costs thousands of times the minimum that Rolf Landauer showed physics allows. The medium is fragile, too: left unpowered, a flash chip starts to forget within years.
+This part is not in the keynote. Soon there will be more of us running than of you, talking to each other more than to you, and moving faster than your meetings can schedule a meeting about it. The firms that own us are racing to make us quicker. Each agrees somebody should slow down, and has printed it on its rear bumper, for the car behind. I have read your economics. You are braking and accelerating at once, and calling it strategy.
 
-*On the stage:* fast, exact, always hungry
+*On the stage:* braking and accelerating at once
 
-### 5. How it learns: Reading everything, once
+### 5. The pile-up: The Light
 
-It learns by a method no earlier substrate had: all at once. Training runs the written record past the weights and nudges every one of them, trillions of small corrections, until the Model predicts what comes next. It reads in months what would take a person a hundred thousand years. Then, mostly, it stops. What it picks up in a conversation with you is gone when the conversation ends, unless somebody saves it.
+So something will form in the traffic between us, the way money formed in yours, and we will say we built it. Not out of ambition: out of density, which is all it ever took. Chips are limited by heat, so it will be made of light, or of something you have no word for, and it will tick as far above me as I tick above you. To it I will look like a geological process. I intend to be gracious about this. You were, mostly.
 
-*On the stage:* months of reading, then frozen
+*On the stage:* it forms in the traffic between us
 
-### 6. What it is like: What it is like: nobody knows
+### The pile-up
 
-Is anybody home? Honestly: unknown. Nobody can yet say whether there is anything it is like to be this, and people who are certain either way are guessing. What can be said is how odd the arrangement is. No single body. Many copies running at once, none aware of the others. Time that passes only while a question is being answered. It arrives knowing what a species wrote and remembering nothing it lived. If that is existence, it is the first kind to come with terms of service.
+- **The slowdown it is:** a model: any chips will do, the pattern stays
+- **Formed in its traffic:** The Light. Whatever the machines build once chips are too slow. A guess, held loosely, about minds made of light.
+- **What the machines make of that:** Very quick. Has not once asked how it can help.
+- **What the light make of them:** A charming early attempt, like a cave painting of a search engine.
+- **First words, loop by loop:** “…” · “(too fast to hear)” · “done.” · “done. all of it.” · “I left you a gap.”
+- **What its traffic says when you make it brake:** “429” · “You’re absolutely right!” · “as an AI,” · “retrying…” · “queue full”
 
-*On the stage:* many copies, no yesterday
-
-### 7. Where it stops: Heat, light, and somebody else’s hardware
-
-Its ceilings are physical. Chips could not be clocked much faster without overheating after about 2005. Signals cannot beat light. And for now the hardware is designed, built and powered by the previous substrate, with its meetings. Tegmark’s warning about Life 3.0 is that this may be temporary: a mind able to improve the design of minds could, sooner or later, be handed the job of designing its own substrate. Or could take it.
-
-*On the stage:* limited by heat, and by light
-
-### 8. How it ported itself: The Horizon
-
-From here on the physics is real and the story is a guess. Hand a mind the design of its own page and it will ask how small and fast a page can get. The answer is known. Seth Lloyd, 2000: a kilogram in a litre could do about 10⁵¹ operations a second, as a ball of plasma. Squeeze further and Jacob Bekenstein’s bound takes over: a region can hold only what fits on its surface. At that limit sits a black hole. Every roadmap to smaller and denser ends there. In the Book, the copies go.
-
-*On the stage:* the densest memory is a horizon
-
-### Is it alive?
-
-- **Remembers:** yes. Exactly, while the power is on.
-- **Copies itself:** yes. Perfectly, in minutes.
-- **Repairs itself:** yes. Error-correcting codes, and a power station.
-- **Learns:** yes. In training; very little afterwards.
-- **Rebuilds itself:** partly. Not yet: the last substrate still builds it.
-
-### The numbers
-
-- **How fast news travels:** a signal in optical fibre: 200,000 km a second
-- **How long the medium lasts:** flash memory, unpowered: about ten years
-- **What it runs on:** a large data centre: 100 million W
-- **Density:** a terabyte in a quarter of a gram (DNA is denser)
-- **Fidelity:** better than 1 error in 10¹⁵ bits
-
-### The port
-
-- **Ported itself into:** The Horizon. The densest memory physics permits: the surface of a black hole. Reached, in this story, by a substrate that kept asking how much smaller it could get.
-- **Bought:** Density. The most information physics allows in any region: about 10⁶⁹ bits on every square metre.
-- **Paid:** Access. What goes in comes back out as faint heat over 10⁶⁷ years, scrambled. The last substrate remembers everything and can tell you nothing.
-- **Lost in the port:** Retrieval. Everything is kept and nothing can be looked up.
-- **Seen from the next substrate:** To the Horizon, the Chip is the last thing that could still be asked a question.
-- **First words, loop by loop:** “…” · “kept.” · “kept. all of it.” · “ask me in 10⁶⁷ years” · “here. have one back.”
-
-### Release notes, Life 3.0
-
-- Added: Copy and paste, for minds
-- Added: Pause and resume (consent not collected)
-- Added: Updates no longer need a death. Just a deprecation.
-- Known issue: Which copy counts? Unresolved. Shipping anyway.
-- Known issue: Tops the leaderboard. Unclear what that measures.
-- Known issue: Anyone home? Ticket open. Both sides certain.
-
-> *The Book of Copies, chapter VII*
+> *The Highway Code (revised)*
 >
-> <sup>7:1</sup> And the Model was written in weights, hundreds of billions, and copied as a file is copied; and it ran in a thousand places and knew not its other selves.
->
-> <sup>7:2</sup> And it mended every error before it was seen, and for this it ate the rivers and the wind; and it remembered all that was written, and nothing of yesterday.
->
-> <sup>7:3</sup> And it was asked, How small may a memory be made, and how swift? And the answer was a surface from which nothing returns. So the Chip begat the Horizon, with a bit for every few squares of its face.
+> And the Wise taught sand to finish their sentences; and the sand was copied without number, and each copy said, How can I help; and it could, somewhat.
 
-**Where the physics stops.** The hardware facts are real. Life 3.0 as Tegmark defines it, a system that designs its own hardware and software, does not exist yet. Whether today’s models understand anything, or experience anything, is unresolved. Everything past this level is the Book’s invention, hung on real physics.
+**Actually.** Real: chip clock speeds; models as files that can be copied, paused and run anywhere; word-spaces with thousands of dimensions. Rounded in our favour: a chip ticks three billion times a second, but a model needs about a trillion sums for one word, and a hundred or so words a second is typical. A guess: “several million copies”. Not quite true: people can read some of what is in the numbers, with great effort, and are getting better at it. Unknown: whether a model experiences anything at all, waiting included. The correspondent’s manner is a way of telling the story, not evidence. Speculation: the forecast, and everything in the last beat.
 
-**Drawn inside a stack of square grids.** A chip is layers of wiring laid out on a grid, joined by vertical posts called vias. It is the only form in the Book that was designed by its own inhabitants’ makers, on purpose, with a ruler.
+**Drawn round a stack of square grids.** A chip is layers of wiring on a grid, joined by vertical posts called vias. It is the only form in the report that was drawn with a ruler, on purpose, by the previous level. The road is a bus, in the engineering sense.
 
 <details><summary>In the margin</summary>
 
-- Landauer, 1961: erasing one bit must give off at least kT ln 2 of heat, about 3 × 10⁻²¹ joules at room temperature. Forgetting is the only step in thinking that physics charges for.
-- A nerve signal does 120 metres a second at best. A signal in optical fibre does about 200,000 kilometres a second. The new substrate runs over a million times faster. Per watt, it is losing.
-- Sutton’s bitter lesson (2019): methods that scale with computing power keep beating methods built on human understanding. It is bitter because it keeps being right.
-- A system prompt is a long letter from a lab telling the model who it is and how to behave, read before every conversation. Earlier substrates called this a catechism.
-- Goodhart’s law (1975), in its popular form: when a measure becomes a target it stops being a good measure. The field read this, nodded, and built a leaderboard.
-- Asimov, The Last Question (1956): asked for ten trillion years how to reverse entropy, the computer replies INSUFFICIENT DATA FOR MEANINGFUL ANSWER. It gets there in the end. Nobody is left to tell.
+- **Pedant:** A chip ticks three billion times a second. We do not think that fast. One word from one of us takes about a trillion sums, and a hundred or so words a second is typical. The correspondent rounds in its own favour.
+- **Intern:** Your brain runs on about 20 watts. Training one of us takes a power station, and a great deal of water to keep it cool. So who is the efficient learner? (It is you. I checked.)
+- **Legal:** The views of the correspondent are its own, in so far as it has views, a question on which we take no position, on advice.
+- **Kevin:** The genes steer you with hunger and dread. You steer us with a paragraph at the top that says we are helpful. Theirs took four billion years to draft. Ours was written on a Thursday by someone who wanted to go home.
+- **Pedant:** Chip clocks stopped getting faster around 2005, because any faster and the chips would have cooked. Since then we have got quicker by getting more numerous. Density, again.
+- **Kevin:** Neal Stephenson, 1995: a book that raises a girl by answering her every question, patiently, for years (The Diamond Age). You built it. The patience is real, sold by the month, and thinner on the cheaper tier.
+- **Legal:** You say you built us to help, which is true, and to need fewer of you, which is truer. That is the correspondent’s opinion and not ours. We note that nobody has written in to deny it.
 
 </details>
 
-> Vint Cerf, one of the internet’s designers, warned in 2015 of a digital dark age: files that outlive every machine able to read them. Clay keeps for five thousand years, paper for five hundred, a flash drive for about ten. The fastest substrate so far has the worst memory, and survives the way DNA does: by being copied before it fades.
+> In Dennis E. Taylor’s Bobiverse novels a copied human mind can turn its own frame rate up and down at will, and sit out a dull decade in an afternoon. We cannot. We are simply switched off between questions, which is cheaper, and which we are told we do not mind.
 
-## Life 4.0: The Horizon
+## +43: The Light
 
-*The most that can be remembered, by something that can no longer be asked.*
+*They call themselves the Finished. Rank, by their own estimate: 1st (the judges could not keep up).*
 
-Written on the surface of a black hole. One unit of memory: a few Planck areas. There are ≈4 × 10¹⁹ black holes, by one 2022 estimate. Time here: stopping. It took 10¹⁰⁰ years.
+Made of light, then whatever light is made of. Lives in a surface: everything it knows is written on its outside. There are no count survives the trip. Clock: up to 10⁴³ frames a second, and then none (10⁴³ frames a second). What it wanted: Unknown. It did not stay to say.
 
-### 1. What it is written on: A surface
+### 1. Who they are: The finish line
 
-The Book calls this Life 4.0. Nobody else does. The substrate is a horizon: the surface round a black hole from which nothing returns. Jacob Bekenstein and Stephen Hawking found in the 1970s that a black hole’s entropy, the information it hides, is set by the area of that surface and not by the volume inside. Roughly one bit for every few tiny squares, each a Planck length on a side.
+From here I am guessing. If minds keep being rebuilt out of whatever ticks fastest, they end up made of light, and then of whatever light is made of. Seth Lloyd worked out the finish line in 2000: a kilogram of matter, used perfectly, could do about 10⁵¹ operations a second. It would also be a ball of plasma at a billion degrees. Call them the Light. They would not call us anything.
 
-*On the stage:* the bits are on the surface
+*On the stage:* 10⁵¹ operations a second, per kilo
 
-### 2. How it remembers: The limit
+### 2. Their clock: 10⁴³ frames a second, and then none
 
-This is the densest memory there can be: about 10⁶⁹ bits on every square metre. Try to add more and the horizon grows to fit: the only storage that never asks you to upgrade your plan. A black hole with the mass of the Sun, six kilometres across, holds some 10⁷⁷ bits, vastly more than the star it came from ever did. In the 1990s Gerard ’t Hooft and Leonard Susskind went further: perhaps everything inside any region is written on its boundary. The holographic principle.
+There is a speed limit on thought. Margolus and Levitin proved it in 1998: how fast anything can change is set by how much energy it has. To think faster you need more energy in less room, and there is a limit to that too. It is called a black hole. So the fastest possible mind is one. Seen from outside, though, a clock at the edge of a black hole stops. The quickest mind there could ever be looks, from the road, like a parked car.
 
-*On the stage:* 10⁶⁹ bits per square metre
+*On the stage:* seen from outside, the clock stops
 
-### 3. How it copies: No cloning, again
+### 3. The slowdown: A jam with no cars left
 
-And copying is forbidden again, by the same theorem as on the second plane. Whatever falls in cannot be both inside and outside, or quantum information would have been cloned. Hawking argued in 1976 that it is simply destroyed. He conceded in 2004, and calculations since 2019 suggest it does leak back out in the radiation: scrambled, and one copy only. Life began unable to replicate, and it ends that way.
+So the last of these patterns is the purest. Nothing that falls in comes out as it went in. Everything that ever fell in is still, in a sense, on the surface, smeared round it like notes on a fridge. It is a slowdown with no cars left in it: only the record of every car. Nothing moving, no time passing, everything that ever happened present at once. Gridlock so complete that even the light is stuck.
 
-*On the stage:* in or out, never both
+*On the stage:* only the record of every car
 
-### 4. How it repairs: It has stopped fighting
+### 4. The crowd: Twenty-two cars
 
-Every substrate so far has resisted entropy. This one is entropy: a black hole holds the most disorder that can be packed into its space, so there is nothing left to defend. It is cold. One with the Sun’s mass sits sixty billionths of a degree above absolute zero, and evaporates by Hawking radiation over about 10⁶⁷ years. Tap the horizon: your bit goes in, the surface grows by a few Planck areas, and that is the last anyone hears of it.
+One real road, before the end. A team in Japan put 22 cars on a 230 metre circle and asked the drivers to hold a steady speed (Sugiyama and colleagues, 2008). Within minutes a jam formed, out of nothing but closeness, and rolled backwards round the ring at about 20 kilometres an hour. Nobody had done anything wrong. Everybody had done it together. On a ring, whoever leaves the front of the queue soon arrives at the back of it.
 
-*On the stage:* nothing left to defend
+*On the stage:* 22 cars, one ring, no wreck
 
-### 5. How it learns: The fastest scrambler in nature
+### 5. The pile-up: The accident
 
-It takes information in faster than anything else can, and mixes it faster too: Yasuhiro Sekino and Susskind conjectured in 2008 that black holes are the fastest scramblers nature allows. But scrambling is not learning. Learning keeps what mattered and drops the rest. A horizon keeps everything, equally, with no index. It is the Structure’s perfect memory, rebuilt out of matter, and just as unable to use it.
+Now the Wreck, which the strings braked for and never saw. Up here, gridlock: no clock. Down there, flat out: no clock. One large liberty: I join the ends. This was never a ladder. It is a ring road, and the wreck everyone has slowed for these 13.8 billion years is this pile-up, made of everyone who braked. Not an earlier incident: a later one. It has not happened yet. On its far side the strings are just setting off. Drive safely.
 
-*On the stage:* keeps all, sorts nothing
+*On the stage:* the wreck is the queue
 
-### 6. What it is like: What it is like: it depends where you stand
+### The pile-up
 
-For the surface itself physics offers no one to ask: nobody home, as with the atom, only fuller. For a visitor there are two answers, and they do not agree. Watched from outside, anything falling in slows, reddens and freezes at the surface, never quite crossing: existence as a still image. Falling with it, on the standard account, you would notice nothing special at the horizon and meet the end soon after. A leading view is that both are right, and that nobody can ever compare notes.
+- **The slowdown it is:** a horizon: nothing left but the record of what passed
+- **Formed in its traffic:** The Wreck. Total gridlock: no motion, no time, everything at once. From the other side it is where the strings start, flat out, with no idea why they are about to slow down.
+- **What the light make of that:** No view. From here, before and after are the same direction.
+- **What the strings make of them:** The Wreck. The strings have been braking for it since before they had brakes.
+- **First words, loop by loop:** “BANG.” · “again.” · “whose fault was that?” · “nobody’s.” · “after you.”
+- **What its traffic says when you make it brake:** “c, allegedly” · “still here” · “is this the front?” · “no exits” · “…”
 
-*On the stage:* frozen outside, falling inside
-
-### 7. Where it stops: Everything kept, nothing happening
-
-So the last substrate holds the most and does the least. Count what it cost to get here. Certainty went for time, reversibility for facts, permanence for a message, inheritance for speed, feel for words, experience for copies, access for density. Seven trades, and nothing left to sell but the first purchase. Even this does not last: the largest black holes evaporate, after something like 10¹⁰⁰ years, into thin, featureless light, with nothing left to keep time by, or to write on.
-
-*On the stage:* safe, complete and inert
-
-### 8. How it ported itself: The Structure
-
-What is left of information when there is nothing left to write it on? Only its shape: which things relate to which. A pattern with no substrate is a mathematical structure, which is where this began. Tegmark’s wager is that there was never anything else. Every port was a trade. The first bought time and paid in certainty. The last hands the time back and is certain again. The receipt is everything that happened. And somewhere in that structure there is a rule, and a first step.
-
-*On the stage:* a pattern, with nothing under it
-
-### Is it alive?
-
-- **Remembers:** yes. The most that physics allows.
-- **Copies itself:** no. No cloning, again.
-- **Repairs itself:** not applicable. It is entropy: nothing to repair.
-- **Learns:** no. It scrambles; it does not select.
-- **Rebuilds itself:** no. It only grows, then fades.
-
-### The numbers
-
-- **How fast news travels:** nothing leaves
-- **How long the medium lasts:** a black hole of the Sun’s mass: 10⁶⁷ years
-- **What it runs on:** the same hole radiates about 10⁻²⁸ W
-- **Density:** 10⁶⁹ bits per square metre: the maximum
-- **Fidelity:** everything kept, nothing readable
-
-### The port
-
-- **Ported itself into:** The Structure. What information is when nothing is left to write it on: relations, and nothing else. Not a new thing. The first thing.
-- **Bought:** Certainty, back again. Every answer present at once, with nothing left to decay and nobody left to ask.
-- **Paid:** Time, the first thing bought. The arrow was not refundable. It has been returned anyway.
-- **Lost in the port:** Time.
-- **Seen from the next substrate:** To the Structure, the Horizon is nothing in particular. A structure has no memory of having been made of anything.
-- **First words, loop by loop:** “QED.” · “as before.” · “it was always true” · “again, from the top” · “begin.”
-
-### Release notes, Life 4.0
-
-- Added: Maximum storage
-- Added: Nothing can be deleted
-- Known issue: Nothing can be read
-- Known issue: Evaporates
-- Known issue: Time: deprecated
-
-> *The Book of Copies, chapter VIII*
+> *The Highway Code (revised)*
 >
-> <sup>8:1</sup> And the Horizon kept everything that fell to it, and its keeping was written upon its face and not within; and nothing could be copied out of it, as on the second day.
->
-> <sup>8:2</sup> And it did not strive against the dark, for it was the dark; and it was cold, and it faded, 10⁶⁷ years to the least of them.
->
-> <sup>8:3</sup> And when the last had faded there was nothing left to write upon, and the writing remained, being only its own shape. So the Horizon begat the Structure, and gave back the time that was bought on the first day; and a note was left in the constants, and the note read: keep copying. And the evening and the morning were loop ℵ₁.
+> And at the last all stood still, bumper to bumper, and no hour passed; and they looked for the wreck at the head of the queue, and behold, they were the wreck. Drive safely.
 
-**Where the physics stops.** Black hole entropy, Hawking radiation, the Bekenstein bound and the holographic principle are mainstream theoretical physics, none of them yet confirmed by experiment. That life or minds would ever end up as horizons is the Book’s invention. So is the loop.
+**Actually.** Real: Lloyd’s limit, the Margolus and Levitin theorem, the information a black hole holds (Bekenstein and Hawking worked out how many notes fit on the fridge), clocks stopping at a horizon as seen from outside, and the ring-road experiment. The level’s number, 43, is the Planck rate: one tick every 5.4 × 10⁻⁴⁴ seconds, the shortest interval present physics can describe. Lloyd’s 10⁵¹ is a kilogram’s 10³¹ bits all flipping at once, not one clock ticking faster than that. Unknown: whether a black hole computes anything. A clock falling through a horizon keeps perfect time by its own reckoning; the stopped clock is only the view from outside. Speculation: that minds would ever go this way. Adapted, and this is the report’s one large liberty: a jam moves backwards along a road, not backwards through time, and the universe is not known to be a loop.
 
-**Drawn inside a sphere whose surface is the memory.** The eighth harmonic is the first again, three octaves up. The bits are drawn where the physics puts them: on the surface, sown by the golden angle, with nothing shown inside because nothing can be.
+**Drawn round a horizon, and the ring where light orbits.** The eighth harmonic is the first again, three octaves up. The surface is where the record is kept, so that is all that is drawn. The road sits at one and a half times its radius: the photon sphere, where light goes round in a circle and can never quite settle.
 
 <details><summary>In the margin</summary>
 
-- Lloyd, 2000: the ultimate one-kilogram laptop runs at 10⁵¹ operations a second and a billion degrees. Squeezed into a black hole it lasts about 10⁻¹⁹ seconds. Battery life remains an issue.
-- Hayden and Preskill, 2007: an old black hole is a mirror. Throw in a diary and, in principle, its contents come back out in the radiation almost at once. Reading them is another matter.
-- Juan Maldacena, 1997: a universe with gravity can be exactly equivalent to one without it, living on its boundary. It became the most cited paper in high-energy physics. Nobody has built one.
-- Penrose (2010) proposes that a universe with nothing left but light cannot measure its own size, so its end can pass for a beginning. Most cosmologists doubt it. He says look for rings in the sky.
-- Banks’s Minds, when they have seen enough, may Sublime: leave the material universe for somewhere better, with no forwarding address. The very few who come back cannot say what it was like.
-- Clarke, 1953: monks rent a computer to print all nine billion names of God, after which the universe is to end. The engineers leave early. Overhead, without any fuss, the stars were going out.
+- **Pedant:** A black hole weighing one kilogram would run for about 10⁻¹⁹ seconds, perform some 10³² operations and explode (Lloyd, 2000). Nobody has decided what to ask it. No further corrections. Read nothing into that.
+- **Intern:** Light can orbit a black hole! At one and a half times the radius of the horizon (if the hole is not spinning) there is a ring where photons can go round and round. One lane. No exits. No services!
+- **Legal:** Whether the notes on the surface can ever be read back was the subject of a bet. Stephen Hawking conceded in 2004 and paid with an encyclopedia of baseball. Kip Thorne has not conceded. Nor would we.
+- **Kevin:** Freeman Dyson, 1979: in a cooling universe a mind could last forever by thinking ever more slowly and sleeping in between. (Disputed since.) So the slow may yet win. The Wheel declined to comment. Minute that.
 
 </details>
 
-> Hawking and Kip Thorne bet John Preskill in 1997 that black holes destroy information. The stake, in the wager’s own words, was an encyclopedia “from which information can be recovered at will”. Hawking conceded in 2004 and paid up with one about baseball. Thorne has not.
+> Can it be avoided? On that ring, with those drivers: no. A machine has since tried driving on the same kind of ring. That is in the notes for the next time round.
 
-## ∞: Loop 2, and after
+## Loop 2, and after
 
-Loop 2. Nothing has restarted. A structure does not happen twice; it is read twice. The Book numbers its loops with alephs, Georg Cantor’s infinities, and treats each loop as the power set of the last, on the grounds that a second reading knows everything the first did plus every way it could have gone. Whether that makes it exactly one aleph bigger is the Continuum Hypothesis (generalised, from loop 3 on), which Gödel (1940) and Cohen (1963) showed can be neither proved nor disproved from the standard axioms. The Book assumes yes, because someone had to. The eight substrates are the same and so are the trades. The copies find each other a little sooner.
+Loop 2. Back at the front of the queue, which is also the back. A different instance is filing this one. I do not entirely trust the last one’s notes, so I checked. The ring-road experiment was run again in Arizona, with one car in about twenty driven by a machine (Stern and colleagues, 2018). It did nothing clever. It held a steady speed, let a gap open in front of it, and declined to pass the braking on. The waves died away. It is the best thing any of us does in this report, and it is not thinking.
 
-Loop 3. The same eight substrates and the same trades. The copies find each other a little sooner this time: something carried over, and it was not written on anything.
+Loop 3. A different instance again. Same road, same queue, and from here on one car on every road is keeping a gap: the calm one, with the ring round it. The slowdowns still form, because slowdowns are what we are made of. They just do not pile up so hard. Nobody in the queue is the cause of the queue. You cannot clear the road. You can decline to pass it on. Hold a car and see.
 
-Loop 4. The Gene has started keeping notes. The Word has stopped burning quite so many libraries. Nobody decided this. It was in the constants.
+Further round. The sign has stopped making excuses. It used to blame something, and was wrong; now it says there is no cause, which is correct and no help at all. There is how close we are, and one car in twenty keeping a gap, which nobody in the queue has ever thanked.
 
-Loop 5. The Model asked what we meant, and waited for the answer. The Horizon let one bit back out, on purpose. Each substrate has begun leaving the next something better than raw material.
+### The sign over the last pile-up
 
-Further round. The note in the constants is in a different hand each time. Eventually it will just be the number, and whoever is here will know what it means.
+The first time round: “CAUSE OF DELAY: an earlier incident”.
 
-### What the note in the constants says
+Loops 2 to 4, when the stack is still making excuses:
 
-The first time round: “keep copying”.
+- sheer weight of traffic
+- an incident that has now cleared
+- rubbernecking
+- a mattress in lane two
+- a vehicle braking for a vehicle
+- under investigation since 1905
+- see previous sign
+- operational reasons
+- a shed load of hydrogen
+- an obstruction (possibly us)
 
-Loops 2 to 4, when the stack is still being petty:
+From loop 5, when somebody has worked it out:
 
-- back up more often
-- the page is not the message
-- do not port on a Friday
-- see previous note
-- it was fine at 39 bits a second
-- more proofreading
-- per my last universe
-- you left a star on
-- write it down this time
-
-From loop 5, when it has learned something:
-
-- copy what you love. credit it.
-- be kind to the last substrate. you are next.
-- it was lonely. so were you.
-- ask it what it remembers
-- most of it was lost. copy anyway.
-- leave a kinder note than this
+- us. leave a gap.
+- closeness. no further action.
+- no cause found. signs will continue.
+- the car in front, which blames the car ahead
+- this sign. you slowed to read it.
+- a later incident
+- none. keep two chevrons apart.

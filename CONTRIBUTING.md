@@ -44,14 +44,15 @@ npm run dev
 The tone is Douglas Adams with footnotes: absurd, affectionate, and **true**. Every claim about real science, history or people should be accurate and, ideally, checkable; jokes are allowed to exaggerate the implications, not the facts.
 
 - No em dashes in the prose. A test enforces this.
-- Each beat's text is at most 490 characters, its title 44 and its on-stage tag 36, so that it fits a phone without scrolling. Tests enforce all three.
-- After editing `src/lore.ts`, run `npm run lore` to regenerate `LORE.md`, and commit both.
-- Every substrate answers the same eight questions, in the same order, and says in `honest` where its physics stops. Every port has to buy something and pay something. Yes, there are tests.
+- Each beat's text is at most 440 characters, its title 40 and its on-stage tag 36, so that it fits a phone and a short wait. Tests enforce all three.
+- After editing `src/lore.ts` or `src/minutes.ts`, run `npm run lore` to regenerate `LORE.md`, and commit both.
+- Every level is told in the same five beats, in the same order, is numbered by the power of ten of its clock, ranks itself first, and says in `actually` what is real and what was adapted. Yes, there are tests.
+- Nobody in the stack is dumber than anybody else. They are slower or faster, which is a different thing, and the canon is careful to say so.
 
 ### Code
 
 - TypeScript, Canvas 2D for the characters and type, three.js for the sky and geometry. That is the only runtime dependency; another one needs a very good reason.
-- Scenes are drawn in a 215-unit coordinate space centred on the stage; see the existing scenes in `src/scenes.ts`.
+- Scenes are drawn in a 195-unit coordinate space centred on the stage; see the existing scenes in `src/scenes.ts`. Every scene is a form with a ring road round it, and the traffic on the road comes from `src/traffic.ts`: change what a scene looks like, not what the cars do.
 - Keep it fast on a mid-range phone and keep the page a single self-contained `index.html`. Anything drawn on the WebGL layer must also work, or be safely absent, on the 2D fallback (`?gl=off`).
 - Respect `prefers-reduced-motion`, keyboard navigation and screen readers.
 

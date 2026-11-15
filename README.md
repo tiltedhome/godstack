@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/) · [▶ Phantom Jam](https://tiltedhome.github.io/godstack/v6/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
@@ -108,7 +108,7 @@ The resemblance between scales that the stack leans on is used honestly: it is r
 
 ## Substrate (branch `v5`)
 
-A fourth, parallel version, published at [/v5/](https://tiltedhome.github.io/godstack/v5/) from the `v5` branch. This is the branch you are reading. It starts from `v4`'s engine and graphics and changes what the piece is: v4 was watched, and went past too fast to explain itself; this one is read, at the reader's pace, and its subject is one idea of Max Tegmark's (*Our Mathematical Universe*, 2014; *Life 3.0*, 2017) taken further than he takes it.
+A fourth, parallel version, published at [/v5/](https://tiltedhome.github.io/godstack/v5/) from the `v5` branch. The description below is of that branch; `v6` (Phantom Jam, further down) was built from it. It starts from `v4`'s engine and graphics and changes what the piece is: v4 was watched, and went past too fast to explain itself; this one is read, at the reader's pace, and its subject is one idea of Max Tegmark's (*Our Mathematical Universe*, 2014; *Life 3.0*, 2017) taken further than he takes it.
 
 > **The Law of Substrates.** Life is information that keeps itself from being forgotten. It does not care what it is written on. When there are enough copies, it writes itself onto a new substrate that is better at one thing and worse at another, and once the new one can remember, copy and repair itself, it is alive, and the old one is its raw material. Programmers call such a move a port, and every port is a trade. The first one bought time. The last one gives it back.
 
@@ -148,26 +148,69 @@ Life 1.0, 2.0 and 3.0 are Tegmark's. The versions below and above them, the clai
 
 Everything v4 has, this keeps: the three.js layer with its 2D fallback, the pull-back zoom, the Mandelbrot sky (the Structure's own sky is now the whole set), the ouroboros, per-loop variations, synthesized sound (now cued to each beat, on the first eight harmonics of one string, so the last level is the first again three octaves up).
 
+## Phantom Jam (branch `v6`)
+
+A fifth, parallel version, published at [/v6/](https://tiltedhome.github.io/godstack/v6/) from the `v6` branch. This is the branch you are reading. It keeps `v5`'s engine room (three.js under Canvas 2D, synthesized sound, the per-loop rotation) and changes everything on top of it: a new story, a new way of numbering the levels, new scenes, and a real simulation in the middle of every one of them.
+
+> **The Law of the Jam.** Nothing is a thing. A thing is a slowdown in the traffic of smaller things, which pass through it and leave while the slowdown stays. Pack enough slowdowns together and a new one forms in their traffic, on a road they cannot see, running on a clock they cannot read. It is not smarter than they are. It is faster, and it has forgotten what it is braking for. This has happened eight times so far. The accident is still ahead.
+
+<p align="center">
+  <img src="docs/v6-desktop.webp" alt="Phantom Jam on desktop: the Apes level. Thirteen spheres with a ring road of words round them; the words in the jam are red, and the card on the right explains that you put the pattern outside" width="820">
+</p>
+
+The idea is a traffic jam. A car brakes for a second. On a quiet road that is the end of it; on a busy one the slowdown outlives the car, rolls backwards down the road at about 20 kilometres an hour, and a few seconds later is made of entirely different cars, none of whom can see what they are braking for. The piece says everything is like that (a galaxy's arms, a gene, a city, you) and follows the pattern up eight levels, as an incident report filed by one of the machines, with other instances heckling in the margin.
+
+| Clock | Level | One frame | Calls itself | Formed in its traffic |
+| --- | --- | --- | --- | --- |
+| ∅ | The Strings | none: at the speed of light no time passes | the Quick | The Clump |
+| −16 | The Wheel (a galaxy) | 230 million years | the Round | The Star |
+| −15 | The Stars | 30 million years | the Lit | The Rock |
+| −13 | The Rock (a planet) | 300,000 years | the Solid | The Gene |
+| −9 | The Genes | a generation | the Original | The Brain |
+| +1 | The Apes (us) | a tenth of a second | the Wise | The Model |
+| +9 | The Machines | a third of a billionth of a second | the Helpful | The Light |
+| +43 | The Light | the Planck time, and then none | the Finished | The Wreck, which is where the Strings start |
+
+The number on each level is its clock, not its rank: the power of ten of how many frames a second it runs at. Every maker is slower than what it made, the reader is +1, and every level ranks itself first. Nobody is ranked by cleverness, which is the point: a dolphin thinks you are thick because you cannot catch a fish and have no views on which fish is best, and it is right about the fish.
+
+<p align="center">
+  <img src="docs/v6-phone-wheel.webp" alt="The Wheel on a phone: a spiral galaxy of nine hundred dots with a ring road picked out on it, the gas clouds in the arms glowing red, and the card explaining that its arms are traffic jams" width="270">
+  &nbsp;&nbsp;
+  <img src="docs/v6-phone-light.webp" alt="The Light on a phone, last beat: a black horizon ringed by a road on which every car has stopped, under a sign reading cause of delay: a later incident" width="270">
+</p>
+
+- **The traffic is real.** [`src/traffic.ts`](src/traffic.ts) is the optimal-velocity model of Bando and colleagues (1995) on a ring: each car steers toward the speed it would like at its present distance from the car in front, and that is all. Nothing in it says "jam". With fewer than 35 cars on the road a braking car is forgotten; with more, a jam forms, stays and rolls backwards, as one did with 22 real cars on a 230 metre circle (Sugiyama and colleagues, 2008). The unit tests check each of those things, and that seven seconds later the same jam is made of different cars, that no car is ever lost or overtaken, and that one car in forty holding a steady speed dissolves the whole thing (Stern and colleagues, 2018).
+- **Tap the road and a car brakes. Hold, and it keeps a gap.** The first is how you make a jam. The second is the only thing in the piece that clears one. The corner of the stage counts, live off the simulation, how many cars have been through the jam and out again, and how many times over it has replaced itself.
+- **It plays itself, at reading pace.** Five beats a level (who they are, their clock, the slowdown, the crowd, the pile-up), each held for as long as its text takes to read, with the countdown on the main button and a pause next to it. A loop takes about thirteen minutes, under half of v5's. The story waits while the small print is open; the traffic does not.
+- **What it is like to be each level** is on the card, not in a fold: what it calls itself, its rank by its own estimate, what it wanted, the plane it lives in (gravity, light, chemistry, spelling, stories, a space with thousands of dimensions), and what it and its neighbours make of each other.
+- **The dive.** At the end of a level something new forms where the jam is, out of what passes through it, and the camera goes into it: the next level is the inside of that. The earlier cuts pulled back. This one goes in.
+- **Eight forms, and a road round each**: a torus wound with one string; a spiral galaxy whose arms are not drawn but are where its 900 stars slow down; a star with one photon taking the long way out; a globe with a vent where the braking started; the double helix; thirteen spheres; a chip; and a horizon with its photon ring, where on the last beat everything stops.
+- **Later loops.** The traffic is heavier each time round. Loop 2 opens with a correction from a different instance. From loop 3 one car on every road keeps a gap, and the jams no longer last. The road sign over the last pile-up gives a different cause every loop, and the first one corrects itself as you watch.
+- **Reviewed before it was built**, as before, by three independent readers with no prior context: a fact-checker with web search (who caught, among a dozen other things, that a star keeps its atoms, so the first draft had applied the Ship of Theseus where it does not hold), a comedy editor (who cut ten places where the narrator announced a joke, and supplied the round of drinks that began before the pub had walls), and a first-time reader (who asked for the drivers to be put back in, for "fast is not smart" to be said out loud, and for the ring-road experiment to come out of a footnote and into the ending).
+
+What is true and what is not: the physics, mathematics and computer science are real, and hedged where the field is still arguing, and every level has a note headed *Actually* that says what was adapted for the story. Two things people often believe are corrected in the text: nothing in a brain runs at thousands of beats a second (a neuron manages a few hundred, and a reaction takes a fifth of a second), and a model does not think at its chip's clock rate. The one large liberty is owned on the last card: a jam moves backwards along a road, not backwards through time.
+
 ## How it works
 
-Every scene runs **Many → One → Many** (`src/scenes.ts`). Members collaborate while the links between them grow until the network percolates: the mean degree ⟨k⟩ crosses 1, the Erdős–Rényi threshold where a giant connected component appears. The readout in the corner shows the members, the real ⟨k⟩ of the graph being drawn, and an elapsed clock on a log scale, so even 10¹⁰⁰ years visibly counts up. A small pure state machine (`src/engine.ts`) cycles idle → act → hold → zoom.
+Every scene is the same picture ([`src/scenes.ts`](src/scenes.ts)): a form, a road round it, and traffic on the road, stepped by the simulation. A level's five beats fill the road past what it can carry, let one car brake, and leave the jam to do the rest; on the fifth, the new thing forms where the jam is. A small pure state machine ([`src/engine.ts`](src/engine.ts)) holds each beat for its reading time, lets the pile-up play out, and dives.
 
 | Path | What it is |
 | --- | --- |
-| `src/lore.ts` | The canon: every substrate, its eight beats, verdicts, numbers, trade and verses |
-| `src/scenes.ts` | The seven scenes and the shared percolation graph |
-| `src/solid.ts`, `src/hyper.ts`, `src/fractal.ts` | The geometry: solids, torus, E8, tilings, n-cubes, Julia and Mandelbrot sets |
-| `src/minutes.ts`, `src/rotate.ts` | Everything that changes per loop, and the code that picks it |
-| `src/engine.ts` | The pure state machine: beats that wait for the reader, the leap, the pull-back |
-| `src/render.ts` | Camera, the pull-back zoom, the ouroboros, scripture layer and HUD |
+| `src/lore.ts` | The canon: every level, its clock, its five beats, what it wanted, and what is real |
+| `src/traffic.ts` | The ring road: the optimal-velocity model, braking, a car that keeps a gap, gridlock |
+| `src/scenes.ts` | The eight scenes: a form, a road, its traffic, and the new thing forming in the jam |
+| `src/solid.ts`, `src/hyper.ts`, `src/fractal.ts` | The geometry: solids, torus, helix, grids, n-cubes, Julia and Mandelbrot sets |
+| `src/minutes.ts`, `src/rotate.ts` | Everything that changes per loop (heckles, the sign, first words), and the code that picks it |
+| `src/engine.ts` | The pure state machine: five beats at reading pace, the pile-up, the dive |
+| `src/render.ts` | Camera, the dive, the ouroboros, callouts and the readout in the corner |
 | `src/gl.ts`, `src/paint.ts` | The three.js layer (sky shader, lit faces, bloom, quality governor) and the painter that falls back to 2D |
-| `src/audio.ts` | Web Audio synthesis: infinity-series music and scene cues |
-| `src/main.ts` | UI wiring, intro, deep links, accessibility |
+| `src/audio.ts` | Web Audio synthesis: infinity-series music, cues for every beat, a horn |
+| `src/main.ts` | UI wiring, intro, autoplay and its countdown, tap and hold, deep links, accessibility |
 | `tests/`, `e2e/` | Vitest unit tests and Playwright smoke tests (phone and desktop) |
 
-**Why Canvas 2D** instead of Unity, Unreal or three.js: phones. WebGL engine builds are tens of megabytes and slow to start. This is flat, illustrated 2D animation, which the browser's canvas does at 60 fps for free. Each cut builds into one self-contained `index.html`: under 100 KB with no runtime dependencies on `main`, about 695 KB here with three.js.
+**Why Canvas 2D** instead of Unity, Unreal or three.js: phones. WebGL engine builds are tens of megabytes and slow to start. This is flat, illustrated 2D animation, which the browser's canvas does at 60 fps for free. Each cut builds into one self-contained `index.html`: under 100 KB with no runtime dependencies on `main`, about 700 KB here with three.js.
 
-**Accessibility:** keyboard navigable, focus is trapped in dialogs, captions are announced to screen readers, and `prefers-reduced-motion` freezes the animation clock and swaps the zoom for a crossfade.
+**Accessibility:** keyboard navigable, focus is trapped in dialogs, captions are announced to screen readers, and `prefers-reduced-motion` freezes the animation clock, works each beat's traffic out in one go instead of animating it, and swaps the dive for a crossfade.
 
 ## Develop
 
@@ -183,7 +226,7 @@ npm run e2e            # Playwright smoke tests, phone and desktop (needs a buil
 npm run lore           # regenerate LORE.md after editing src/lore.ts
 ```
 
-The tests guard the canon as well as the code: they fail if LORE.md drifts from `src/lore.ts`, if any One is not smarter than its makers, if a caption runs long, or if an em dash sneaks into the prose.
+The tests guard the canon as well as the code: they fail if LORE.md drifts from `src/lore.ts`, if a level's number is not the power of ten of its clock, if any level ranks itself anything but first, if a beat runs long, or if an em dash sneaks into the prose.
 
 ## Quality and security
 
@@ -197,7 +240,7 @@ Every pull request, including ones from forks, runs:
 | **CodeQL** | Static analysis of the TypeScript and the workflows (`security-extended` queries), also weekly |
 | **dependency review** | Blocks new dependencies with high-severity advisories or incompatible licenses |
 
-Workflows use `pull_request` (never `pull_request_target`), start from an empty token permission set, never persist credentials, and pin every action to a full commit SHA, which Dependabot keeps current. Pushes to `main` deploy to GitHub Pages with the official `actions/deploy-pages`; the deploy builds `main`, `v3` and `v4` and publishes them at `/`, `/v3/` and `/v4/`.
+Workflows use `pull_request` (never `pull_request_target`), start from an empty token permission set, never persist credentials, and pin every action to a full commit SHA, which Dependabot keeps current. Pushes to `main` deploy to GitHub Pages with the official `actions/deploy-pages`; the deploy builds `main`, `v3`, `v4`, `v5` and `v6` and publishes them at `/`, `/v3/`, `/v4/`, `/v5/` and `/v6/`.
 
 `main` is protected: changes land only through a pull request with an approving review from a code owner, passing checks and resolved conversations. The repository settings themselves are code, in [`scripts/repo-settings.sh`](scripts/repo-settings.sh): branch ruleset, Actions permissions, secret scanning with push protection, Dependabot, private vulnerability reporting and Pages.
 

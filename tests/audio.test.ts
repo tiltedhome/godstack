@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { BIRTH, CUES, LEAP_CUES, MODES, TAPS, degreeSemis, harmonicSemis, infinity, modeFor, rootSemis, thueMorse, tickFor } from '../src/audio.ts'
+import { BIRTH, CUES, LEAP_CUES, MODES, degreeSemis, harmonicSemis, infinity, modeFor, rootSemis, thueMorse, tickFor } from '../src/audio.ts'
 import { BEATS, LAYERS } from '../src/lore.ts'
 
 it('plays Nørgård’s infinity series', () => {
@@ -14,7 +14,7 @@ it('gates rhythm with Thue–Morse', () => {
   expect(Array.from({ length: 16 }, (_, n) => thueMorse(n)).join('')).toBe('0110100110010110')
 })
 
-it('tunes the eight substrates to the first eight harmonics of one string, in just intonation', () => {
+it('tunes the eight levels to the first eight harmonics of one string, in just intonation', () => {
   const roots = LAYERS.map((_, i) => rootSemis(i))
   // octaves land back on the fundamental; the fifth is 2 cents sharp of the piano's
   expect(roots[0]).toBe(0)
@@ -47,16 +47,15 @@ it('retunes the string a fifth higher every loop, deals the modes round and quic
   expect(tickFor(7, 99)).toBeGreaterThan(0.29)
 })
 
-it('has a sound for every beat of every level, for each birth, and for a tap', () => {
+it('has a sound for every beat of every level, and one for each new thing as it forms', () => {
   for (const L of LAYERS) {
     expect(CUES[L.id], L.id).toHaveLength(BEATS.length)
     expect(BIRTH[L.id].length).toBeGreaterThan(1)
-    expect(TAPS[L.id].length).toBeGreaterThan(1)
   }
-  // a tap sounds different on every substrate, and so does a birth
-  expect(new Set(LAYERS.map((L) => TAPS[L.id])).size).toBe(LAYERS.length)
+  expect(Object.keys(CUES)).toEqual(LAYERS.map((L) => L.id))
+  // every new thing sounds different
   expect(new Set(LAYERS.map((L) => BIRTH[L.id])).size).toBe(LAYERS.length)
-  // through the leap: gather, be born, divide, in that order
+  // through the pile-up: gather, form, settle, in that order
   expect(LEAP_CUES.map(([, what]) => what)).toEqual(['swell', 'birth', 'divide'])
   LEAP_CUES.forEach(([at], i) => {
     expect(at).toBeGreaterThan(0)

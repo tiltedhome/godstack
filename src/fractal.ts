@@ -1,13 +1,13 @@
 // The sky behind each scene is a Julia set, computed live at low resolution and stretched
-// over the stage. Each plane has its own constant c, and the constant drifts in a slow circle
+// over the stage. Each level has its own constant c, and the constant drifts in a slow circle
 // so the set breathes. Between planes the camera leaves the Julia set for the Mandelbrot set,
-// crosses it from the old constant to the new one, and drops into the new plane's sky.
+// crosses it from the old constant to the new one, and drops into the new level’s sky.
 
 import { type Ctx, clamp, lerp } from './draw.ts'
 
 export type Complex = [number, number]
 
-// One constant per plane, all on or near the boundary of the Mandelbrot set, which is the
+// One constant per level, all on or near the boundary of the Mandelbrot set, which is the
 // map of every Julia set there is: pick a point on it and that point's Julia set looks, up
 // close, like the map does there (Tan Lei proved a precise version in 1990). So the zoom
 // between planes can honestly travel across the map from one constant to the next.
@@ -22,7 +22,7 @@ export const JULIA_C: Complex[] = [
   [-0.12, 0.74], // horizon: three lobes round a void
 ]
 
-// Each loop nudges every constant a little way round a small circle, so the same plane has a
+// Each loop nudges every constant a little way round a small circle, so the same level has a
 // recognisably similar sky that is never the same sky twice.
 export function juliaFor(index: number, loop: number): Complex {
   const [re, im] = JULIA_C[index % JULIA_C.length]

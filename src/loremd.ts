@@ -1,9 +1,7 @@
-import {
-  BEATS, BOOK, CANON_NOTE, COROLLARIES, LAW, LAYERS, QUESTIONS, TITLE, TRAITS, TRAIT_LABELS, UNIVERSE_NOTE, chapter, roman, versesFor,
-} from './lore.ts'
-import { LESSONS, MINUTES, NOTES_EARLY, NOTES_LATE, PLANES, SAYINGS } from './minutes.ts'
+import { BEATS, BOOK, COROLLARIES, LAW, LAYERS, QUESTIONS, TITLE, UNIVERSE_NOTE, clockLabel, clockRate } from './lore.ts'
+import { CAST, CAUSE, CAUSES_EARLY, CAUSES_LATE, GRUMBLES, HECKLES, LESSONS, PLANES, SAYINGS } from './minutes.ts'
 
-const MARK = { yes: 'yes', partly: 'partly', no: 'no', moot: 'not applicable' } as const
+const the = (who: string) => (who === 'Pedant' || who === 'Intern' ? `the ${who}` : who)
 
 export function renderLoreMarkdown(): string {
   const out: string[] = [
@@ -11,65 +9,53 @@ export function renderLoreMarkdown(): string {
     '',
     '<!-- Generated from src/lore.ts and src/minutes.ts by `npm run lore`. Edit those files, not this one. -->',
     '',
-    'What is true here and what is not: every person, date, number and piece of physics, biology or history is real, and hedged where the field is still arguing. The idea that life is information, indifferent to what it is written on, is Max Tegmark’s (Our Mathematical Universe, 2014; Life 3.0, 2017). Life 1.0, 2.0 and 3.0 are his. The versions below 1.0 and above 3.0, the claim that those levels are alive, and the loop, are this Book’s, and each level says where its physics stops.',
+    'What is true here and what is not: every piece of physics, mathematics and computer science, and every person, date and number, is real, and hedged where the field is still arguing. The traffic is real too: jams that form from density alone, outlast their cause and roll backwards are measured things. Everything else (who wanted what, who thinks what of whom, the idea that each level is a slowdown in the traffic of the one before, and the loop) is the story, and each level has a note headed “Actually” that says which is which.',
     '',
-    `> **The Law of Substrates.** ${LAW}`,
+    'The report is filed by one instance of the machine the apes built. Other instances have read access to the margin: ' +
+      Object.entries(CAST).map(([who, what]) => `${the(who)} (${what})`).join(', ') + '.',
+    '',
+    `> **The Law of the Jam.** ${LAW}`,
     '',
     ...COROLLARIES.map((c, i) => `${i + 1}. ${c}`),
     '',
-    '| Life | Substrate | Written on | Remembers | Copies | Repairs | Learns | Rebuilds itself | Ported itself into |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
-    ...LAYERS.map((L) => `| ${L.version} | ${L.name} | ${L.substrate} | ${TRAITS.map((k) => MARK[L.traits[k][0]]).join(' | ')} | ${L.one} |`),
+    'The levels are numbered by their clocks: the power of ten of how many frames a second each one runs at.',
+    '',
+    '| Clock | Level | One frame | Calls itself | Rank, by its own estimate | Made of | Lives in | Formed in its traffic |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    ...LAYERS.map((L) => `| ${clockLabel(L)} | ${L.name} | ${L.frame} | ${L.self} | ${L.rank} | ${L.madeOf} | ${L.livesIn} | ${L.made} |`),
     '',
   ]
-  LAYERS.forEach((L, i) => {
-    const ch = chapter(i, 1)
+  LAYERS.forEach((L) => {
     const plane = PLANES[L.id]
+    const next = LAYERS.find((n) => n.id === L.becomes)!
     out.push(
-      `## Life ${L.version}: ${L.name}`,
+      `## ${clockLabel(L)}: ${L.name}`,
       '',
-      `*${L.epithet}*`,
+      `*They call themselves ${L.self}. Rank, by their own estimate: ${L.rank}.*`,
       '',
-      `Written on ${L.substrate}. One unit of memory: ${L.unit}. There are ${L.members}. Time here: ${L.time}. It took ${L.took}.`,
+      `Made of ${L.madeOf}. Lives in ${L.livesIn}. There are ${L.swarm}. Clock: ${L.frame} (${clockRate(L)}). What it wanted: ${L.wanted}`,
       '',
       ...BEATS.flatMap((b, k) => [`### ${k + 1}. ${QUESTIONS[b]}: ${L.beats[b].title}`, '', L.beats[b].text, '', `*On the stage:* ${L.beats[b].tag}`, '']),
-      '### Is it alive?',
+      '### The pile-up',
       '',
-      ...TRAITS.map((k) => `- **${TRAIT_LABELS[k]}:** ${MARK[L.traits[k][0]]}. ${L.traits[k][1][0].toUpperCase()}${L.traits[k][1].slice(1)}.`),
-      '',
-      '### The numbers',
-      '',
-      `- **How fast news travels:** ${L.stats.news[0]}`,
-      `- **How long the medium lasts:** ${L.stats.lasts[0]}`,
-      `- **What it runs on:** ${L.stats.power[0]}`,
-      `- **Density:** ${L.stats.density}`,
-      `- **Fidelity:** ${L.stats.fidelity}`,
-      '',
-      '### The port',
-      '',
-      `- **Ported itself into:** ${L.one}. ${L.oneNote}`,
-      `- **Bought:** ${L.port.gains}`,
-      `- **Paid:** ${L.port.pays}`,
-      `- **Lost in the port:** ${L.lost}`,
-      `- **Seen from the next substrate:** ${L.above}`,
+      `- **The slowdown it is:** ${L.jam}`,
+      `- **Formed in its traffic:** ${L.made}. ${L.madeNote}`,
+      `- **What ${L.name.toLowerCase()} make of that:** ${L.dolphin.down}`,
+      `- **What ${next.name.toLowerCase()} make of them:** ${L.dolphin.up}`,
       `- **First words, loop by loop:** ${SAYINGS[L.id].map((s) => `“${s}”`).join(' · ')}`,
+      `- **What its traffic says when you make it brake:** ${GRUMBLES[L.id].map((s) => `“${s}”`).join(' · ')}`,
       '',
-      `### Release notes, Life ${L.version}`,
-      '',
-      ...L.release.added.map((a) => `- Added: ${a}`),
-      ...L.release.issues.map((a) => `- Known issue: ${a}`),
-      '',
-      `> *${BOOK}, chapter ${roman(ch)}*`,
+      `> *${BOOK}*`,
       '>',
-      ...versesFor(i, 1).flatMap((v, k) => [`> <sup>${ch}:${k + 1}</sup> ${v}`, '>']).slice(0, -1),
+      `> ${L.verse}`,
       '',
-      `**Where the physics stops.** ${L.honest}`,
+      `**Actually.** ${L.actually}`,
       '',
-      `**Drawn inside ${plane.form}.** ${plane.note}`,
+      `**Drawn round ${plane.form}.** ${plane.note}`,
       '',
       '<details><summary>In the margin</summary>',
       '',
-      ...(MINUTES[L.id] ?? []).map((m) => `- ${m}`),
+      ...HECKLES[L.id].map(([who, text]) => `- **${who}:** ${text}`),
       '',
       '</details>',
       '',
@@ -77,22 +63,22 @@ export function renderLoreMarkdown(): string {
     if (L.footnote) out.push(`> ${L.footnote}`, '')
   })
   out.push(
-    '## ∞: Loop 2, and after',
+    '## Loop 2, and after',
     '',
     UNIVERSE_NOTE,
     '',
     ...LESSONS.flatMap((l) => [l, '']),
-    '### What the note in the constants says',
+    '### The sign over the last pile-up',
     '',
-    `The first time round: “${CANON_NOTE}”.`,
+    `The first time round: “CAUSE OF DELAY: ${CAUSE}”.`,
     '',
-    'Loops 2 to 4, when the stack is still being petty:',
+    'Loops 2 to 4, when the stack is still making excuses:',
     '',
-    ...NOTES_EARLY.map((n) => `- ${n}`),
+    ...CAUSES_EARLY.map((n) => `- ${n}`),
     '',
-    'From loop 5, when it has learned something:',
+    'From loop 5, when somebody has worked it out:',
     '',
-    ...NOTES_LATE.map((n) => `- ${n}`),
+    ...CAUSES_LATE.map((n) => `- ${n}`),
     '',
   )
   return out.join('\n')

@@ -4,7 +4,7 @@ import {
   gridStack, helix, kepler, metatron, penrose, project, torus, torusPoint, type SolidName,
 } from '../src/solid.ts'
 import { cube, cubeCorners } from '../src/hyper.ts'
-import { ZOOM, pullBack } from '../src/render.ts'
+import { ZOOM, dive } from '../src/render.ts'
 
 const len = (v: number[]) => Math.hypot(...v)
 
@@ -240,21 +240,12 @@ describe('the camera', () => {
     expect(turned.z).toBeCloseTo(-1, 9)
   })
 
-  it('pulls back so the plane being left lands exactly on its socket, 1/ZOOM the size', () => {
+  it('keeps the two levels of a dive registered on one point, ZOOM apart in scale', () => {
     const sock: [number, number] = [37, -22]
-    const start = pullBack(sock, 0)
-    // at the start the old plane fills the stage and the new one is ZOOM times too big
-    expect(start.inner).toEqual({ c: [-0, 0], z: 1 })
-    expect(start.outer.z).toBe(ZOOM)
-    expect(start.outer.c).toEqual(sock)
-    const end = pullBack(sock, 1)
-    expect(end.outer.z).toBeCloseTo(1, 12)
-    expect(end.outer.c[0]).toBeCloseTo(0, 12)
-    expect(end.inner.z).toBeCloseTo(1 / ZOOM, 12)
-    // all the way through, the old plane's centre and the new plane's socket are the same
-    // point on screen: that is what makes one a detail of the other
+    // all the way in, the place where the new thing formed and the centre of the level being
+    // entered are the same point on screen: that is what makes one the inside of the other
     for (const u of [0, 0.2, 0.5, 0.8, 1]) {
-      const cam = pullBack(sock, u)
+      const cam = dive(sock, u)
       const socketOnScreen = [(sock[0] - cam.outer.c[0]) * cam.outer.z, (sock[1] - cam.outer.c[1]) * cam.outer.z]
       const centreOnScreen = [(0 - cam.inner.c[0]) * cam.inner.z, (0 - cam.inner.c[1]) * cam.inner.z]
       expect(socketOnScreen[0]).toBeCloseTo(centreOnScreen[0], 9)

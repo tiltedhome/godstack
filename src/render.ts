@@ -1,6 +1,6 @@
 import { clamp, easeInOut, easeOut, lerp, rgba, rng, seg, type Ctx } from './draw.ts'
-import { LAST, NBEATS, frame as engineFrame, type Durations, type EngineState, type Frame } from './engine.ts'
-import { BEATS, TRAITS, TRAIT_BEAT, TRAIT_LABELS, type Layer, type Verdict } from './lore.ts'
+import { NBEATS, frame as engineFrame, type Durations, type EngineState, type Frame } from './engine.ts'
+import { clockLabel, type Layer } from './lore.ts'
 import { stage as sceneStage, tags, type Scene } from './scenes.ts'
 import { JuliaSky, hexToRgb, juliaFor, type Complex } from './fractal.ts'
 import { accentFor } from './rotate.ts'
@@ -14,7 +14,7 @@ export interface Rect {
   h: number
 }
 
-// How much smaller each level sits inside the next one up.
+// How much bigger the camera has to get to go from a road to the inside of one thing on it.
 export const ZOOM = 18
 // Scenes are drawn in units; the stage's short side is this many of them.
 export const UNIT = 195
@@ -29,16 +29,27 @@ export interface Spin {
   pitch: number
 }
 
-// Where the camera is during the pull-back between planes, in scene units. `u` runs 0 to 1.
-// The plane being left (inner) shrinks to 1/ZOOM and comes to rest on the socket of the
-// plane being entered (outer), which starts ZOOM times too big and centred on that socket.
-export function pullBack(sock: [number, number], u: number) {
-  const zo = Math.pow(ZOOM, 1 - u)
+// Where the camera is during the dive between levels, in scene units. `u` runs 0 to 1. The
+// level being left (outer) grows ZOOM times, centred more and more on the place where its new
+// thing formed; the level being entered (inner) starts at 1/ZOOM, sitting on that place, and
+// ends up filling the stage. The new thing turns out to have a road of its own inside it.
+export function dive(sock: [number, number], u: number) {
+  const zo = Math.pow(ZOOM, u)
   const zi = zo / ZOOM
+  const w = 1 - u
   return {
-    outer: { c: [sock[0] - (sock[0] * u) / zo, sock[1] - (sock[1] * u) / zo] as [number, number], z: zo },
-    inner: { c: [(-sock[0] * u) / zi, (-sock[1] * u) / zi] as [number, number], z: zi },
+    outer: { c: [sock[0] - (sock[0] * w) / zo, sock[1] - (sock[1] * w) / zo] as [number, number], z: zo },
+    inner: { c: [(-sock[0] * w) / zi, (-sock[1] * w) / zi] as [number, number], z: zi },
   }
+}
+
+const prevOf = (i: number, n: number) => (i + n - 1) % n
+// How one of this level's frames compares with one of the reader's, who runs at +1.
+function framesLine(L: Layer): string {
+  if (L.clock === null) return 'no frames: nothing to compare'
+  const d = 1 - L.clock
+  if (d === 0) return 'this is your clock'
+  return d > 0 ? `1 of its frames = 1 and ${d} noughts of yours` : `1 of your frames = 1 and ${-d} noughts of its`
 }
 
 interface Ripple {
@@ -92,8 +103,13 @@ export class Renderer {
     this.dpr = Math.min(2, window.devicePixelRatio || 1)
     this.W = window.innerWidth
     this.H = window.innerHeight
-    this.canvas.width = Math.round(this.W * this.dpr)
-    this.canvas.height = Math.round(this.H * this.dpr)
+    const w = Math.round(this.W * this.dpr)
+    const h = Math.round(this.H * this.dpr)
+    // setting a canvas's size clears it, even to the size it already is; the card changes
+    // height on every beat, and the stage must not blink when it does
+    if (this.canvas.width === w && this.canvas.height === h) return
+    this.canvas.width = w
+    this.canvas.height = h
     this.gl?.resize(this.W, this.H, window.devicePixelRatio || 1)
   }
 
@@ -102,14 +118,21 @@ export class Renderer {
     if (snap) this.stage = { ...r }
   }
 
-  // Screen pixels to a scene's own units (its short side is 200, origin at the stage center).
+  // Pixels per scene unit. Every scene is a ring road, which is wider than it is tall, so on
+  // a stage that is wider than it is tall the scene is allowed to use some of the width.
+  private scale(): number {
+    const { stage } = this
+    return (Math.min(stage.w, stage.h) / UNIT) * clamp(stage.w / stage.h, 1, 1.22)
+  }
+
+  // Screen pixels to a scene's own units (origin at the stage center).
   toScene(px: number, py: number): [number, number] {
     const { stage } = this
-    const k = Math.min(stage.w, stage.h) / UNIT
+    const k = this.scale()
     return [(px - (stage.x + stage.w / 2)) / k, (py - (stage.y + stage.h / 2)) / k]
   }
 
-  // A tap leaves rings and a word for what the tap did on this plane.
+  // A tap leaves rings and a word for what the tap did on this road.
   ripple(px: number, py: number, color: string, word = '') {
     this.ripples.push({ x: px, y: py, t0: this.lastTime, color, word })
   }
@@ -118,7 +141,8 @@ export class Renderer {
     return accentFor(this.layers[i].palette.accent, loop)
   }
 
-  frame(s: EngineState, now: number, dur: Durations, reduced: boolean) {
+  // `step` is how much story time has passed since the last frame (zero while it is held).
+  frame(s: EngineState, now: number, dur: Durations, reduced: boolean, step = 0) {
     const { ctx, dpr } = this
     // With reduced motion the idle wobbles, spins and blinks hold still; the story still
     // advances because scenes are driven by the beat, not the clock.
@@ -136,6 +160,7 @@ export class Renderer {
     this.spinVel.pitch *= decay
     sceneStage.yaw = this.spin.yaw + this.tilt[0] * 0.35
     sceneStage.pitch = this.spin.pitch + this.tilt[1] * 0.3
+    sceneStage.still = reduced
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     const gl = this.gl
     if (gl) {
@@ -153,6 +178,7 @@ export class Renderer {
     const f = engineFrame(s, dur)
     const accent = this.accent(cur, loop)
     tags.length = 0
+    this.scenes[cur].update(step, f)
     if (s.phase !== 'zoom') {
       const home = this.home(cur, loop)
       if (gl) gl.sky({ top: pal(cur).top, bottom: pal(cur).bottom, top2: pal(cur).top, bottom2: pal(cur).bottom, blend: 0, tint: accent, c: home.c, center: home.center, span: home.span, onMap: home.map, time, drift: reduced ? 0 : 1, glow })
@@ -164,11 +190,9 @@ export class Renderer {
       }
       this.starfield(time, 0, reduced)
       this.scene(cur, time, f, [0, 0], 1, 1, accent)
-      // the level below stays in view, as a detail, while this one is introduced
-      this.detail(cur, loop, time, s.beat === 0 ? 1 : s.beat === 1 ? 1 - f.u : 0)
       this.drawTags()
       this.ripplesDraw(now)
-      this.hud(cur, f, accent)
+      this.hud(cur, prevOf(cur, n), loop, f, accent)
       this.ouroboros(cur, cur + ((s.beat + f.u) / NBEATS) * 0.9, loop, accent, 1)
       gl?.end()
       return
@@ -185,7 +209,8 @@ export class Renderer {
       this.gradient(next, accentNext, u)
     }
     // the next level, as it will be when we arrive: its first beat, not yet eased in
-    const arriving: Frame = { beat: 0, from: 0, u: 0, link: 0, leap: 0 }
+    const arriving: Frame = { beat: 0, from: 0, u: 0, age: 0, leap: 0, dive: 0 }
+    this.scenes[next].update(step, arriving)
     if (reduced) {
       // no travelling: the old sky and scene fade out as the new ones fade in
       const h = half ? h0 : h1
@@ -211,11 +236,11 @@ export class Renderer {
       this.atlas(center, half ? accent : accentNext, span, time, onMap, (this.skyFrame & 1) === 1)
     }
     this.starfield(time, Math.sin(Math.PI * raw), reduced)
-    // Pull back: the level being left shrinks to 1/ZOOM and turns out to be one unit of
-    // the level above, which was there all along, ZOOM times too big to see.
-    const cam = pullBack(this.scenes[next].socket(time), u)
-    this.scene(next, time, arriving, cam.outer.c, cam.outer.z, easeInOut(seg(raw, 0.38, 0.86)), accentNext)
-    this.scene(cur, time, f, cam.inner.c, cam.inner.z, 1, accent)
+    // Dive: the camera goes into the thing that has just formed in the jam, and the road
+    // it was formed on grows past the edges of the stage and is gone.
+    const cam = dive(this.scenes[cur].made, u)
+    this.scene(cur, time, f, cam.outer.c, cam.outer.z, 1 - easeInOut(seg(raw, 0.3, 0.8)), accent)
+    this.scene(next, time, arriving, cam.inner.c, cam.inner.z, easeInOut(seg(raw, 0.12, 0.6)), accentNext)
     tags.length = 0
     this.fold(accent, raw)
     this.ripplesDraw(now)
@@ -223,7 +248,7 @@ export class Renderer {
     gl?.end()
   }
 
-  // Each level's own sky. The Structure's is the Mandelbrot set itself, whole: one line of
+  // Each level's own sky. The Strings' is the Mandelbrot set itself, whole: one line of
   // definition and no end of detail. Every other level's is the Julia set for its constant.
   private home(i: number, loop: number): { c: Complex; center: Complex; span: number; map: number } {
     const c = juliaFor(i, loop)
@@ -233,7 +258,7 @@ export class Renderer {
   private scene(i: number, time: number, f: Frame, c: [number, number], z: number, a: number, accent: string) {
     if (a <= 0.002) return
     const { ctx, dpr, stage } = this
-    const k = (Math.min(stage.w, stage.h) / UNIT) * z
+    const k = this.scale() * z
     const cx = stage.x + stage.w / 2
     const cy = stage.y + stage.h / 2
     ctx.save()
@@ -244,48 +269,12 @@ export class Renderer {
     ctx.restore()
   }
 
-  /* ---------------------------------------------------------------- scales */
+  /* ------------------------------------------------------------------ dial */
 
-  // The plane below is still there after the pull-back: it sits on one member of this plane,
-  // at 1/ZOOM scale, inside a small reticle, until this plane's own story gets going.
-  private detail(i: number, loop: number, time: number, a: number) {
-    if (a <= 0.01) return
-    const n = this.scenes.length
-    const prev = (i + n - 1) % n
-    const prevLoop = i === 0 ? loop - 1 : loop
-    if (prevLoop < 1) return
-    const { ctx, stage } = this
-    const sock = this.scenes[i].socket(time)
-    const kept = tags.length
-    this.scene(prev, time, { beat: LAST, from: LAST, u: 1, link: 1, leap: 1 }, [-sock[0] * ZOOM, -sock[1] * ZOOM], 1 / ZOOM, a, this.accent(prev, prevLoop))
-    tags.length = kept
-    const k = Math.min(stage.w, stage.h) / UNIT
-    const x = stage.x + stage.w / 2 + sock[0] * k
-    const y = stage.y + stage.h / 2 + sock[1] * k
-    const r = (UNIT / ZOOM) * k * 0.62
-    ctx.save()
-    ctx.globalAlpha = a * 0.75
-    ctx.strokeStyle = this.accent(i, loop)
-    ctx.lineWidth = 1
-    ctx.setLineDash([3, 3])
-    ctx.beginPath()
-    ctx.arc(x, y, r, 0, TAU)
-    ctx.stroke()
-    ctx.setLineDash([])
-    ctx.font = `500 9px ${MONO}`
-    ctx.fillStyle = this.accent(i, loop)
-    const label = `${this.layers[prev].one.toUpperCase()}, MADE BY ${this.layers[prev].short.toUpperCase()}`
-    const left = x > stage.x + stage.w / 2
-    ctx.textAlign = left ? 'right' : 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(label, x + (left ? -r - 5 : r + 5), y)
-    ctx.restore()
-  }
-
-  // The timeline is a snake eating its tail. The seven planes are laid round the ring from
-  // the tail (the lowest plane, thin) to the head (the highest, thick), and the head meets
-  // the tail at the top. `at` is how far round the story is, in planes. Every completed loop
-  // leaves a ring inside the ring.
+  // The timeline is a snake eating its tail, which is also a ring road. The eight levels are
+  // laid round it from the tail (the slowest clock, thin) to the head (the fastest, thick),
+  // and the head meets the tail at the top. `at` is how far round the story is, in levels.
+  // Every completed loop leaves a ring inside the ring.
   private ouroboros(i: number, at: number, loop: number, accent: string, a: number) {
     const { ctx, stage } = this
     const n = this.scenes.length
@@ -315,7 +304,7 @@ export class Renderer {
       ctx.lineWidth = 1.2 + 3.6 * f
       ctx.stroke()
     }
-    // a scale for each plane, and a brighter one where the story is now
+    // a scale for each level, and a brighter one where the story is now
     for (let k = 0; k < n; k++) {
       const t = ang(k + 0.5)
       ctx.beginPath()
@@ -345,19 +334,19 @@ export class Renderer {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.font = `italic 500 15px ${DISPLAY}`
-    ctx.fillText(this.layers[i].version, cx, cy - 2)
+    ctx.fillText(clockLabel(this.layers[i]), cx, cy - 2)
     ctx.font = `500 7px ${MONO}`
     ctx.fillStyle = 'rgba(255,255,255,.55)'
     ctx.fillText(`LOOP ${loop}`, cx, cy + 9)
     ctx.restore()
   }
 
-  // During the pull-back a ring closes in on the plane being left, ticked like a dial.
+  // During the dive a ring opens out from the thing being entered, ticked like a dial.
   private fold(accent: string, raw: number) {
     const { ctx, stage } = this
     const cx = stage.x + stage.w / 2
     const cy = stage.y + stage.h / 2
-    const R = Math.max(stage.w, stage.h) * (1 - easeOut(raw)) * 0.9
+    const R = Math.max(stage.w, stage.h) * easeOut(raw) * 0.9
     const a = Math.sin(raw * Math.PI) * 0.6
     if (R < 2 || a <= 0.01) return
     ctx.save()
@@ -397,7 +386,7 @@ export class Renderer {
       }
       ctx.setLineDash([])
       if (r.word) {
-        // what the tap did on this substrate, said plainly and left up long enough to read
+        // what the traffic said about it, left up long enough to read
         ctx.globalAlpha = Math.min(1, (2.4 - age) * 2)
         ctx.font = `500 12px ${MONO}`
         ctx.textAlign = 'center'
@@ -422,7 +411,7 @@ export class Renderer {
   // that can be read on a phone whatever the scene's own scale.
   private drawTags() {
     const { ctx, stage } = this
-    const k = Math.min(stage.w, stage.h) / UNIT
+    const k = this.scale()
     const cx = stage.x + stage.w / 2
     const cy = stage.y + stage.h / 2
     const size = stage.w < 520 ? 11.5 : 13
@@ -436,11 +425,11 @@ export class Renderer {
       const y = cy + tag.y * k
       const w = ctx.measureText(tag.text).width + size * 1.5
       const h = size * 2
-      const above = y - stage.y > h * 2.2
+      const above = tag.side ? tag.side < 0 : y - stage.y > h * 2.2
       const bx = clamp(x, stage.x + 8 + w / 2, stage.x + stage.w - 8 - w / 2)
-      // keep clear of the checklist in the corner, which on a phone reaches most of the way across
-      const top = stage.y + (stage.w < 520 && stage.h >= 210 ? 106 : 78) + h / 2
-      const by = tag.ring ? clamp(y + (above ? -1 : 1) * (h * 0.5 + 16), top, stage.y + stage.h - 46) : clamp(y, top, stage.y + stage.h - 46)
+      // keep clear of the readout in the corner, which on a phone reaches most of the way across
+      const top = stage.y + (stage.w < 520 && stage.h >= 210 ? 84 : 78) + h / 2
+      const by = tag.ring ? clamp(y + (above ? -1 : 1) * (h * 0.5 + 16), top, stage.y + stage.h - 30) : clamp(y, top, stage.y + stage.h - 30)
       ctx.globalAlpha = tag.a
       if (tag.ring) {
         ctx.strokeStyle = 'rgba(255,255,255,.95)'
@@ -463,25 +452,35 @@ export class Renderer {
     ctx.restore()
   }
 
-  // Is it alive? Tegmark's test, item by item, with the one the current beat is making the
-  // case for picked out.
-  private hud(i: number, f: Frame, accent: string) {
+  // The corner of the stage: this level's clock, and what its road is doing right now. The
+  // Ship of Theseus is the last two lines, counted live off the simulation: how many cars
+  // have been through the jam and left, and how many jams' worth that is.
+  private hud(i: number, prev: number, loop: number, f: Frame, accent: string) {
     const { ctx, stage } = this
     const L = this.layers[i]
-    const mark: Record<Verdict, string> = { yes: '●', partly: '◐', no: '○', moot: '–' }
+    const st = this.scenes[i].stats()
+    const lines: [string, boolean][] = [[`CLOCK ${clockLabel(L)}  ·  ${L.name.toUpperCase()}`, false]]
+    if (stage.h >= 210) {
+      lines.push([L.frame, f.beat === 1])
+      if (f.beat === 1) lines.push([framesLine(L), true])
+      // (on the very first card nobody has heard of the level that comes before the first)
+      else if (f.beat === 0 && (i > 0 || loop > 1)) lines.push([`formed in the traffic of ${this.layers[prev].name.toLowerCase()}`, false])
+      else if (f.beat >= 2) {
+        const slow = Math.round(st.share * st.count)
+        const road = st.stopped ? 'gridlock' : st.free ? 'no jam: nothing has mass' : slow >= 3 ? `in a jam: ${slow}` : st.calm ? 'no jam: one of them keeps a gap' : 'no jam'
+        lines.push([`on the road: ${st.count}  ·  ${road}`, false])
+        if (st.passed > 0) lines.push([`through it and out again: ${st.passed}`, false])
+        if (st.turnover >= 1 && !st.stopped) lines.push([st.turnover === 1 ? 'it has replaced every car in it' : `it has replaced itself ${st.turnover} times over`, true])
+      }
+    }
     ctx.save()
     ctx.font = `500 10.5px ${MONO}`
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
-    ctx.fillStyle = accent
-    ctx.globalAlpha = 0.55
-    ctx.fillText(`LIFE ${L.version}  ·  IS IT ALIVE?`, stage.x + 16, stage.y + 6)
-    // on a very short stage there is no room for the list without covering the scene
-    if (stage.h >= 210) TRAITS.forEach((key, n) => {
-      const on = BEATS[f.beat] === TRAIT_BEAT[key]
-      ctx.globalAlpha = on ? 1 : 0.5
+    lines.forEach(([s, on], n) => {
+      ctx.globalAlpha = n === 0 ? 0.6 : on ? 1 : 0.62
       ctx.fillStyle = on ? '#ffffff' : accent
-      ctx.fillText(`${mark[L.traits[key][0]]} ${TRAIT_LABELS[key].toLowerCase()}`, stage.x + 16, stage.y + 22 + n * 14)
+      ctx.fillText(s, stage.x + 16, stage.y + 6 + n * 14 + (n ? 2 : 0))
     })
     ctx.restore()
   }
@@ -520,7 +519,7 @@ export class Renderer {
   private julia(c: Complex, accent: string, time: number, reduced: boolean, a: number, render?: boolean) {
     const { ctx, W, H } = this
     const [w, h] = this.skySize()
-    // reduced motion: render once per plane and leave it still; otherwise every second frame
+    // reduced motion: render once per level and leave it still; otherwise every second frame
     const key = `${c[0].toFixed(4)},${c[1].toFixed(4)},${w},${accent}`
     if (reduced) {
       if (key !== this.skyKey) {
@@ -534,7 +533,7 @@ export class Renderer {
     ctx.restore()
   }
 
-  // The Mandelbrot set, centred on the constant as it travels from one plane's to the next.
+  // The Mandelbrot set, centred on the constant as it travels from one level’s to the next.
   private atlas(c: Complex, accent: string, span: number, time: number, a: number, render: boolean) {
     const { ctx, W, H } = this
     this.skyFrame++

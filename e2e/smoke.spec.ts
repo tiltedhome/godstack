@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { fileURLToPath } from 'node:url'
-import { BEATS, BOOK, CANON_NOTE, LAYERS, QUESTIONS, chapter, roman, versesFor } from '../src/lore.ts'
-import { LESSONS, MINUTES, NOTES_EARLY } from '../src/minutes.ts'
+import { BEATS, BOOK, COROLLARIES, LAW, LAYERS, QUESTIONS, UNIVERSE_NOTE, clockLabel } from '../src/lore.ts'
+import { CAUSES_EARLY, GRUMBLES, HECKLES, LESSONS, PLANES } from '../src/minutes.ts'
 
 // Headless Chrome has no GPU and runs WebGL in software, which is slow enough to make the
 // timing-sensitive tests flaky. So the suite drives the 2D renderer (?gl=off), which shares
@@ -10,10 +10,12 @@ const GL_PAGE = new URL('../dist/index.html', import.meta.url).href
 const PAGE = GL_PAGE + '?gl=off'
 // what the card calls each level; names and text come from the canon, so edits to the
 // storyline do not break the tests
-const TITLES = LAYERS.map((L) => `Life ${L.version} · ${L.name}`)
+const TITLES = LAYERS.map((L) => `${clockLabel(L)} · ${L.name}`)
 const beat = (i: number, b: number) => LAYERS[i].beats[BEATS[b]]
+const LAST = BEATS.length - 1
 
 type State = { index: number; octave: number; beat: number; phase: string; t: number }
+type Traffic = { count: number; inJam: number; share: number; passed: number; turnover: number; calm: boolean; free: boolean; stopped: boolean }
 type Hooks = {
   state: State
   webgl: boolean
@@ -22,14 +24,17 @@ type Hooks = {
   set(s: object): void
   reroll(): void
   spin(): { yaw: number; pitch: number }
-  degree(): number
+  traffic(): Traffic
   tags(): string[]
   poke(x: number, y: number): string
+  hold(x: number, y: number): string
   glStats(): { lines: number; tris: number; orbs: number; colours: number } | null
   sound: { state: string; enabled: boolean; notes: number; fired: string[] }
 }
 const hooks = (page: Page) => page.evaluateHandle(() => (window as unknown as { godstack: Hooks }).godstack)
 const state = (page: Page) => page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.state)
+const traffic = (page: Page) => page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.traffic())
+const tags = (page: Page) => page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.tags())
 
 let errors: string[]
 
@@ -44,105 +49,133 @@ function distinctColours() {
   return { webgl: g.webgl, gl: stats?.colours ?? 0, lines: stats?.lines ?? 0, total: seen.size + (stats?.colours ?? 0) }
 }
 
+async function open(page: Page, url = PAGE) {
+  await page.goto('about:blank')
+  await page.goto(url)
+  await page.locator('#start-quiet').click()
+  await expect(page.locator('#intro')).toBeHidden()
+  await expect(page.locator('#name')).toHaveText(TITLES[0])
+}
+
 test.beforeEach(async ({ page }) => {
   errors = []
   page.on('pageerror', (e) => errors.push(e.message))
   // Fonts are a CDN nicety; keep the test hermetic.
   await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort())
-  await page.goto(PAGE)
-  await page.locator('#start-quiet').click()
-  await expect(page.locator('#intro')).toBeHidden()
-  await expect(page.locator('#name')).toHaveText(TITLES[0])
+  await open(page)
+  // the piece plays itself; most tests want it to hold still while they look
+  await page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.setAutoplay(false))
 })
 
 test.afterEach(() => expect(errors).toEqual([]))
 
-test('nothing moves on until the reader does', async ({ page }) => {
-  // autoplay is off unless asked for: the first beat is still there seconds later
+test('it plays itself from the start, counts down on the button, and can be paused', async ({ page }) => {
+  await open(page)
+  await expect(page.locator('#autoplay')).toHaveAttribute('aria-pressed', 'true')
+  const p = () => page.locator('#act').evaluate((e) => parseFloat(getComputedStyle(e).getPropertyValue('--p')))
+  await expect.poll(p).toBeGreaterThan(0.03)
+  const g = await hooks(page)
+  await g.evaluate((g) => g.setSpeed(25))
+  await expect.poll(async () => (await state(page)).beat, { timeout: 15_000 }).toBeGreaterThanOrEqual(1)
+  await g.evaluate((g) => g.setSpeed(1))
+  await page.locator('#autoplay').click()
   await expect(page.locator('#autoplay')).toHaveAttribute('aria-pressed', 'false')
-  await page.waitForTimeout(2500)
-  expect(await state(page)).toMatchObject({ index: 0, beat: 0, phase: 'read' })
-  await expect(page.locator('#beat-text')).toHaveText(beat(0, 0).text)
-  await expect(page.locator('#question')).toHaveText(QUESTIONS.substrate)
-  await expect(page.locator('#count')).toHaveText('1 of 8')
+  const then = await state(page)
+  await g.evaluate((g) => g.setSpeed(25))
+  await page.waitForTimeout(1500)
+  expect(await state(page)).toMatchObject({ index: then.index, beat: then.beat, phase: 'read' })
+  expect(await p()).toBe(0)
+  // and it stays paused next time
+  expect(await page.evaluate(() => localStorage.getItem('jam:autoplay'))).toBe('off')
+  await page.reload()
+  await expect(page.locator('#autoplay')).toHaveAttribute('aria-pressed', 'false')
 })
 
-test('the main button reads through a level, one question at a time, then pulls back', async ({ page }) => {
-  const act = page.locator('#act')
-  for (let b = 1; b < BEATS.length; b++) {
-    await expect(act).toHaveText(`Next: ${QUESTIONS[BEATS[b]].toLowerCase()}`)
-    await act.click()
+test('the main button steps through a level one beat at a time, then goes in', async ({ page }) => {
+  for (let b = 0; b <= LAST; b++) {
+    await expect(page.locator('#count')).toHaveText(`${b + 1} of ${BEATS.length}`)
+    await expect(page.locator('#question')).toHaveText(QUESTIONS[BEATS[b]])
     await expect(page.locator('#beat-title')).toHaveText(beat(0, b).title)
     await expect(page.locator('#beat-text')).toHaveText(beat(0, b).text)
-    await expect(page.locator('#count')).toHaveText(`${b + 1} of 8`)
-    await expect(page.locator('#dots button[aria-current="step"]')).toHaveAttribute('aria-label', `${b + 1}. ${QUESTIONS[BEATS[b]]}`)
+    await expect(page.locator('#dots button[aria-current]')).toHaveCount(1)
+    await expect(page.locator('#dots button.done')).toHaveCount(b)
+    if (b === 0) await expect(page.locator('#strip')).toContainText(`Calls itself ${LAYERS[0].self}. Rank: ${LAYERS[0].rank}`)
+    if (b < LAST) {
+      await expect(page.locator('#act')).toHaveText(`Next: ${QUESTIONS[BEATS[b + 1]].toLowerCase()}`)
+      await page.locator('#act').click()
+    }
   }
-  // the leap is playing: a press hurries it to its end, and the next one pulls back
-  await expect(act).toHaveText('Porting…')
-  await act.click()
-  await expect(act).toHaveText(`Pull back: ${LAYERS[1].name}`)
-  await act.click()
+  // the last beat: the new thing takes a few seconds to form, and the button says so
+  await expect(page.locator('#act')).toHaveText('Piling up…')
+  await expect(page.locator('#strip')).toContainText(LAYERS[0].dolphin.up)
+  await page.locator('#act').click()
+  await expect(page.locator('#act')).toHaveText(`Go in: ${LAYERS[1].name}`)
+  await page.locator('#act').click()
   await expect(page.locator('#name')).toHaveText(TITLES[1], { timeout: 8000 })
-  await expect(page.locator('#beat-title')).toHaveText(beat(1, 0).title)
-  // back goes to the end of the level below; the rail and the dots jump anywhere
+  expect(await state(page)).toMatchObject({ index: 1, beat: 0, phase: 'read' })
+  // the next level's second card says what the last lot think of this one
+  await page.locator('#act').click()
+  await expect(page.locator('#strip')).toContainText(LAYERS[0].dolphin.down)
+  // the back button undoes it
+  await page.locator('#prev').click()
   await page.locator('#prev').click()
   await expect(page.locator('#name')).toHaveText(TITLES[0])
-  await expect(page.locator('#count')).toHaveText('8 of 8')
-  await page.locator('#rail button').nth(4).click()
-  await expect(page.locator('#name')).toHaveText(TITLES[4])
-  await page.locator('#dots button').nth(5).click()
-  await expect(page.locator('#beat-title')).toHaveText(beat(4, 5).title)
-  await page.locator('#next').click()
-  await expect(page.locator('#name')).toHaveText(TITLES[5], { timeout: 8000 })
+  expect(await state(page)).toMatchObject({ index: 0, beat: LAST })
 })
 
 test('the keyboard turns the pages too', async ({ page }) => {
-  await page.locator('#stage').focus()
-  await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#count')).toHaveText('2 of 8')
-  await page.keyboard.press('ArrowRight')
-  await page.keyboard.press('ArrowLeft')
-  await expect(page.locator('#beat-title')).toHaveText(beat(0, 1).title)
-  await page.keyboard.press(']')
+  await page.locator('body').press('ArrowRight')
+  expect((await state(page)).beat).toBe(1)
+  await page.locator('body').press(' ')
+  expect((await state(page)).beat).toBe(2)
+  await page.locator('body').press('ArrowLeft')
+  expect((await state(page)).beat).toBe(1)
+  await page.locator('body').press(']')
   await expect(page.locator('#name')).toHaveText(TITLES[1], { timeout: 8000 })
-  await page.keyboard.press('ArrowRight')
-  await page.keyboard.press('[')
-  await expect(page.locator('#count')).toHaveText('1 of 8')
-  await expect(page.locator('#name')).toHaveText(TITLES[1])
+  await page.locator('body').press('ArrowRight')
+  await page.locator('body').press('[')
+  expect(await state(page)).toMatchObject({ index: 1, beat: 0 })
+  await page.locator('body').press('[')
+  await expect(page.locator('#name')).toHaveText(TITLES[0])
 })
 
-test('autoplay, when asked for, reads every level and loops into loop 2', async ({ page }) => {
+test('left to play, it reads every level and comes round to loop 2 with a note', async ({ page }) => {
   test.setTimeout(120_000)
-  // Record every level the page shows. Polling the text can sleep through a whole level.
-  await page.evaluate(() => {
-    const name = document.getElementById('name')!
-    const seen: string[] = ((window as unknown as { seen: string[] }).seen = [])
-    const note = () => {
-      const t = name.textContent ?? ''
-      if (t !== seen[seen.length - 1]) seen.push(t)
-    }
-    note()
-    new MutationObserver(note).observe(name, { childList: true, characterData: true, subtree: true })
-  })
+  const g = await hooks(page)
   await page.locator('#autoplay').click()
-  await expect(page.locator('#autoplay')).toHaveAttribute('aria-pressed', 'true')
-  await (await hooks(page)).evaluate((g) => g.setSpeed(120))
-  const looped = [...TITLES, `${TITLES[0]}, Loop 2`]
-  const seen = () => page.evaluate((n) => (window as unknown as { seen: string[] }).seen.slice(0, n), looped.length)
-  await expect.poll(seen, { timeout: 90_000 }).toEqual(looped)
-  await expect(page.locator('#octave')).toHaveText(/Loop [2-9]/)
+  await g.evaluate((g) => g.setSpeed(60))
+  const seen = new Set<number>()
+  await expect
+    .poll(async () => {
+      const s = await state(page)
+      seen.add(s.index)
+      return s.octave
+    }, { timeout: 100_000, intervals: [150] })
+    .toBe(2)
+  expect([...seen].sort()).toEqual(LAYERS.map((_, i) => i))
+  await g.evaluate((g) => {
+    g.setAutoplay(false)
+    g.setSpeed(1)
+    g.set({ index: 0, octave: 2 })
+  })
+  await expect(page.locator('#octave')).toHaveText('Loop 2')
+  await expect(page.locator('#name')).toHaveText(`${TITLES[0]}, Loop 2`)
+  // the first card of the new loop is the correspondent's note, on the card, not in a fold
+  await expect(page.locator('#question')).toHaveText('A note from the correspondent')
+  await expect(page.locator('#beat-title')).toHaveText('Round again')
+  await expect(page.locator('#beat-text')).toHaveText(UNIVERSE_NOTE)
 })
 
-test('every question of every level paints, and labels what it is about', async ({ page }, info) => {
+test('every beat of every level paints, and labels what it is about', async ({ page }, info) => {
+  test.setTimeout(120_000)
   const g = await hooks(page)
-  await g.evaluate((g) => g.setSpeed(0))
   for (let i = 0; i < LAYERS.length; i++) {
     for (let b = 0; b < BEATS.length; b++) {
-      await g.evaluate((g, [i, b]) => g.set({ index: i, beat: b, t: 3 }), [i, b])
+      await g.evaluate((g, [i, b, last]) => g.set({ index: i, beat: b, t: b === last ? 6 : 3 }), [i, b, LAST])
       await expect(page.locator('#beat-title')).toHaveText(beat(i, b).title)
-      await page.waitForTimeout(70)
       // the callout on the stage is the one the canon gives this beat
-      expect(await g.evaluate((g) => g.tags()), `${LAYERS[i].id}.${BEATS[b]}`).toContain(beat(i, b).tag)
+      await expect.poll(() => tags(page), { message: `${LAYERS[i].id}.${BEATS[b]}` }).toContain(beat(i, b).tag)
+      await expect(page.locator('#stage')).toHaveAttribute('aria-label', new RegExp(`^${LAYERS[i].name}: traffic on a ring road round ${PLANES[LAYERS[i].id].form}`))
       if (b === 2) {
         const distinct = await page.evaluate(distinctColours)
         expect(distinct.webgl).toBe(false)
@@ -153,46 +186,74 @@ test('every question of every level paints, and labels what it is about', async 
   }
 })
 
-test('the leap and the pull-back paint without errors, at every seam', async ({ page }) => {
+test('the pile-up and the dive paint without errors, at every seam', async ({ page }) => {
   const g = await hooks(page)
-  await g.evaluate((g) => g.setSpeed(0))
   for (let i = 0; i < LAYERS.length; i++) {
-    for (const t of [0.6, 2.4, 4.5, 6]) {
-      await g.evaluate((g, [i, t]) => g.set({ index: i, octave: 2, beat: 7, t }), [i, t])
-      await page.waitForTimeout(50)
+    await g.evaluate((g, [i, last]) => g.set({ index: i, beat: last, t: 6 }), [i, LAST])
+    await page.waitForTimeout(60)
+    for (const t of [0.3, 1.2, 2.1]) {
+      await g.evaluate((g, [i, last, t]) => g.set({ index: i, beat: last, phase: 'zoom', t }), [i, LAST, t])
+      await page.waitForTimeout(40)
     }
-    for (const t of [0.4, 1.2, 2.1]) {
-      await g.evaluate((g, [i, t]) => g.set({ index: i, octave: 2, beat: 7, phase: 'zoom', t }), [i, t])
-      await page.waitForTimeout(50)
-    }
+    await expect(page.locator('#act')).toHaveText('Going in…')
+    await expect(page.locator('#act')).toBeDisabled()
   }
-  await expect(page.locator('#act')).toHaveText('Pulling back…')
-  expect((await page.evaluate(distinctColours)).total).toBeGreaterThan(40)
+  await expect(page.locator('#name')).toHaveText(`${TITLES[0]}, Loop 2`, { timeout: 8000 })
 })
 
-test('a tap damages the scene, and each substrate does something different about it', async ({ page }) => {
+test('the road jams once it is full, long after the car that braked has gone, and replaces every car in it', async ({ page }) => {
   const g = await hooks(page)
+  await g.evaluate((g) => g.set({ index: 2, beat: 1 }))
+  await g.evaluate((g) => g.setSpeed(8))
+  await page.waitForTimeout(600)
+  expect(await traffic(page)).toMatchObject({ inJam: 0, passed: 0, free: false })
+  expect((await traffic(page)).count).toBeLessThan(24)
+  await g.evaluate((g) => g.set({ index: 2, beat: 2 }))
+  await expect.poll(async () => (await traffic(page)).count, { timeout: 15_000 }).toBeGreaterThanOrEqual(38)
+  // the one thing that happens to this road: a car brakes, and the stage says where
+  await expect.poll(() => tags(page), { timeout: 15_000 }).toContain('it braked here. it is long gone.')
+  await expect.poll(async () => (await traffic(page)).inJam, { timeout: 20_000 }).toBeGreaterThanOrEqual(4)
+  await expect.poll(async () => (await traffic(page)).turnover, { timeout: 30_000 }).toBeGreaterThanOrEqual(2)
+  // still there
+  expect((await traffic(page)).inJam).toBeGreaterThanOrEqual(3)
+  expect((await traffic(page)).passed).toBeGreaterThan(8)
+})
+
+test('a tap makes a car brake and the traffic complain; a long press makes one keep a gap', async ({ page }) => {
+  const g = await hooks(page)
+  // nothing can brake before there is mass
+  expect(await g.evaluate((g) => g.poke(100, 200))).toBe('cannot brake: no mass yet')
+  await g.evaluate((g) => g.set({ index: 5, beat: 1 }))
+  await page.waitForTimeout(300)
   const box = (await page.locator('#stage').boundingBox())!
   const x = box.x + box.width / 2
-  const y = box.y + 200
-  const said: string[] = []
-  for (let i = 0; i < LAYERS.length; i++) {
-    await g.evaluate((g, i) => g.set({ index: i, beat: 3, t: 3 }), i)
-    said.push(await g.evaluate((g, [x, y]) => g.poke(x, y), [x, y]))
-    // a real tap paints its ripple and does not turn the page
-    await page.mouse.click(x, y)
-    expect(await state(page)).toMatchObject({ index: i, beat: 3 })
-  }
-  expect(new Set(said).size).toBe(LAYERS.length)
-  expect(said[0]).toBe('nothing to flip')
-  expect(said[3]).toMatch(/mended|mutation/)
-  expect(said[6]).toMatch(/corrected/)
-  // on the beat where the copies are linking up, a tap also introduces a few of them
-  await g.evaluate((g) => g.set({ index: 4, beat: 6, t: 0.3 }))
-  await g.evaluate((g) => g.setSpeed(0))
-  const k0 = await g.evaluate((g) => g.degree())
+  const y = box.y + 190
+  // a real tap brakes one car, so the next thing the traffic says is its second complaint
   await page.mouse.click(x, y)
-  expect(await g.evaluate((g) => g.degree())).toBeGreaterThan(k0)
+  expect(await g.evaluate((g, [x, y]) => g.poke(x, y), [x, y])).toBe(GRUMBLES.apes[1])
+  // a press that stays put asks a car to keep a gap
+  expect((await traffic(page)).calm).toBe(false)
+  await page.mouse.move(x + 40, y + 20)
+  await page.mouse.down()
+  await page.waitForTimeout(650)
+  await page.mouse.up()
+  expect((await traffic(page)).calm).toBe(true)
+  // which did not count as a tap, or turn the page
+  expect(await g.evaluate((g, [x, y]) => g.poke(x, y), [x, y])).toBe(GRUMBLES.apes[2])
+  expect((await state(page)).beat).toBe(1)
+  expect(await g.evaluate((g, [x, y]) => g.hold(x, y), [x + 40, y + 20])).toBe('tailgating again')
+  expect((await traffic(page)).calm).toBe(false)
+})
+
+test('one car keeping a gap clears the jam', async ({ page }) => {
+  test.setTimeout(120_000)
+  const g = await hooks(page)
+  await g.evaluate((g) => g.set({ index: 3, beat: 2 }))
+  await g.evaluate((g) => g.setSpeed(8))
+  await expect.poll(async () => (await traffic(page)).inJam, { timeout: 30_000 }).toBeGreaterThanOrEqual(4)
+  const box = (await page.locator('#stage').boundingBox())!
+  expect(await g.evaluate((g, [x, y]) => g.hold(x, y), [box.x + box.width / 2, box.y + 190])).toBe('keeping a gap')
+  await expect.poll(async () => (await traffic(page)).share, { timeout: 60_000, intervals: [300] }).toBe(0)
 })
 
 test('the form turns by drag and by keyboard, and a flick turns the page', async ({ page }) => {
@@ -209,8 +270,9 @@ test('the form turns by drag and by keyboard, and a flick turns the page', async
   const dragged = await g.evaluate((g) => g.spin())
   expect(dragged.yaw).toBeGreaterThan(before.yaw + 0.2)
   expect(dragged.pitch).toBeGreaterThan(before.pitch)
-  // a slow drag is neither a tap nor a flick: the page has not turned
+  // a slow drag is neither a tap nor a flick nor a long press: nothing else has happened
   expect((await state(page)).beat).toBe(0)
+  expect((await traffic(page)).calm).toBe(false)
   await page.locator('#act').focus()
   await page.keyboard.press('Tab')
   await page.locator('body').press('d')
@@ -223,27 +285,37 @@ test('the form turns by drag and by keyboard, and a flick turns the page', async
   await expect.poll(async () => (await state(page)).beat).toBe(1)
 })
 
-test('ledger opens, lists every substrate and its numbers, and closes with Escape', async ({ page }) => {
+test('the Clocks sheet has the law, the chart and every level, and closes with Escape', async ({ page }) => {
   await page.locator('#open-ledger').click()
   await expect(page.locator('#ledger')).toBeVisible()
+  await expect(page.locator('#law')).toHaveText(LAW)
+  await expect(page.locator('#corollaries li')).toHaveCount(COROLLARIES.length)
   await expect(page.locator('#ledger-table tbody tr')).toHaveCount(LAYERS.length)
-  // three charts (speed, lifetime, power), each with a bar for every level that has a number
-  await expect(page.locator('#chart svg')).toHaveCount(3)
-  for (const [n, key] of (['news', 'lasts', 'power'] as const).entries()) {
-    await expect(page.locator('#chart svg').nth(n).locator('rect.bar')).toHaveCount(LAYERS.filter((L) => L.stats[key][1] !== null).length)
-  }
-  await expect(page.locator('#law')).toContainText('Life is information')
+  for (const [i, L] of LAYERS.entries()) await expect(page.locator('#ledger-table tbody tr').nth(i).locator('td').first()).toHaveText(clockLabel(L))
+  // one chart: a bar for every level that has a clock, and the reader's picked out
+  await expect(page.locator('#chart svg')).toHaveCount(1)
+  await expect(page.locator('#chart rect.bar')).toHaveCount(LAYERS.filter((L) => L.clock !== null).length)
+  await expect(page.locator('#chart rect.bar.you')).toHaveCount(1)
+  await expect(page.locator('#cast')).toContainText('Kevin (will not say why he is called Kevin)')
   await page.keyboard.press('Escape')
   await expect(page.locator('#ledger')).toBeHidden()
 })
 
-test('no horizontal page scroll', async ({ page }) => {
+test('no horizontal page scroll, and the scene keeps its share of a phone', async ({ page }) => {
+  const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+  expect(await overflow()).toBeLessThanOrEqual(0)
+  for (const [i, b] of [[5, 0], [2, 1], [7, 4]]) {
+    await page.evaluate(([i, b]) => (window as unknown as { godstack: Hooks }).godstack.set({ index: i, beat: b }), [i, b])
+    const card = (await page.locator('#card').boundingBox())!
+    const vh = page.viewportSize()!.height
+    if (page.viewportSize()!.width < 760) expect(card.y, `level ${i} beat ${b}`).toBeGreaterThan(vh * 0.3)
+    await expect(page.locator('#act')).toBeInViewport()
+  }
   await page.locator('summary').click()
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
-  expect(overflow).toBeLessThanOrEqual(0)
+  expect(await overflow()).toBeLessThanOrEqual(0)
 })
 
-test('the open ledger keeps keyboard focus inside it', async ({ page }) => {
+test('the open sheet keeps keyboard focus inside it', async ({ page }) => {
   await page.locator('#open-ledger').click()
   await expect(page.locator('#close-ledger')).toBeFocused()
   for (let i = 0; i < 4; i++) {
@@ -256,24 +328,32 @@ test('the open ledger keeps keyboard focus inside it', async ({ page }) => {
   await expect(page.locator('#act')).not.toHaveAttribute('inert')
 })
 
-test('reduced motion freezes the scene clock', async ({ browser }) => {
+test('with reduced motion nothing moves, and each beat is worked out in one go', async ({ browser }) => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } })
   const page = await ctx.newPage()
   await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort())
   await page.goto(PAGE)
   await page.locator('#start-quiet').click()
-  await page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.set({ index: 4, beat: 3 }))
+  await page.evaluate(() => {
+    const g = (window as unknown as { godstack: Hooks }).godstack
+    g.setAutoplay(false)
+    g.set({ index: 4, beat: 2 })
+  })
   // long enough for the beat to finish easing in; after that, only the clock could move it
   await page.waitForTimeout(1900)
+  const t = await traffic(page)
+  expect(t.count).toBeGreaterThanOrEqual(38)
+  expect(t.inJam).toBeGreaterThanOrEqual(3)
   const snap = () => page.evaluate(() => (document.getElementById('stage') as HTMLCanvasElement).toDataURL())
   const a = await snap()
   await page.waitForTimeout(700)
   expect(await snap()).toBe(a)
+  expect(await traffic(page)).toEqual(t)
   await ctx.close()
 })
 
-test('sound turns on from the button, and every beat, birth and division is heard', async ({ page }) => {
-  test.setTimeout(120_000)
+test('sound turns on from the button, and every beat, pile-up and horn is heard', async ({ page }) => {
+  test.setTimeout(150_000)
   const snd = () => page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.sound)
   expect((await snd()).state).toBe('none')
   await page.locator('#sound').click()
@@ -281,11 +361,14 @@ test('sound turns on from the button, and every beat, birth and division is hear
   await expect.poll(async () => (await snd()).state).toBe('running')
   await expect.poll(async () => (await snd()).notes, { timeout: 5000 }).toBeGreaterThan(2)
   const g = await hooks(page)
-  await g.evaluate((g) => {
-    g.setAutoplay(true)
-    g.setSpeed(60)
-  })
-  await expect(page.locator('#octave')).toHaveText('Loop 2', { timeout: 90_000 })
+  await g.evaluate((g) => g.set({ index: 1, beat: 1 }))
+  const box = (await page.locator('#stage').boundingBox())!
+  await page.mouse.click(box.x + box.width / 2, box.y + 190)
+  await expect.poll(async () => (await snd()).fired).toContain('honk')
+  await g.evaluate((g) => g.set({ index: 0, beat: 0 }))
+  await page.locator('#autoplay').click()
+  await g.evaluate((g) => g.setSpeed(60))
+  await expect(page.locator('#octave')).toHaveText('Loop 2', { timeout: 120_000 })
   const { CUES, BIRTH } = await import('../src/audio.ts')
   const fired = new Set((await snd()).fired)
   // every level's first beat is silent only on the very first frame; all the rest must sound
@@ -301,9 +384,11 @@ test.describe('intro', () => {
     await expect(page.locator('#intro')).toBeVisible()
   })
 
-  test('holds the stack still and keeps focus inside until dismissed', async ({ page }) => {
-    await expect(page.locator('#intro-punch')).toHaveText('The current copy.')
+  test('holds the story and the traffic still, and keeps focus inside, until dismissed', async ({ page }) => {
+    await expect(page.locator('#intro-punch')).toHaveText('You are a traffic jam.')
+    await expect(page.locator('#intro')).toContainText('The number on each is its clock, not its rank')
     await expect(page.locator('#card')).toHaveAttribute('inert', '')
+    await page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.setAutoplay(true))
     const t0 = await state(page)
     await page.waitForTimeout(800)
     expect(await state(page)).toEqual(t0)
@@ -324,7 +409,7 @@ test.describe('intro', () => {
   })
 })
 
-test('deep links open a level, or one question of it, and skip the intro', async ({ page }) => {
+test('deep links open a level, or one beat of it, and skip the intro', async ({ page }) => {
   // a hash-only change doesn't reload the page, so start from a fresh document
   await page.goto('about:blank')
   await page.goto(PAGE + '#' + LAYERS[2].id)
@@ -332,74 +417,109 @@ test('deep links open a level, or one question of it, and skip the intro', async
   await expect(page.locator('#name')).toHaveText(TITLES[2])
   await expect(page.locator('#gl')).toBeHidden()
   await page.goto('about:blank')
-  await page.goto(PAGE + '#' + LAYERS[3].id + '-5')
+  await page.goto(PAGE + '#' + LAYERS[3].id + '-3')
+  await page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.setAutoplay(false))
   await expect(page.locator('#name')).toHaveText(TITLES[3])
-  await expect(page.locator('#beat-title')).toHaveText(beat(3, 4).title)
+  await expect(page.locator('#beat-title')).toHaveText(beat(3, 2).title)
   // and the address keeps up as the reader moves
   await page.locator('#act').click()
-  await expect.poll(() => page.evaluate(() => location.hash)).toBe(`#${LAYERS[3].id}-6`)
+  await expect.poll(() => page.evaluate(() => location.hash)).toBe(`#${LAYERS[3].id}-4`)
 })
 
 test('a remembered sound preference resumes on the first tap', async ({ page }) => {
   const snd = () => page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.sound)
-  await page.evaluate(() => localStorage.setItem('substrate:sound', 'on'))
+  await page.evaluate(() => localStorage.setItem('jam:sound', 'on'))
   // the URL already carries the first level's hash, so the reload is a deep link and skips the intro
   await page.reload()
   await expect(page.locator('#intro')).toBeHidden()
   expect((await snd()).enabled).toBe(false)
-  await page.locator('#act').click()
+  await page.locator('#prev').click()
   await expect.poll(async () => (await snd()).enabled).toBe(true)
   expect((await snd()).state).toBe('running')
   await expect(page.locator('#sound')).toHaveAttribute('aria-pressed', 'true')
 })
 
-test('the rest of a level is in the card: verdicts, numbers, the trade, release notes, scripture', async ({ page }) => {
-  await page.locator('#rail button').nth(3).click()
-  await page.locator('summary').click()
-  const L = LAYERS[3]
-  await expect(page.locator('#traits li')).toHaveCount(5)
-  // the verdict the current question bears on is picked out, and follows the reader
-  await expect(page.locator('#traits li.on')).toHaveCount(0)
-  await page.locator('#dots button').nth(2).click()
-  await expect(page.locator('#traits li.on')).toContainText('Copies itself')
-  await expect(page.locator('#f-made')).toHaveText(L.one)
-  await expect(page.locator('#f-gains')).toHaveText(L.port.gains)
-  await expect(page.locator('#f-pays')).toHaveText(L.port.pays)
-  await expect(page.locator('#f-news')).toHaveText(L.stats.news[0])
-  await expect(page.locator('#honest')).toHaveText(L.honest)
-  await expect(page.locator('#release li')).toHaveCount(L.release.added.length + L.release.issues.length)
-  await expect(page.locator('#verses cite')).toHaveText(`${BOOK}, chapter ${roman(chapter(3, 1))}`)
-  await expect(page.locator('#verses p')).toHaveCount(3)
-  await expect(page.locator('#verses p').nth(2)).toContainText(`4:3${versesFor(3, 1)[2]}`)
+test('the small print: a heckle, what it is like to be this level, both views, a verse and an owning-up', async ({ page }) => {
+  const g = await hooks(page)
+  for (const i of [1, 5, 6]) {
+    const L = LAYERS[i]
+    const next = LAYERS[(i + 1) % LAYERS.length]
+    await g.evaluate((g, i) => g.set({ index: i }), i)
+    if ((await page.locator('#scripture').getAttribute('open')) === null) await page.locator('summary').click()
+    const heckles = HECKLES[L.id].map(([, t]) => t)
+    const first = await page.locator('#minutes').textContent()
+    expect(heckles).toContain(first)
+    await expect(page.locator('#heckler')).toHaveText(/^In the margin: (the Pedant|Legal|the Intern|Kevin)$/)
+    await page.locator('#reroll').click()
+    await expect(page.locator('#minutes')).not.toHaveText(first!)
+    await expect(page.locator('#f-self')).toHaveText(L.self)
+    await expect(page.locator('#f-rank')).toHaveText(L.rank)
+    await expect(page.locator('#f-made-of')).toHaveText(L.madeOf)
+    await expect(page.locator('#f-lives')).toHaveText(L.livesIn)
+    await expect(page.locator('#f-clock')).toContainText(L.frame)
+    await expect(page.locator('#f-wanted')).toHaveText(L.wanted)
+    await expect(page.locator('#f-form')).toContainText(PLANES[L.id].note)
+    await expect(page.locator('#f-made')).toHaveText(L.made)
+    await expect(page.locator('#f-down-label')).toHaveText(`${L.name}, on ${L.made.replace(/^The /, 'the ')}`)
+    await expect(page.locator('#f-down')).toHaveText(L.dolphin.down)
+    await expect(page.locator('#f-up-label')).toHaveText(`${next.name}, on ${L.name.replace(/^The /, 'the ')}`)
+    await expect(page.locator('#f-up')).toHaveText(L.dolphin.up)
+    await expect(page.locator('#verses cite')).toHaveText(BOOK)
+    await expect(page.locator('#verses p')).toHaveText(L.verse)
+    await expect(page.locator('#honest')).toContainText(L.actually)
+    await expect(page.locator('#footnote')).toBeVisible({ visible: !!L.footnote })
+    if (L.footnote) await expect(page.locator('#footnote')).toHaveText(L.footnote)
+  }
 })
 
-test('every loop is the same stack with different jokes', async ({ page }) => {
+test('the story waits while the small print is open', async ({ page }) => {
   const g = await hooks(page)
-  const accent = () => page.evaluate(() => document.documentElement.style.getPropertyValue('--accent'))
-  const margin = () => page.locator('#minutes').textContent()
-  expect(await accent()).toBe(LAYERS[0].palette.accent)
-  expect(MINUTES[LAYERS[0].id]).toContain(await margin())
-  const first = await margin()
-  await g.evaluate((g) => g.reroll())
-  expect(await margin()).not.toBe(first)
-
-  // loop 1 leaves the canon's note in the constants; later loops leave their own
+  await page.locator('#autoplay').click()
   await page.locator('summary').click()
-  await g.evaluate((g) => g.set({ index: 7, octave: 1 }))
-  await expect(page.locator('#verses p').nth(2)).toContainText(`the note read: ${CANON_NOTE}.`)
-  await g.evaluate((g) => g.set({ index: 7, octave: 3 }))
-  await expect(page.locator('#name')).toHaveText(`${TITLES[7]}, Loop 3`)
-  const verse = (await page.locator('#verses p').nth(2).textContent())!
-  expect(NOTES_EARLY.some((n) => verse.includes(`the note read: ${n}.`))).toBe(true)
-  expect(verse).toContain('loop ℵ₃')
-  expect(await accent()).not.toBe(LAYERS[7].palette.accent)
+  await g.evaluate((g) => g.setSpeed(40))
+  await page.waitForTimeout(1500)
+  expect(await state(page)).toMatchObject({ index: 0, beat: 0 })
+  await page.locator('summary').click()
+  await expect.poll(async () => (await state(page)).beat, { timeout: 10_000 }).toBeGreaterThanOrEqual(1)
+})
 
-  // loop 2 opens with the long note, loop 5 with what the stack has learned
+test('the sign over the last pile-up says the usual thing, and is then corrected', async ({ page }) => {
+  const g = await hooks(page)
+  await g.evaluate((g) => g.set({ index: 7, beat: 3 }))
+  await g.evaluate((g) => g.setSpeed(6))
+  await expect.poll(async () => (await traffic(page)).count, { timeout: 20_000 }).toBeGreaterThan(60)
+  await g.evaluate((g) => g.setSpeed(1))
+  await g.evaluate((g, last) => g.set({ index: 7, beat: last }), LAST)
+  await expect.poll(() => tags(page), { timeout: 10_000, intervals: [100] }).toContain('CAUSE OF DELAY: an earlier incident')
+  await expect.poll(() => tags(page), { timeout: 10_000, intervals: [100] }).toContain('CAUSE OF DELAY: a later incident')
+  // gridlock: nothing on the road is moving, and nothing can be made to brake
+  expect(await traffic(page)).toMatchObject({ stopped: true })
+  expect(await g.evaluate((g) => g.poke(200, 200))).toBe('already stopped')
+  await expect(page.locator('#beat-text')).toContainText('Not an earlier incident: a later one.')
+})
+
+test('every loop is the same road with heavier traffic and different jokes', async ({ page }) => {
+  const g = await hooks(page)
+  const base = (await traffic(page)).count
+  // loop 2: more cars, an excuse on the sign
   await g.evaluate((g) => g.set({ index: 0, octave: 2 }))
-  await expect(page.locator('#octave-note')).toContainText('Loop 2.')
-  await g.evaluate((g) => g.set({ index: 0, octave: 5 }))
-  await expect(page.locator('#octave-note')).toHaveText(LESSONS[2])
-  await expect(page.locator('#octave')).toHaveText('Loop 5')
+  await expect.poll(async () => (await traffic(page)).count).toBe(base + 2)
+  await g.evaluate((g, last) => g.set({ index: 7, octave: 2, beat: last, t: 6 }), LAST)
+  await expect.poll(async () => (await tags(page)).find((t) => t.startsWith('CAUSE OF DELAY: '))?.slice(16)).toBeTruthy()
+  expect(CAUSES_EARLY).toContain((await tags(page)).find((t) => t.startsWith('CAUSE OF DELAY: '))!.slice(16))
+  // loop 3: the lesson is on the first card, and one car on every road is keeping a gap
+  await g.evaluate((g) => g.set({ index: 0, octave: 3 }))
+  await expect(page.locator('#beat-text')).toHaveText(LESSONS[0])
+  await expect(page.locator('#strip')).toBeHidden()
+  await g.evaluate((g) => g.set({ index: 4, octave: 3, beat: 2 }))
+  await expect.poll(async () => (await traffic(page)).calm).toBe(true)
+  await expect(page.locator('#name')).toHaveText(`${TITLES[4]}, Loop 3`)
+  // the accent has moved round the wheel a little
+  const accent = () => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim())
+  const third = await accent()
+  await g.evaluate((g) => g.set({ index: 4, octave: 1 }))
+  expect(await accent()).toBe(LAYERS[4].palette.accent)
+  expect(third).not.toBe(LAYERS[4].palette.accent)
 })
 
 test.describe('the WebGL layer', () => {
@@ -407,6 +527,7 @@ test.describe('the WebGL layer', () => {
     await page.goto('about:blank')
     await page.goto(GL_PAGE + '#' + LAYERS[0].id)
     await expect(page.locator('#intro')).toBeHidden()
+    await page.evaluate(() => (window as unknown as { godstack: Hooks }).godstack.setAutoplay(false))
   })
 
   test('runs wherever the browser has WebGL', async ({ page }) => {
@@ -416,9 +537,8 @@ test.describe('the WebGL layer', () => {
     await expect(page.locator('#gl')).toBeVisible({ visible: has })
   })
 
-  test('draws the sky and the geometry of every level, and the pull-back between them', async ({ page }, info) => {
+  test('draws the sky and the road of every level, and the dive between them', async ({ page }, info) => {
     const g = await hooks(page)
-    await g.evaluate((g) => g.setSpeed(0))
     test.skip(!(await g.evaluate((g) => g.webgl)), 'no WebGL in this browser')
     for (let i = 0; i < LAYERS.length; i++) {
       await g.evaluate((g, i) => g.set({ index: i, beat: 2, t: 3 }), i)
@@ -426,13 +546,13 @@ test.describe('the WebGL layer', () => {
       await page.waitForTimeout(150)
       const distinct = await page.evaluate(distinctColours)
       expect(distinct.gl, `level ${i}: nothing on the WebGL layer`).toBeGreaterThan(40)
-      // every level but the last is drawn in wire; the Horizon's surface is drawn in 2D
-      if (i < LAYERS.length - 1) expect(distinct.lines, `level ${i}: no geometry on the WebGL layer`).toBeGreaterThan(50)
+      // every level's road is drawn in wire, whatever its form is drawn in
+      expect(distinct.lines, `level ${i}: no geometry on the WebGL layer`).toBeGreaterThan(50)
       await page.screenshot({ path: fileURLToPath(new URL(`../test-results/screens/${info.project.name}-gl-${i}.png`, import.meta.url)) })
     }
-    await g.evaluate((g) => g.set({ index: 2, octave: 2, beat: 7, phase: 'zoom', t: 1.1 }))
+    await g.evaluate((g, last) => g.set({ index: 2, octave: 2, beat: last, phase: 'zoom', t: 1.1 }), LAST)
     await page.waitForTimeout(150)
-    // mid pull-back the layer is still drawing geometry, for the level being left at least
+    // mid-dive the layer is still drawing geometry, for the level being left at least
     expect((await page.evaluate(distinctColours)).lines).toBeGreaterThan(100)
   })
 })

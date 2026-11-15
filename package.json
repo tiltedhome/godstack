@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Substrate: life as information that keeps itself from being forgotten, ported across eight substrates, read at your own pace",
+  "description": "Phantom Jam: nothing is a thing; a thing is a traffic jam. Eight levels, slowest clock first, with a real traffic simulation in every scene",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
