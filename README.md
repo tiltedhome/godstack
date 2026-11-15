@@ -123,3 +123,9 @@ Found a security problem? Please don't open a pull request; see [SECURITY.md](SE
 ## License
 
 [MIT](LICENSE) © Tilted Studio
+
+## Godstack v2gpt: The Department of Unintended Consequences
+
+[Open the independent cosmic hearing](https://tiltedhome.github.io/godstack/v2gpt/) · [Source branch](https://github.com/tiltedhome/godstack/tree/v2gpt)
+
+An original story in eight movements about minds, makers, embodiment and unintended worlds. Reader-paced, with animated mathematical engravings, optional music and science notes. Published at its own path; all existing cuts remain unchanged.
