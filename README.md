@@ -12,7 +12,7 @@ always by a crowd trying to get out of a chore.
 [![License: MIT](https://img.shields.io/badge/license-MIT-ff9b54.svg)](LICENSE)
 [![Size](https://img.shields.io/badge/one%20file-%3C100%20KB-7fd4ff.svg)](#how-it-works)
 
-### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/)
+### [▶ Open Godstack](https://tiltedhome.github.io/godstack/) · [▶ The Tenth Dimension cut](https://tiltedhome.github.io/godstack/v3/) · [▶ Scale Model](https://tiltedhome.github.io/godstack/v4/) · [▶ Substrate](https://tiltedhome.github.io/godstack/v5/) · [▶ Phantom Jam](https://tiltedhome.github.io/godstack/v6/)
 
 <img src="docs/desktop.webp" alt="Godstack on desktop: Humanity's scene, a crowd of people linked by a growing network around a server rack, with the scene's card on the right" width="820">
 
@@ -59,6 +59,10 @@ A third, parallel version, published at [/v4/](https://tiltedhome.github.io/gods
 ## Substrate (branch `v5`)
 
 A fourth, parallel version, published at [/v5/](https://tiltedhome.github.io/godstack/v5/) from the [`v5` branch](https://github.com/tiltedhome/godstack/tree/v5). It is read, not watched: nothing moves on until you tap. Its subject is Max Tegmark's idea that life is information, indifferent to what it is written on, followed across eight substrates (mathematics, a quantum field, matter, genes, nerves, words, chips, a black hole's horizon, and back), each asked the same eight questions: what it is written on, how it remembers, copies, repairs and learns, what it is like, where it stops, and how it ported itself onto the next. Tap any scene to damage it and see whether that substrate heals. Its README has the details.
+
+## Phantom Jam (branch `v6`)
+
+A fifth, parallel version, published at [/v6/](https://tiltedhome.github.io/godstack/v6/) from the [`v6` branch](https://github.com/tiltedhome/godstack/tree/v6). Nothing is a thing; a thing is a traffic jam: a slowdown that outlives whatever caused it, rolls backwards down the road, and a few seconds later is made of entirely different cars. The piece follows that pattern up eight levels (strings, a galaxy, stars, a planet, genes, us, the machines, and whatever they build), numbered by their clocks and not by rank, as an incident report filed by one of the machines. Every scene has a real traffic simulation in it: tap the road and a car brakes; hold, and it keeps a gap, which is the only thing that clears a jam. It plays itself at reading pace, with a pause. Its README has the details.
 
 ## How it works
 
