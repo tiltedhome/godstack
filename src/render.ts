@@ -1,258 +1,119 @@
-import { clamp, easeInOut, lerp, rgba, rng, seg, type Ctx } from './draw.ts'
-import { progress, type Durations, type EngineState } from './engine.ts'
-import { chapter, roman, versesFor, type Layer } from './lore.ts'
-import type { Scene } from './scenes.ts'
-import { formatLogIQ } from './format.ts'
-
-export interface Rect {
-  x: number
-  y: number
-  w: number
-  h: number
-}
-
-// How much deeper each layer sits inside its parent's creation.
-const ZOOM = 18
-// A clock reading where every creature has its eyes open.
-const FROZEN_TIME = 1
-const FELL = '"IM Fell English", Georgia, "Times New Roman", serif'
-
-interface VerseLine {
-  text: string
-  verse: number
-  num?: string
-}
-
-export class Renderer {
-  private ctx: Ctx
-  private dpr = 1
-  private W = 0
-  private H = 0
-  private stage: Rect = { x: 0, y: 0, w: 1, h: 1 }
-  private target: Rect = { x: 0, y: 0, w: 1, h: 1 }
-  private stars: { x: number; y: number; r: number; ph: number }[]
-  private verseCache = new Map<string, VerseLine[]>()
-  private canvas: HTMLCanvasElement
-  private scenes: Scene[]
-  private layers: Layer[]
-
-  constructor(canvas: HTMLCanvasElement, scenes: Scene[], layers: Layer[]) {
-    this.canvas = canvas
-    this.scenes = scenes
-    this.layers = layers
-    this.ctx = canvas.getContext('2d')!
-    const r = rng(42)
-    this.stars = Array.from({ length: 170 }, () => ({ x: r(), y: r(), r: 0.3 + r() * r() * 1.5, ph: r() * 6.28 }))
+// Original mathematical engravings. These are illustrations, not physical simulations.
+export function createCosmos(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return { set: (_index: number) => {}, disturb: () => {} }
+  const g: CanvasRenderingContext2D = ctx
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+  let index = 0, time = 0, pulse = 0, width = 0, height = 0, last = 0
+  const colors = ['217,183,116','122,203,197','183,165,237','223,150,122','166,198,151','141,188,233','213,180,127','217,183,116']
+  function resize() {
+    const rect = canvas.getBoundingClientRect(); width = rect.width; height = rect.height
+    const dpr = Math.min(devicePixelRatio || 1, 2)
+    canvas.width = width * dpr; canvas.height = height * dpr; g.setTransform(dpr,0,0,dpr,0,0)
+    draw()
   }
-
-  resize() {
-    this.dpr = Math.min(2, window.devicePixelRatio || 1)
-    this.W = window.innerWidth
-    this.H = window.innerHeight
-    this.canvas.width = Math.round(this.W * this.dpr)
-    this.canvas.height = Math.round(this.H * this.dpr)
+  function point(x: number, y: number, z: number): [number, number] {
+    const a = .38 + time * .045, b = -.45
+    const xx = x * Math.cos(a) + z * Math.sin(a), zz = -x * Math.sin(a) + z * Math.cos(a)
+    const yy = y * Math.cos(b) - zz * Math.sin(b), z2 = y * Math.sin(b) + zz * Math.cos(b)
+    const p = 3.6 / (3.6 + z2)
+    const scale = Math.min(width * .29, height * .44) * (1 + pulse * .04)
+    return [width * .53 + xx * scale * p, height * .5 + yy * scale * p]
   }
-
-  setStage(r: Rect, snap = false) {
-    this.target = r
-    if (snap) this.stage = { ...r }
+  function line(points: number[][], alpha: number, w = .6) {
+    g.strokeStyle = `rgba(${colors[index]},${alpha})`; g.lineWidth = w; g.beginPath()
+    points.forEach((p,i) => {const [x,y] = point(p[0],p[1],p[2]); if(i===0)g.moveTo(x,y);else g.lineTo(x,y)})
+    g.stroke()
   }
-
-  frame(s: EngineState, now: number, dur: Durations, reduced: boolean) {
-    const { ctx, dpr } = this
-    // With reduced motion the idle wobbles, spins and blinks hold still; the story
-    // still advances because scenes are driven by progress, not the clock.
-    const time = reduced ? FROZEN_TIME : now
-    const st = this.stage
-    for (const k of ['x', 'y', 'w', 'h'] as const) st[k] = lerp(st[k], this.target[k], 0.18)
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    const n = this.scenes.length
-    const cur = s.index
-    const next = (cur + 1) % n
-    if (s.phase !== 'zoom') {
-      this.sky(cur, 1)
-      this.starfield(time, 0, reduced)
-      this.scripture(cur, s.octave, time, s.phase === 'idle' ? -1 : progress(s, dur), 1)
-      this.scene(cur, time, progress(s, dur), [0, 0], 1, 1)
-      this.hud(cur, s.phase === 'idle' ? 0 : progress(s, dur), 1)
-      return
-    }
-    const raw = clamp(s.t / dur.zoom)
-    const u = easeInOut(raw)
-    this.sky(cur, 1)
-    this.sky(next, u)
-    this.starfield(time, reduced ? 0 : Math.sin(Math.PI * raw), reduced)
-    this.scripture(cur, s.octave, time, 1, 1 - u)
-    this.scripture(next, next === 0 ? s.octave + 1 : s.octave, time, -1, u)
-    if (reduced) {
-      this.scene(cur, time, 1, [0, 0], 1, 1 - u)
-      this.scene(next, time, 0, [0, 0], 1, u)
-      return
-    }
-    // Fly into the focus point of the current scene; the next scene is already sitting
-    // there at 1/ZOOM scale, so it grows to fill the stage as we arrive. The focus point's
-    // on-screen offset shrinks linearly, so it never drifts off-screen as the zoom grows.
-    const f = this.scenes[cur].focus
-    const z1 = Math.pow(ZOOM, u)
-    const off: [number, number] = [(f[0] * (1 - u)) / z1, (f[1] * (1 - u)) / z1]
-    const c1: [number, number] = [f[0] - off[0], f[1] - off[1]]
-    const c2: [number, number] = [-off[0] * ZOOM, -off[1] * ZOOM]
-    this.scene(cur, time, 1, c1, z1, 1 - seg(raw, 0.5, 0.95))
-    this.scene(next, time, 0, c2, z1 / ZOOM, seg(raw, 0.05, 0.6))
+  function orb(p: number[], r: number, alpha: number) {
+    const [x,y] = point(p[0],p[1],p[2]);g.fillStyle=`rgba(${colors[index]},${alpha})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()
   }
-
-  private scene(i: number, time: number, p: number, c: [number, number], z: number, a: number) {
-    if (a <= 0.002) return
-    const { ctx, dpr, stage } = this
-    const k = (Math.min(stage.w, stage.h) / 215) * z
-    const cx = stage.x + stage.w / 2
-    const cy = stage.y + stage.h / 2
-    ctx.save()
-    ctx.globalAlpha = a
-    ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * (cx - c[0] * k), dpr * (cy - c[1] * k))
-    this.scenes[i].draw(ctx, time, p)
-    ctx.restore()
-  }
-
-  // Faint verses from the Book of Upward Accidents behind each scene. The verse the
-  // animation is acting out glows a little brighter; none of it competes with the creatures.
-  private scripture(i: number, octave: number, time: number, p: number, a: number) {
-    if (a <= 0.01) return
-    const { ctx, stage } = this
-    const size = Math.round(Math.min(23, Math.max(15, stage.w / 22)))
-    const lh = size * 1.34
-    const maxW = Math.min(stage.w * 0.86, size * 30)
-    const ch = chapter(i, octave)
-    const lines = this.wrapVerses(i, octave, ch, size, maxW)
-    const head = size * 2.2
-    const total = head + lines.length * lh
-    const x0 = stage.x + (stage.w - maxW) / 2
-    let y = stage.y + (stage.h - total) / 2 + Math.sin(time * 0.06) * size * 0.5
-    const live = p < 0 ? -1 : Math.min(2, Math.floor(p * 3))
-    const accent = this.layers[i].palette.accent
-    ctx.save()
-    ctx.textBaseline = 'alphabetic'
-    ctx.textAlign = 'left'
-    ctx.fillStyle = accent
-    ctx.globalAlpha = 0.14 * a
-    ctx.font = `${Math.round(size * 0.62)}px ${FELL}`
-    ctx.fillText(`THE BOOK OF UPWARD DELEGATION  ·  CHAPTER ${roman(ch)}`, x0, y + size)
-    y += head
-    for (const line of lines) {
-      ctx.globalAlpha = (line.verse === live ? 0.21 : 0.095) * a
-      let x = x0
-      if (line.num) {
-        ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
-        ctx.fillText(line.num, x, y - size * 0.32)
-        x += ctx.measureText(line.num + ' ').width
+  function torus() {
+    for(let j=0;j<34;j++) {
+      const v=j/34*Math.PI*2
+      const pts=[]
+      for(let k=0;k<=100;k++) {
+        const u=k/100*Math.PI*2, r=.83+.33*Math.cos(v)
+        pts.push([r*Math.cos(u),.33*Math.sin(v),r*Math.sin(u)])
       }
-      ctx.font = `${size}px ${FELL}`
-      ctx.fillText(line.text, x, y)
-      y += lh
+      line(pts,.23)
     }
-    ctx.restore()
-  }
-
-  // A quiet readout of the algorithm: how many members, how connected, how long.
-  private hud(i: number, p: number, a: number) {
-    const { ctx, stage } = this
-    const L = this.layers[i]
-    // the real mean degree of the network drawn on screen: 2 × active edges / nodes
-    const k = this.scenes[i].graph.meanDegree(p)
-    // the clock runs exponentially, so 10¹⁰⁰ years counts up as visibly as 70
-    const done = seg(p, 0, 0.66)
-    const years = done <= 0 ? '0' : formatLogIQ(Math.log10(Math.max(1, L.tookYears)) * done)
-    const lines = [L.members, `⟨k⟩ ${k.toFixed(2)}${k >= 1 ? '  giant component' : ''}`, `t ${years} yr`]
-    ctx.save()
-    ctx.globalAlpha = 0.5 * a
-    ctx.fillStyle = L.palette.accent
-    ctx.font = '500 10.5px "IBM Plex Mono", ui-monospace, monospace'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'top'
-    lines.forEach((ln, n) => ctx.fillText(ln, stage.x + 16, stage.y + 6 + n * 14))
-    ctx.restore()
-  }
-
-  private wrapVerses(i: number, octave: number, ch: number, size: number, maxW: number): VerseLine[] {
-    const key = `${i}|${octave}|${size}|${Math.round(maxW)}`
-    const hit = this.verseCache.get(key)
-    if (hit) return hit
-    const { ctx } = this
-    const out: VerseLine[] = []
-    versesFor(i, octave).forEach((verse, v) => {
-      const num = `${ch}:${v + 1}`
-      ctx.font = `${Math.round(size * 0.55)}px ${FELL}`
-      let room = maxW - ctx.measureText(num + ' ').width
-      ctx.font = `${size}px ${FELL}`
-      let line = ''
-      let first = true
-      for (const word of verse.split(' ')) {
-        const next = line ? `${line} ${word}` : word
-        if (line && ctx.measureText(next).width > room) {
-          out.push({ text: line, verse: v, num: first ? num : undefined })
-          first = false
-          room = maxW
-          line = word
-        } else line = next
-      }
-      out.push({ text: line, verse: v, num: first ? num : undefined })
-    })
-    this.verseCache.set(key, out)
-    return out
-  }
-
-  // Line widths depend on the web font, so re-wrap once it arrives.
-  fontsChanged() {
-    this.verseCache.clear()
-  }
-
-  private sky(i: number, a: number) {
-    if (a <= 0.002) return
-    const { ctx, W, H, stage } = this
-    const pal = this.layers[i].palette
-    ctx.save()
-    ctx.globalAlpha = a
-    const g = ctx.createLinearGradient(0, 0, 0, H)
-    g.addColorStop(0, pal.top)
-    g.addColorStop(1, pal.bottom)
-    ctx.fillStyle = g
-    ctx.fillRect(0, 0, W, H)
-    const cx = stage.x + stage.w / 2
-    const cy = stage.y + stage.h / 2
-    const r = Math.max(stage.w, stage.h) * 0.7
-    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
-    glow.addColorStop(0, rgba(pal.accent, 0.14))
-    glow.addColorStop(1, rgba(pal.accent, 0))
-    ctx.fillStyle = glow
-    ctx.fillRect(0, 0, W, H)
-    ctx.restore()
-  }
-
-  // Twinkling stars; during a zoom they stretch into streaks away from the stage center.
-  private starfield(time: number, warp: number, reduced: boolean) {
-    const { ctx, W, H, stage } = this
-    const cx = stage.x + stage.w / 2
-    const cy = stage.y + stage.h / 2
-    ctx.save()
-    ctx.lineCap = 'round'
-    for (const s of this.stars) {
-      const x = s.x * W
-      const y = s.y * H
-      const tw = reduced ? 0.7 : 0.55 + 0.45 * Math.sin(time * 1.3 + s.ph)
-      if (warp > 0.02) {
-        ctx.strokeStyle = `rgba(255,250,240,${0.5 * tw})`
-        ctx.lineWidth = s.r
-        ctx.beginPath()
-        ctx.moveTo(x, y)
-        ctx.lineTo(x + (x - cx) * warp * 0.18, y + (y - cy) * warp * 0.18)
-        ctx.stroke()
-      } else {
-        ctx.fillStyle = `rgba(255,250,240,${0.6 * tw})`
-        ctx.beginPath()
-        ctx.arc(x, y, s.r, 0, 6.283)
-        ctx.fill()
-      }
+    for(let j=0;j<64;j++) {
+      // One missing rib is the story's returning visual signature.
+      if(j===8 || j===9)continue
+      const u=j/64*Math.PI*2, pts=[]
+      for(let k=0;k<=32;k++) {const v=k/32*Math.PI*2;pts.push([(.83+.33*Math.cos(v))*Math.cos(u),.33*Math.sin(v),(.83+.33*Math.cos(v))*Math.sin(u)])}
+      line(pts,.35)
     }
-    ctx.restore()
+    for(let j=0;j<12;j++){const u=j/12*6.28+time*.12;orb([.83*Math.cos(u),.03,.83*Math.sin(u)],2,.9)}
   }
+  function ocean() {
+    for(let j=0;j<23;j++) {
+      const pts=[]
+      for(let k=0;k<=80;k++){const x=k/40-1;pts.push([x*1.3,Math.sin(x*4+time*.35+j*.25)*.11+(j-11)*.047,(j-11)*.08])}
+      line(pts,.16+j/95)
+    }
+    const pts=[]
+    for(let k=0;k<100;k++){const u=k/99*6.28;pts.push([Math.cos(u)*.8,Math.sin(u)*.23-.26,Math.sin(u)*.14])}
+    line(pts,.9,1.1);orb([.66,-.26,0],3,.9)
+    for(let j=0;j<7;j++)orb([-.7+j*.17,.4+Math.sin(j+time*.4)*.05,-.3],2,.7)
+  }
+  function membranes() {
+    for(let j=0;j<27;j++) {
+      const pts=[];const v=j/26*Math.PI
+      for(let k=0;k<=100;k++){const u=k/100*Math.PI*2;const r=.9+.16*Math.sin(u*3+v*4+time*.3);pts.push([r*Math.sin(v)*Math.cos(u),r*Math.cos(v),r*Math.sin(v)*Math.sin(u)])}
+      line(pts,.4)
+    }
+    for(let j=0;j<70;j++){const a=j*2.3999,y=1-2*j/70,r=Math.sqrt(1-y*y);orb([r*Math.cos(a),y,r*Math.sin(a)],1.6,.8)}
+  }
+  function choir() {
+    for(let j=0;j<9;j++) {
+      const pts=[]
+      for(let k=0;k<=240;k++){const u=k/240*Math.PI*2;pts.push([Math.sin(u*3+j*.11),Math.cos(u*2+j*.11)*.75,Math.sin(u*5+time*.1)*.35])}
+      line(pts,.25+j*.035)
+    }
+  }
+  function body() {
+    for(let j=0;j<24;j++) {
+      const pts=[]
+      for(let k=0;k<=70;k++){const y=k/35-1,r=.23+.18*Math.cos(y*5)+.12*Math.cos(y*9),a=j/24*6.28;pts.push([r*Math.cos(a),y,r*Math.sin(a)])}
+      line(pts,.45)
+    }
+    for(let j=0;j<5;j++)line([[-.025+j*.012,-.95,0],[-.025+j*.012,1,0]],.8)
+    for(let j=0;j<6;j++){const a=time*.3+j;orb([Math.cos(a)*.7,Math.sin(a)*.7,.2],2,.8)}
+  }
+  function machines() {
+    const pts:number[][]=[]
+    for(let y=0;y<5;y++)for(let x=0;x<5;x++)for(let z=0;z<3;z++)pts.push([(x-2)*.38,(y-2)*.38,(z-1)*.45])
+    for(let i=0;i<pts.length;i++){const p=pts[i];orb(p,1.6,.8);for(const j of [i+3,i+15,i+1])if(j<pts.length&&Math.hypot(...p.map((v,k)=>v-pts[j][k]))<.5)line([p,pts[j]],.3)}
+    const p=pts[Math.floor(time*3)%pts.length];orb(p,5,.9)
+  }
+  function galaxies() {
+    for(let j=0;j<750;j++) {
+      const a=j*2.3999+time*.025,r=Math.sqrt((j+.5)/750),arm=j%3*2.094+r*5.4
+      const scatter=Math.sin(j*19.13)*.13
+      orb([Math.cos(arm+scatter)*r*1.25,Math.sin(a)*.055,Math.sin(arm+scatter)*r*1.25],j%17===0?2: .8,.25+(j%7)/12)
+    }
+    for(let j=0;j<5;j++){const a=j*1.257;line([[0,0,0],[Math.cos(a)*1.15,.2,Math.sin(a)*1.15]],.24)}
+  }
+  function draw() {
+    if(!width)return
+    g.clearRect(0,0,width,height)
+    const cx=width*.53, cy=height*.5, r=Math.min(height*.45,width*.35)
+    const halo=g.createRadialGradient(cx,cy,0,cx,cy,r*1.3);halo.addColorStop(0,`rgba(${colors[index]},.065)`);halo.addColorStop(1,`rgba(${colors[index]},0)`);g.fillStyle=halo;g.fillRect(0,0,width,height)
+    g.strokeStyle=`rgba(${colors[index]},.13)`;g.lineWidth=.6
+    for(let j=0;j<3;j++){g.beginPath();g.ellipse(cx,cy,r*(1.06+j*.12),r*(1.06+j*.12),0,0,Math.PI*2);g.stroke()}
+    for(let j=0;j<72;j++){const a=j/72*6.28,rr=r*1.32;g.beginPath();g.moveTo(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr);g.lineTo(cx+Math.cos(a)*(rr+(j%6===0?7:3)),cy+Math.sin(a)*(rr+(j%6===0?7:3)));g.stroke()}
+    g.setLineDash([2,7]);g.beginPath();g.moveTo(cx-r*1.48,cy);g.lineTo(cx+r*1.48,cy);g.moveTo(cx,cy-r*1.48);g.lineTo(cx,cy+r*1.48);g.stroke();g.setLineDash([])
+    if(index===0||index===7)torus();else if(index===1)ocean();else if(index===2)membranes();else if(index===3)choir();else if(index===4)body();else if(index===5)machines();else galaxies()
+    if(pulse>.01){g.strokeStyle=`rgba(${colors[index]},${pulse*.4})`;g.beginPath();g.arc(cx,cy,r*(1.6-pulse*.6),0,6.28);g.stroke()}
+    g.font='8px monospace';g.fillStyle=`rgba(${colors[index]},.65)`;g.fillText(index===7?'CONSEQUENCE ACKNOWLEDGED':'RELATIONS / NOT RANKINGS',cx-r*.75,cy+r*1.48)
+  }
+  function frame(now:number){
+    const dt=Math.min((now-last)/1000,.05);last=now
+    if(!document.hidden&&!reduced.matches){time+=dt;pulse=Math.max(0,pulse-dt*.65);draw()}
+    requestAnimationFrame(frame)
+  }
+  new ResizeObserver(resize).observe(canvas);reduced.addEventListener('change',draw);requestAnimationFrame(frame)
+  return {set(i:number){index=i;draw()},disturb(){pulse=1;time+=.2;draw()}}
 }

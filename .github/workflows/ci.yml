@@ -10,7 +10,7 @@ name: ci
 # everything and deploys.
 on:
   push:
-    branches: [main, v3, v4, v5, v6]
+    branches: [main, v3, v4, v5, v6, v2gpt]
   pull_request:
   workflow_dispatch:
 
@@ -95,7 +95,7 @@ jobs:
   publish:
     name: ask main to publish
     needs: [lint, workflows, build]
-    if: (github.ref == 'refs/heads/v3' || github.ref == 'refs/heads/v4' || github.ref == 'refs/heads/v5' || github.ref == 'refs/heads/v6') && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/v3' || github.ref == 'refs/heads/v4' || github.ref == 'refs/heads/v5' || github.ref == 'refs/heads/v6' || github.ref == 'refs/heads/v2gpt') && github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -140,6 +140,11 @@ jobs:
           ref: v6
           path: v6
           persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v2gpt
+          path: v2gpt
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
@@ -153,13 +158,16 @@ jobs:
         working-directory: v5
       - run: npm ci && npm run build
         working-directory: v6
+      - run: npm ci && npm run build
+        working-directory: v2gpt
       - run: |
-          mkdir -p site/v3 site/v4 site/v5 site/v6
+          mkdir -p site/v3 site/v4 site/v5 site/v6 site/v2gpt
           cp main/dist/index.html site/index.html
           cp v3/dist/index.html site/v3/index.html
           cp v4/dist/index.html site/v4/index.html
           cp v5/dist/index.html site/v5/index.html
           cp v6/dist/index.html site/v6/index.html
+          cp v2gpt/dist/index.html site/v2gpt/index.html
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site

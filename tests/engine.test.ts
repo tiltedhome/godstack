@@ -1,50 +1,23 @@
 import { describe, expect, it } from 'vitest'
-import { DUR, advance, back, initial, progress, step, trigger } from '../src/engine.ts'
-
-const N = 7
-const run = (s = initial(), seconds: number, autoplay = true, dt = 0.05) => {
-  for (let t = 0; t < seconds; t += dt) s = step(s, dt, autoplay, DUR, N)
-  return s
-}
-
-describe('engine', () => {
-  it('waits in idle without autoplay', () => {
-    expect(run(initial(), 30, false)).toMatchObject({ index: 0, phase: 'idle' })
-  })
-
-  it('autoplays idle → act → hold → zoom → next idle', () => {
-    let s = run(initial(), DUR.autoIdle + 0.1)
-    expect(s.phase).toBe('act')
-    s = run(s, DUR.act + 0.1)
-    expect(s.phase).toBe('hold')
-    s = run(s, DUR.hold + 0.1)
-    expect(s.phase).toBe('zoom')
-    s = run(s, DUR.zoom + 0.1)
-    expect(s).toMatchObject({ index: 1, octave: 1, phase: 'idle' })
-  })
-
-  it('wraps from the Verdict back to the turtle, one octave up', () => {
-    const s = run(advance(initial(6, 1)), DUR.zoom + 0.1)
-    expect(s).toMatchObject({ index: 0, octave: 2, phase: 'idle' })
-  })
-
-  it('trigger starts the accident, then skips to its end', () => {
-    const a = trigger(initial())
-    expect(a.phase).toBe('act')
-    expect(trigger(a).phase).toBe('hold')
-    const z = { ...a, phase: 'zoom' as const }
-    expect(trigger(z)).toBe(z)
-  })
-
-  it('back steps down a generation and across octaves, but not below the first turtle', () => {
-    expect(back(initial(3, 1), N)).toMatchObject({ index: 2, octave: 1 })
-    expect(back(initial(0, 2), N)).toMatchObject({ index: 6, octave: 1 })
-    expect(back(initial(0, 1), N)).toMatchObject({ index: 0, octave: 1 })
-  })
-
-  it('reports drawing progress', () => {
-    expect(progress(initial(), DUR)).toBe(0)
-    expect(progress({ ...initial(), phase: 'act', t: DUR.act / 2 }, DUR)).toBeCloseTo(0.5)
-    expect(progress({ ...initial(), phase: 'zoom', t: 0 }, DUR)).toBe(1)
-  })
+import { next, previous, parseHash, readingTime } from '../src/engine'
+import { chapters } from '../src/lore'
+import { renderLoreMarkdown } from '../src/loremd'
+import { readFileSync } from 'node:fs'
+describe('reader state',()=>{
+ it('visits every passage exactly once before the changed second reading',()=>{
+  let s={chapter:0,beat:0,loop:0};const visited=new Set<string>()
+  for(let i=0;i<24;i++){visited.add(`${s.chapter}/${s.beat}`);s=next(s)}
+  expect(visited.size).toBe(24);expect(s).toEqual({chapter:0,beat:0,loop:1})
+ })
+ it('moves backward across chapter boundaries without losing the reading count',()=>{expect(previous({chapter:2,beat:0,loop:3})).toEqual({chapter:1,beat:2,loop:3});expect(previous({chapter:0,beat:0,loop:0})).toEqual({chapter:7,beat:2,loop:0})})
+ it('restores deep links and clamps invalid passages',()=>{
+  expect(parseHash('#body/2')).toEqual({chapter:4,beat:1,loop:0})
+  for(const hash of ['#unknown/99','#body/-4','#body/NaN','#body/Infinity','#body/1.5']){const s=parseHash(hash);expect(chapters[s.chapter].beats[s.beat]).toBeDefined()}
+ })
+ it('allows enough time for the full passage and shortens it with tempo',()=>{const text=Array(64).fill('word').join(' ');expect(readingTime(text,1)).toBe(23000);expect(readingTime(text,1.4)).toBeLessThan(readingTime(text,1))})
+})
+describe('published canon',()=>{
+ it('keeps the downloadable reading synchronized',()=>expect(readFileSync('LORE.md','utf8')).toBe(renderLoreMarkdown()))
+ it('keeps route IDs unique and the science boundary explicit',()=>{expect(new Set(chapters.map(c=>c.id)).size).toBe(chapters.length);for(const c of chapters){expect(c.note.length).toBeGreaterThan(80);expect(c.beats).toHaveLength(3)}})
+ it('preserves house punctuation and reasonably short passages',()=>{expect(JSON.stringify(chapters)).not.toContain('\u2014');for(const c of chapters)for(const b of c.beats)expect(b.text.length).toBeLessThan(520)})
 })

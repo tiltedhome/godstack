@@ -1,9 +1,9 @@
 {
-  "name": "godstack",
+  "name": "godstack-v2gpt",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "An animated field guide to creators who keep accidentally making something smarter than themselves",
+  "description": "An independent cosmic hearing about minds, makers, embodiment and unintended worlds",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
