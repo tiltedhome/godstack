@@ -1,0 +1,32 @@
+{
+  "/": {
+    "bytes": 87955,
+    "sha256": "8b139f898fda0e738264bf9b32d051811a02aa66ca079b6b99c4aee236e425c1",
+    "unchanged": true
+  },
+  "v3/": {
+    "bytes": 118014,
+    "sha256": "d88fcc3b42f20eeaf9f8a9c8e549642d3f8220ec31676f2d30cacf8ddcb10887",
+    "unchanged": true
+  },
+  "v4/": {
+    "bytes": 695523,
+    "sha256": "a3f0d72e9cbe6071742b6b5852ad208ed008ff3e23ec8d3e226bd0a51111072a",
+    "unchanged": true
+  },
+  "v5/": {
+    "bytes": 727426,
+    "sha256": "894fc58effe17fbd4cd1d061aaabbbc34d94cfa05774e0feaba68115834fc483",
+    "unchanged": true
+  },
+  "v6/": {
+    "bytes": 699526,
+    "sha256": "2a54034d102a660883d33551ef6e5f4d064fe560218b1908b40f82da0811b19c",
+    "unchanged": true
+  },
+  "v2gpt/": {
+    "bytes": 41532,
+    "sha256": "9b259f4915fa28d2eccf3ae90003b3684ac52c1ac8b630c3ba6dc46035078da8",
+    "matches_local_build": true
+  }
+}

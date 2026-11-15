@@ -44,10 +44,16 @@ The supplied Playwright configuration runs phone and desktop. CI uses preinstall
 
 ## Verification and limits
 
-Canon independently reviewed for science, comedy and clarity. Local lint, types, unit tests and both builds pass. CI runs phone/desktop browser tests and workflow security checks. Managed preview routing was unavailable during initial development; published-page inspection follows deployment. Canvas drawings are illustrative, not quantitative simulations. Real-device performance is not inferred from headless tests.
+Canon independently reviewed for science, comedy and clarity. Local lint, types, seven unit tests and both builds pass. CI passed all ten phone/desktop browser tests and workflow security checks. The publication PR passed CodeQL. Published-page inspection confirmed desktop and narrow layouts, notes, navigation and mobile reading position. All five prior editions are byte-for-byte unchanged; the live new edition matches its local build. See [verification fingerprints](docs/v2gpt-verification.json). Managed preview routing was unavailable, so visual inspection used the published page. Canvas drawings are illustrative, not quantitative simulations. Real-device performance is not inferred from headless tests.
 
 ## Reading room
 
 Tegmark's Mathematical Universe Hypothesis and Life 3.0; David Michael Levin's The Body's Recollection of Being; Landauer's work on irreversible computation. Full links and distinctions are in the page's Field notes and [LORE.md](LORE.md). The story is original, with absurd cosmic scale, recursive consequences, and affectionate satire rather than quotations or borrowed characters.
 
 MIT. See [LICENSE](LICENSE).
+
+## Screenshots
+
+![Desktop edition](docs/godstack-v2gpt-desktop.jpg)
+
+![The creators at narrow width](docs/godstack-v2gpt-creators.jpg)
