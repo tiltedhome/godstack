@@ -34,3 +34,13 @@ test('automatic reading pauses inside field notes',async({page})=>{
  await page.locator('#close-notes').click();await page.clock.runFor(60000)
  expect(await page.locator('#story').textContent()).not.toBe(before)
 })
+
+test('every engraving and passage remains readable',async({page},testInfo)=>{
+ await page.goto(url)
+ for(let chapter=0;chapter<8;chapter++){
+  await page.locator('.chapter-nav button').nth(chapter).click()
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+  await expect(page.locator('#story')).toBeVisible()
+  await page.screenshot({path:`test-results/${testInfo.project.name}-chapter-${chapter+1}.png`,fullPage:true})
+ }
+})

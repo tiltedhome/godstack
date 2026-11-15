@@ -10,10 +10,10 @@ const dialog=el<HTMLDialogElement>('field-notes')
 const nav=document.querySelector<HTMLElement>('.chapter-nav')!
 chapters.forEach((c,i)=>{
  const button=document.createElement('button');button.innerHTML=`<span>${String(i+1).padStart(2,'0')} /</span><strong>${c.label}</strong>`;button.setAttribute('aria-label',`Chapter ${i+1}: ${c.label}`)
- button.onclick=()=>navigate({...state,chapter:i,beat:0});nav.append(button)
+ button.onclick=()=>navigate({...state,chapter:i,beat:0},'chapter');nav.append(button)
 })
 sources.forEach(s=>{const block=document.createElement('div'),a=document.createElement('a'),p=document.createElement('p');a.href=s.url;a.textContent=s.title;a.target='_blank';a.rel='noopener noreferrer';p.textContent=s.text;block.append(a,p);el('sources').append(block)})
-function navigate(s:State){const changed=s.chapter!==state.chapter;state=s;elapsed=0;started=performance.now();history.replaceState(null,'',`#${chapters[s.chapter].id}/${s.beat+1}`);render();if(changed)sound.play(s.chapter)}
+function navigate(s:State, intent: 'reader' | 'chapter' | 'auto' = 'reader'){const changed=s.chapter!==state.chapter;state=s;elapsed=0;started=performance.now();history.replaceState(null,'',`#${chapters[s.chapter].id}/${s.beat+1}`);render();if(changed)sound.play(s.chapter);if(matchMedia('(max-width: 700px)').matches&&intent!=='auto'){(intent==='chapter'?document.querySelector('.theatre')!:el('reading')).scrollIntoView({block:'start',behavior:'instant'})}}
 function render(){
  const c=chapters[state.chapter],b=c.beats[state.beat]
  document.documentElement.style.setProperty('--accent',c.color)
@@ -37,5 +37,5 @@ dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoun
 el('share').onclick=async()=>{try{const url=new URL(location.href);url.hash=`${chapters[state.chapter].id}/${state.beat+1}`;await navigator.clipboard.writeText(url.href);el('share-status').textContent='Passage link copied'}catch{el('share-status').textContent='Copy the address from your browser to share this passage.'}}
 window.addEventListener('hashchange',()=>{state={...parseHash(location.hash),loop:state.loop};elapsed=0;render()})
 window.addEventListener('keydown',e=>{if(dialog.open||(e.target instanceof HTMLElement&&/BUTTON|SELECT|INPUT|TEXTAREA|A/.test(e.target.tagName)))return;if(e.key==='ArrowRight'){e.preventDefault();navigate(next(state))}if(e.key==='ArrowLeft'){e.preventDefault();navigate(previous(state))}})
-setInterval(()=>{const now=performance.now(),dt=now-started;started=now;if(autoplay&&!document.hidden&&!dialog.open){elapsed+=Math.min(dt,500);const duration=readingTime(el('story').textContent!+' '+el('aside').textContent!,speed);if(elapsed>=duration)navigate(next(state));const bar=document.querySelector<HTMLElement>('.timer span')!;bar.style.width=`${Math.min(100,elapsed/duration*100)}%`}else if(!autoplay){document.querySelector<HTMLElement>('.timer span')!.style.width='0%'}},100)
+setInterval(()=>{const now=performance.now(),dt=now-started;started=now;if(autoplay&&!document.hidden&&!dialog.open){elapsed+=Math.min(dt,500);const duration=readingTime(el('story').textContent!+' '+el('aside').textContent!,speed);if(elapsed>=duration)navigate(next(state),'auto');const bar=document.querySelector<HTMLElement>('.timer span')!;bar.style.width=`${Math.min(100,elapsed/duration*100)}%`}else if(!autoplay){document.querySelector<HTMLElement>('.timer span')!.style.width='0%'}},100)
 render()
