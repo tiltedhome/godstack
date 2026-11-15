@@ -27,6 +27,8 @@ test('mobile layout, muted default and reduced motion remain usable',async({page
  await page.screenshot({path:`test-results/${testInfo.project.name}.png`,fullPage:true})
 })
 test('automatic reading pauses inside field notes',async({page})=>{
+ // Keep virtual time focused on reading timers, not thousands of rendered frames.
+ await page.emulateMedia({reducedMotion:'reduce'})
  await page.goto(url);await page.locator('#autoplay').click();await page.locator('#notes').click()
  const before=await page.locator('#story').textContent()
  await page.clock.install();await page.clock.runFor(60000)
